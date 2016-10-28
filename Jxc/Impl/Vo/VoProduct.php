@@ -12,17 +12,17 @@ namespace Jxc\Impl\Vo;
 use Jxc\Impl\Core\Vo;
 
 /**
- * ²úÆ·¿â´æĞÅÏ¢
+ * äº§å“åº“å­˜ä¿¡æ¯
  * Class VoProduct
  * @package Jxc\Impl\Vo
  */
 class VoProduct extends Vo {
     public $id;
-    public $pdt_id;         //  ²úÆ·
-    public $pdt_name;       //  »õºÅÃû³Æ
-    public $pdt_color;      //  ÑÕÉ«
-    public $pdt_stock;  //  ¿â´æ
-    public $pdt_purchase;   //  ½ø»õ¼Û
+    public $pdt_id;         //  äº§å“
+    public $pdt_name;       //  è´§å·åç§°
+    public $pdt_color;      //  é¢œè‰²
+    public $pdt_stock;  //  åº“å­˜
+    public $pdt_purchase;   //  è¿›è´§ä»·
 
     public function toArray($fields = array()) {
         $map = parent::toArray($fields);

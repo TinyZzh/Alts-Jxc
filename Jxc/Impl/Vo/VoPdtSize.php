@@ -1,17 +1,11 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: TinyZ
- * Date: 2016/10/26
- * Time: 22:29
- */
 
 namespace Jxc\Impl\Vo;
 
 use Jxc\Impl\Core\Vo;
 
 /**
- * ²úÆ·³ßÂëÅäÖÃ
+ * äº§å“å°ºç é…ç½®
  * Class VoPdtSize
  * @package Jxc\Impl\Vo
  */

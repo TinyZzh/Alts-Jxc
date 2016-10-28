@@ -12,17 +12,17 @@ namespace Jxc\Impl\Vo;
 use Jxc\Impl\Core\Vo;
 
 /**
- * ÏúÊÛ¼ÇÂ¼
+ * é”€å”®è®°å½•
  * Class VoLogSales
  * @package Jxc\Impl\Vo
  */
 class VoLogSales extends Vo {
     public $id;
-    public $pdt_id;     //  »õºÅ
-    public $ct_id;      //  Ïû·ÑÕß
-    public $pdt_counts; //  ÊıÁ¿
-    public $pdt_price;  //  µ¥¼Û
-    public $pdt_zk;     //  ÕÛ¿Û
+    public $pdt_id;     //  è´§å·
+    public $ct_id;      //  æ¶ˆè´¹è€…
+    public $pdt_counts; //  æ•°é‡
+    public $pdt_price;  //  å•ä»·
+    public $pdt_zk;     //  æŠ˜æ‰£
 
     public function dataArray($fields = array()) {
 
