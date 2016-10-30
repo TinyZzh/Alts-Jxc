@@ -4,32 +4,23 @@ namespace Jxc\Impl\Dao;
 
 use Exception;
 use Jxc\Impl\Core\MySQLDao;
+use Jxc\Impl\Vo\LogProcure;
 use Jxc\Impl\Vo\LogSales;
 
 /**
- * 销售日志
- * Class ProductDao
+ * 采购进货日志
+ * Class LogProcureDao
  * @package Jxc\Impl\Dao
  */
-class LogSalesDao extends MySQLDao {
+class LogProcureDao extends MySQLDao {
 
     public function __construct($config) {
         parent::__construct($config);
     }
 
-    public function select($id) {
-        $datas = $this->mysqlDB()->select('log_sales', '*', array('id' => $id));
-        if (!$datas) {
-            return null;
-        }
-        $voLogSales = new LogSales();
-        $voLogSales->convert($datas[0]);
-        return $voLogSales;
-    }
-
     public function selectById($ids) {
         $inId = implode(",", $ids);
-        $query = "SELECT * FROM log_sales WHERE id IN ({$inId});";
+        $query = "SELECT * FROM log_procure WHERE id IN ({$inId});";
         $datas = $this->mysqlDB()->ExecuteSQL($query);
         $map = array();
         foreach ($datas as $data) {
@@ -40,11 +31,10 @@ class LogSalesDao extends MySQLDao {
         return $map;
     }
 
-    public function selectAll() {
-        $query = $this->mysqlDB()->sqlSelectWhere('log_sales', '*');
-        $datas = $this->mysqlDB()->ExecuteSQL($query);
+    public function select($where = array()) {
+        $resultSet = $this->mysqlDB()->select('log_procure', '*', $where);
         $array = array();
-        foreach ($datas as $data) {
+        foreach ($resultSet as $data) {
             $voLogSales = new LogSales();
             $voLogSales->convert($data);
             $array[] = $voLogSales;
@@ -58,18 +48,18 @@ class LogSalesDao extends MySQLDao {
      * @throws Exception
      */
     public function insert($voLogSales) {
-        $query = $this->mysqlDB()->sqlInsert('log_sales', $voLogSales->toArray());
+        $query = $this->mysqlDB()->sqlInsert('log_procure', $voLogSales->toArray());
         $this->mysqlDB()->ExecuteSQL($query);
         $voLogSales->id = $this->mysqlDB()->getInsertId();
         return $voLogSales;
     }
 
     /**
-     * @param $voLogSales LogSales
+     * @param $logProcure LogProcure
      * @param array $fields
      */
-    public function updateByFields($voLogSales, $fields = array()) {
-        $query = $this->mysqlDB()->sqlUpdateWhere('log_sales', $voLogSales->toArray($fields), array('id' => $voLogSales->id));
+    public function updateByFields($logProcure, $fields = array()) {
+        $query = $this->mysqlDB()->sqlUpdateWhere('log_procure', $logProcure->toArray($fields), array('id' => $logProcure->id));
         $this->mysqlDB()->ExecuteSQL($query);
     }
 
@@ -78,7 +68,7 @@ class LogSalesDao extends MySQLDao {
      * @throws Exception
      */
     public function delete($id) {
-        $query = $this->mysqlDB()->sqlDeleteWhere('log_sales', array('id' => $id));
+        $query = $this->mysqlDB()->sqlDeleteWhere('log_procure', array('id' => $id));
         $this->mysqlDB()->ExecuteSQL($query);
     }
 

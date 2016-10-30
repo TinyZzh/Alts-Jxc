@@ -17,6 +17,25 @@ class ProductDao extends MySQLDao {
         parent::__construct($config);
     }
 
+    public function selectById($ids) {
+        $inId = implode(",", $ids);
+        $query = "SELECT * FROM tb_product WHERE pdt_id IN ({$inId});";
+        $datas = $this->mysqlDB()->ExecuteSQL($query);
+        $map = array();
+        foreach ($datas as $data) {
+            $voProduct = new VoProduct();
+            $voProduct->convert($data);
+            $map[$voProduct->pdt_id] = $voProduct;
+        }
+        return $map;
+    }
+
+    public function selectPdtIdList() {
+        $query = "SELECT pdt_id FROM tb_product;";
+        $resultSet = $this->mysqlDB()->ExecuteSQL($query);
+        return $resultSet;
+    }
+
     /**
      * @return array
      * @throws Exception
@@ -39,10 +58,9 @@ class ProductDao extends MySQLDao {
      * @throws Exception
      */
     public function insert($voProduct) {
-        var_dump($voProduct->toArray());
         $query = $this->mysqlDB()->sqlInsert('tb_product', $voProduct->toArray());
-        $voProduct->id = $this->mysqlDB()->getInsertId();
         $this->mysqlDB()->ExecuteSQL($query);
+//        $voProduct->pdt_id = $this->mysqlDB()->getInsertId();
         return $voProduct;
     }
 

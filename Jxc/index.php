@@ -1,31 +1,19 @@
 <?php
 header("Content-type: text/html; charset=utf-8");
-
+//  Object
 include_once __DIR__ . "/AutoLoader.php";
 include_once __DIR__ . "/Config.inc.php";
 Jxc\AutoLoader::register();
+//  HTTP util
+//include_once __DIR__ . "/Impl/Libs/Requests.php";
+//Requests::register_autoloader();
 
-use Jxc\Impl\Dao\ProductDao;
-use Jxc\Impl\Vo\VoProduct;
-
-echo "Tinyz";
-
-
-$product = new VoProduct();
-
-$product->pdt_id = "8025";
-$product->pdt_color = 15;
-$product->pdt_stock = array(1, 2, 3, 4, 5, 6, 7, 8, 0);
-$product->pdt_name = "名称";
-$product->pdt_purchase = 115;
-
-
-$pdtDao = new ProductDao($DB_Config);
-$product = $pdtDao->insert($product);
-
-var_dump($product);
-
-
-var_dump($pdtDao->selectAll());
-
+if (!isset($_REQUEST['api'])) {
+    exit('404');
+}
+$filePath = __DIR__ . "/Modules/" . $_REQUEST['api'] . '.php';
+if (!file_exists($filePath)) {
+    exit('404');
+}
+include_once $filePath;
 

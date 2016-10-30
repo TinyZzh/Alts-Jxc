@@ -35,7 +35,6 @@ class SimpleSQL {
             }
         }
         $sql .= '(' . implode(',', $fields) . ") VALUES (" . implode(',', $val) . ') ;';
-        echo $sql."<br/>";
         return $sql;
     }
 
