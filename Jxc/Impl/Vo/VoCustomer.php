@@ -12,17 +12,17 @@ namespace Jxc\Impl\Vo;
 use Jxc\Impl\Core\Vo;
 
 /**
- * Ïû·ÑÕß-»áÔ±
+ * æ¶ˆè´¹è€…-ä¼šå‘˜
  * Class VoCustomer
  * @package Jxc\Impl\Vo
  */
 class VoCustomer extends Vo {
 
-    public $ct_id;       //  ¿Í»§ID
-    public $ct_name;     //  ¿Í»§ĞÕÃû
-    public $ct_address;  //  Í¨ĞÅµØÖ·
-    public $ct_phone;    //  ÁªÏµµç»°
-    public $ct_money;    //  Ô¤´æ½ğ¶î   -   ÊÖ¶¯³äÖµ
-    public $ct_debt;     //  Ç·ÕË -   ×Ô¶¯½áËã
+    public $ct_id;       //  å®¢æˆ·ID
+    public $ct_name;     //  å®¢æˆ·å§“å
+    public $ct_address;  //  é€šä¿¡åœ°å€
+    public $ct_phone;    //  è”ç³»ç”µè¯
+    public $ct_money;    //  é¢„å­˜é‡‘é¢   -   æ‰‹åŠ¨å……å€¼
+    public $ct_debt;     //  æ¬ è´¦ -   è‡ªåŠ¨ç»“ç®—
 
 }

@@ -1,30 +1,19 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: TinyZ
- * Date: 2016/10/26
- * Time: 0:33
- */
-
+header("Content-type: text/html; charset=utf-8");
+//  Object
 include_once __DIR__ . "/AutoLoader.php";
+include_once __DIR__ . "/Config.inc.php";
 Jxc\AutoLoader::register();
+//  HTTP util
+//include_once __DIR__ . "/Impl/Libs/Requests.php";
+//Requests::register_autoloader();
 
-use Jxc\Impl\Vo\VoProduct;
-
-echo "Tinyz";
-
-
-$product = new VoProduct();
-
-$product->id = 1;
-$product->pdt_color = "";
-$product->pdt_stock = array(1,2,3,4,5,6,7,8,0);
-$product->pdt_name = "Ãû³Æ";
-
-$map = $product->toArray();
-var_dump($map);
-
-$pdt2 = new VoProduct();
-$pdt2->convert($map);
-var_dump($pdt2);
+if (!isset($_REQUEST['api'])) {
+    exit('404');
+}
+$filePath = __DIR__ . "/Modules/" . $_REQUEST['api'] . '.php';
+if (!file_exists($filePath)) {
+    exit('404');
+}
+include_once $filePath;
 
