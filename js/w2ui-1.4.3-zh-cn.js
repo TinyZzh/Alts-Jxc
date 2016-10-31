@@ -6192,7 +6192,8 @@ w2utils.keyboard = (function (obj) {
             var end        = start + Math.floor(records.height() / this.recordHeight) + this.show_extra * 2 + 1;
             // var div     = start - this.last.range_start;
             if (start < 1) start = 1;
-            if (end > this.total) end = this.total;
+            //if (end > this.total) end = this.total;
+            if (end > this.total) end = Math.max(this.total, this.records.length);//  tinyz - 20161101
             var tr1 = records.find('#grid_'+ this.name +'_rec_top');
             var tr2 = records.find('#grid_'+ this.name +'_rec_bottom');
             // if row is expanded
