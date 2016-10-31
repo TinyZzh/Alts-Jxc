@@ -1,46 +1,25 @@
-<?php
-//  Object
-include_once "../Jxc/AutoLoader.php";
-include_once "../Jxc/Config.inc.php";
-Jxc\AutoLoader::register();
-
-include_once "../Jxc/Modules/get_customer_list.php";
-
-$remoteUrl = "../Jxc/index.php?api=jxc_product";
-
-?>
+<?php include_once "../Templates/include.php"; ?>
 <!DOCTYPE html>
 <html lang="zh-cn">
-<head>
-    <meta charset="UTF-8">
-    <title>Index - Title</title>
-    <link href="../css/jxc-1.0.0.css" type="text/css" rel="stylesheet">
-    <link href="../css/bootstrap.min.css" type="text/css" rel="stylesheet">
-    <link href="../css/bootstrap-theme.min.css" type="text/css" rel="stylesheet">
-    <link href="../css/w2ui-1.4.3.min.css" type="text/css" rel="stylesheet">
-
-    <script src="../js/jquery.min.js" type="text/javascript"></script>
-    <script src="../js/jxc-1.0.0.js" type="text/javascript"></script>
-    <script src="../js/bootstrap.min.js" type="text/javascript"></script>
-    <script src="../js/w2ui-1.4.3-zh-cn.js" type="text/javascript"></script>
-
-</head>
+<?php include_once "../Templates/head.html"; ?>
 <body id="body">
-<div id="layout">
-    <div id="jxc_nav" class="navbar navbar-default navbar-fixed-top" role="navigation"><p>导航栏</p></div>
-    <div id="div_left"></div>
-    <div id="div_right"></div>
-    <div id="div_footer"></div>
-</div>
+<?php include_once "../Templates/layout.html"; ?>
 </body>
+<?php
+use Jxc\Impl\Dao\CustomerDao;
 
+$dao = new CustomerDao($DB_Config);
+$resultSet = $dao->selectCustomNameList();
+$custom_list = array();
+foreach ($resultSet as $k => $v) {
+    $custom_list[] = array('id' => $k, 'text' => $v['ct_name']);
+}
+$pub_custom_list = json_encode($custom_list);
+//
+$remoteUrl = "../Jxc/index.php?api=jxc_product";
+?>
 <script>
-    console.log(<?=json_encode($pub_custom_list)?>);
     $(document).ready(function () {
-//        $.get("../Jxc/index.php?api=log_sales", function(data) {
-//            console.log(data);
-//        });
-
         $('#layout').height($(window).height());
         $('#layout').w2layout({
             name: 'layout',
@@ -53,7 +32,6 @@ $remoteUrl = "../Jxc/index.php?api=jxc_product";
                 {type: 'bottom', size: 50, content: 'div_footer'}
             ]
         });
-
 
         var content = $('#div_right').w2grid({
             name: 'div_frame',
@@ -94,6 +72,7 @@ $remoteUrl = "../Jxc/index.php?api=jxc_product";
                 toolbarAdd: true,
                 toolbarSave: true,
                 toolbarDelete: true,
+                lineNumbers: true,
                 footer: true
             },
             toolbar: {
@@ -117,10 +96,16 @@ $remoteUrl = "../Jxc/index.php?api=jxc_product";
                     console.log(target);
                 }
             },
-            onAdd: function (event) {
+            onLoad: function (event) {
+                w2uiInitEmptyGrid(this, event);
+            },
+            onEditField: function (event) {
                 var that = this;
-                console.log(this);
-                w2GridAddRecord(that);
+                var nextRow = that.nextRow(that.last.sel_ind);
+                if (nextRow == null) w2GridAddRecord(that);
+            },
+            onAdd: function (event) {
+                w2GridAddRecord(this);
             },
             onSave: function (event) {
                 var that = this;
@@ -133,6 +118,7 @@ $remoteUrl = "../Jxc/index.php?api=jxc_product";
                             if (v['depId']) {
 //                                that.select(v['depId']);
 //                                that.delete(true);
+                                that.grid.total = that.records.length;
                                 that.remove(v['depId']);
                                 that.add(v);
                             } else {
@@ -142,47 +128,7 @@ $remoteUrl = "../Jxc/index.php?api=jxc_product";
                     }
                 }
             },
-            onSubmit: function (event) {
-//                console.log(this);
-//                var changes = event.changes;
-//                for (var i in changes) {
-//                    if (this.columns.length != changes[i].length) {
-//                        w2alert("请补充完数据:" + changes[i]['recid']);
-//                        event.preventDefault();
-//                        break;
-//                    }
-//                }
-//                console.log(event);
-            },
-            onKeydown: function (event) {
-                var that = this;
-                console.log(event.originalEvent);
-                if (event.originalEvent.keyCode == 13
-                    && event.originalEvent.ctrlKey
-                ) {    //  Ctrl + 回车
-                    if (that.records) {
-                        var nextRcd = that.nextRow(that.last.sel_recid);
-                        console.log(nextRcd);
-                        if (nextRcd == null) {
-                            var targetRcd = w2GridAddRecord(that);
-                            that.selectNone();
-                            that.select(targetRcd['recid']);
-                            that.editField(targetRcd['recid'], 1);
-                        }
-                    }
-                }
-//                if (event.originalEvent.keyCode == 9) {
-//                    var nextInd = that.last.sel_col + 1;
-//                    if (nextInd < that.columns.length) {
-//                        that.editField(that.last.sel_recid, nextInd);
-//                    }
-//                }
-            },
-            onEditField: function (event) {
-                console.log(event);
-
-
-            }
+            onKeydown: w2uiFuncGridOnKeydown
         });
         w2ui['layout'].content('main', content);
 
@@ -192,24 +138,12 @@ $remoteUrl = "../Jxc/index.php?api=jxc_product";
                 var item = {
                     type: 'menu', id: 'selectPdt', caption: '选择货号',
                     items: data['items'],
-
                 };
                 w2ui['div_frame'].toolbar.add(item);
                 w2ui['div_frame'].toolbar.refresh();
             }
         });
-
-//        $.getJSON("<?//=$customerListUrl?>//", null, function (data) {
-//            if (data['status'] == 'success') {
-//                console.log(data['items']);
-//                w2ui['div_frame'].columns[1].items = data['items'];
-//            }
-//        });
-
-    })
-    ;
-    $(function () {
-
     });
 </script>
 </html>
+
