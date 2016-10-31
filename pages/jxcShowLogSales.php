@@ -116,7 +116,7 @@
             onAdd: function (event) {
                 var that = this;
                 console.log(this);
-                jxcAddRecord(that);
+                w2GridAddRecord(that);
             },
             onSave: function (event) {
                 var that = this;
@@ -160,7 +160,7 @@
                         var nextRcd = that.nextRow(that.last.sel_recid);
                         console.log(nextRcd);
                         if (nextRcd == null) {
-                            var targetRcd = jxcAddRecord(that);
+                            var targetRcd = w2GridAddRecord(that);
                             that.selectNone();
                             that.select(targetRcd['recid']);
                             that.editField(targetRcd['recid'], 1);

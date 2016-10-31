@@ -1,12 +1,8 @@
 <?php
-//  Object
+//  Autoload register
 include_once "../Jxc/AutoLoader.php";
 include_once "../Jxc/Config.inc.php";
 Jxc\AutoLoader::register();
-
-include_once "../Jxc/Modules/get_customer_list.php";
-
-$remoteUrl = "../Jxc/index.php?api=jxc_product";
 
 ?>
 <!DOCTYPE html>
@@ -35,12 +31,7 @@ $remoteUrl = "../Jxc/index.php?api=jxc_product";
 </body>
 
 <script>
-    console.log(<?=json_encode($pub_custom_list)?>);
     $(document).ready(function () {
-//        $.get("../Jxc/index.php?api=log_sales", function(data) {
-//            console.log(data);
-//        });
-
         $('#layout').height($(window).height());
         $('#layout').w2layout({
             name: 'layout',
