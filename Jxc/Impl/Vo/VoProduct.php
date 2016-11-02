@@ -28,6 +28,13 @@ class VoProduct extends Vo {
     public $pdt_total;   //  库存总数
     public $total_rmb;   //  库存总价值
 
+    public function __construct() {
+        $this->pdt_counts = array();
+        for ($i = 0; $i < 10; $i++) {
+            $this->pdt_counts[] = '';
+        }
+    }
+
     public function toArray($fields = array()) {
         $map = parent::toArray($fields);
         $map['pdt_counts'] = implode("|", $this->pdt_counts);

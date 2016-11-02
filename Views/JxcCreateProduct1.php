@@ -111,7 +111,7 @@ Jxc\AutoLoader::register();
             onAdd: function (event) {
                 var that = this;
                 console.log(this);
-                w2GridAddRecord(that);
+                w2GridAddEmptyRecord(that);
             },
             onSave: function (event) {
                 var that = this;
@@ -155,7 +155,7 @@ Jxc\AutoLoader::register();
                         var nextRcd = that.nextRow(that.last.sel_recid);
                         console.log(nextRcd);
                         if (nextRcd == null) {
-                            var targetRcd = w2GridAddRecord(that);
+                            var targetRcd = w2GridAddEmptyRecord(that);
                             that.selectNone();
                             that.select(targetRcd['recid']);
                             that.editField(targetRcd['recid'], 1);

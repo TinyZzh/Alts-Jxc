@@ -113,61 +113,9 @@
                     console.log(target);
                 }
             },
-            onAdd: function (event) {
-                var that = this;
-                console.log(this);
-                w2GridAddRecord(that);
-            },
-            onSave: function (event) {
-                var that = this;
-                console.log(event.xhr);
-                //  回调更新数据
-                if (event.xhr != null) {
-                    var cb = JSON.parse(event.xhr.responseText);
-                    if (cb['updates']) {
-                        cb['updates'].map(function (v) {
-                            if (v['depId']) {
-//                                that.select(v['depId']);
-//                                that.delete(true);
-                                that.remove(v['depId']);
-                                that.add(v);
-                            } else {
-                                that.set(v['recid'], v);
-                            }
-                        });
-                    }
-                }
-            },
-            onSubmit: function (event) {
-//                console.log(this);
-//                var changes = event.changes;
-//                for (var i in changes) {
-//                    if (this.columns.length != changes[i].length) {
-//                        w2alert("请补充完数据:" + changes[i]['recid']);
-//                        event.preventDefault();
-//                        break;
-//                    }
-//                }
-//                console.log(event);
-            },
-            onKeydown: function (event) {
-                var that = this;
-                console.log(event.originalEvent);
-                if (event.originalEvent.keyCode == 13
-                    && event.originalEvent.ctrlKey
-                ) {    //  Ctrl + 回车
-                    if (that.records) {
-                        var nextRcd = that.nextRow(that.last.sel_recid);
-                        console.log(nextRcd);
-                        if (nextRcd == null) {
-                            var targetRcd = w2GridAddRecord(that);
-                            that.selectNone();
-                            that.select(targetRcd['recid']);
-                            that.editField(targetRcd['recid'], 1);
-                        }
-                    }
-                }
-            }
+            onAdd: function (event) w2GridAddRecord(this),
+            onSave: w2GridOnSaveAndUpdate,
+            onKeydown: w2GridOnKeyDown
         });
 
         w2ui['layout'].content(
