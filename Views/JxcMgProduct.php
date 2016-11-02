@@ -1,4 +1,10 @@
-<?php include_once "../Templates/include.php"; ?>
+<?php
+/**
+ * 管理产品基本信息.
+ *
+ */
+include_once "../Templates/include.php";
+?>
 <!DOCTYPE html>
 <html lang="zh-cn">
 <?php include_once "../Templates/head.html"; ?>
@@ -16,7 +22,7 @@ foreach ($resultSet as $k => $v) {
 }
 $pub_custom_list = json_encode($custom_list);
 //
-$remoteUrl = "../Jxc/index.php?api=jxc_product";
+$remoteUrl = "../Jxc/index.php?api=mg_product";
 ?>
 <script>
     $(document).ready(function () {
@@ -26,8 +32,6 @@ $remoteUrl = "../Jxc/index.php?api=jxc_product";
             panels: [
                 {type: 'top', size: 50, content: 'jxc_nav'},
                 {type: 'left', size: 200, content: 'div_left'},
-//                { type: 'main', style: pstyle, content: 'main' },
-//                { type: 'preview', size: '50%', content: 'preview' },
                 {type: 'main', size: 200},
                 {type: 'bottom', size: 50, content: 'div_footer'}
             ]
@@ -35,37 +39,29 @@ $remoteUrl = "../Jxc/index.php?api=jxc_product";
 
         var content = $('#div_right').w2grid({
             name: 'div_frame',
-            header: '采购',
+            header: '产品信息管理',
             multiSelect: true,
             url: "<?=$remoteUrl ?>",
+            columnGroups: [
+                {caption: '产品', span: 2},
+                {caption: '颜色', master: true},
+                {caption: '尺码', span: 9},
+                {caption: '进货价', master: true}
+            ],
             columns: [
-                {field: 'pdt_id', caption: '货号', size: '10%', editable: {type: 'pdt_id'}},
-                {
-                    field: 'pdt_name', caption: '名称', size: '10%', resizable: true,
-                    editable: {
-                        type: 'list',
-                        showAll: true,
-                        items: <?=$pub_custom_list?>
-                    },
-                    render: function (record, index, col_index) {
-                        var html = this.getCellValue(index, col_index);
-//                        console.log(html);
-                        return html.text || '';
-                    }
-                },
-                {field: 'pdt_color', caption: '颜色', size: '5%', editable: {type: 'pdt_color'}},
-                {field: 'pdt_count_0', caption: '3XS', size: '5%', editable: {type: 'text',}},
-                {field: 'pdt_count_1', caption: '2XS', size: '5%', editable: {type: 'text',}},
-                {field: 'pdt_count_2', caption: 'XS', size: '5%', editable: {type: 'text',}},
-                {field: 'pdt_count_3', caption: 'S', size: '5%', editable: {type: 'text',}},
-                {field: 'pdt_count_4', caption: 'M', size: '5%', editable: {type: 'text',}},
-                {field: 'pdt_count_5', caption: 'L', size: '5%', editable: {type: 'text',}},
-                {field: 'pdt_count_6', caption: 'XL', size: '5%', editable: {type: 'text',}},
-                {field: 'pdt_count_7', caption: '2XL', size: '5%', editable: {type: 'text',}},
-                {field: 'pdt_count_8', caption: '3XL', size: '5%', editable: {type: 'text',}},
-                {field: 'pdt_price', caption: '单价', size: '5%', editable: {type: 'text',}},
-                {field: 'pdt_total', caption: '总数', size: '5%'},
-                {field: 'total_rmb', caption: '总价', size: '10%'}
+                {field: 'pdt_id', caption: '编号', size: '10%', editable: {type: 'text'}},
+                {field: 'pdt_name', caption: '名称', size: '10%', editable: {type: 'text'}},
+                {field: 'pdt_color', caption: '颜色', size: '5%', editable: {type: 'text'}},
+                {field: 'pdt_count_0', caption: '3XS', size: '5%', editable: {type: 'text'}},
+                {field: 'pdt_count_1', caption: '2XS', size: '5%', editable: {type: 'text'}},
+                {field: 'pdt_count_2', caption: 'XS', size: '5%', editable: {type: 'text'}},
+                {field: 'pdt_count_3', caption: 'S', size: '5%', editable: {type: 'text'}},
+                {field: 'pdt_count_4', caption: 'M', size: '5%', editable: {type: 'text'}},
+                {field: 'pdt_count_5', caption: 'L', size: '5%', editable: {type: 'text'}},
+                {field: 'pdt_count_6', caption: 'XL', size: '5%', editable: {type: 'text'}},
+                {field: 'pdt_count_7', caption: '2XL', size: '5%', editable: {type: 'text'}},
+                {field: 'pdt_count_8', caption: '3XL', size: '5%', editable: {type: 'text'}},
+                {field: 'pdt_price', caption: '进货价', size: '5%', editable: {type: 'text'}}
             ],
             show: {
                 toolbar: true,
@@ -96,19 +92,20 @@ $remoteUrl = "../Jxc/index.php?api=jxc_product";
                     console.log(target);
                 }
             },
+            onSubmit: function (event) {
+                var pdt_id = w2GridCheckUniqueID(this, 'pdt_id');
+                if (pdt_id) {
+                    event.preventDefault();
+                    w2alert("[Error]货号[" + pdt_id + "]重复, 请重新输入.", "Error");
+                }
+            },
             onLoad: function (event) {
                 w2uiInitEmptyGrid(this, event);
             },
-            onEditField: function (event) {
-                var that = this;
-                var nextRow = that.nextRow(that.last.sel_ind);
-                if (nextRow == null) w2GridAddEmptyRecord(that);
-            },
-            onAdd: function (event) {
-                w2GridAddEmptyRecord(this);
-            },
+            onAdd: w2GridOnAdd,
+            onEditField: w2GridOnEditField,
             onSave: w2GridOnSaveAndUpdate,
-            onKeydown: w2uiFuncGridOnKeydown
+            onKeydown: w2GridOnKeyDown
         });
         w2ui['layout'].content('main', content);
 
@@ -117,7 +114,7 @@ $remoteUrl = "../Jxc/index.php?api=jxc_product";
             if (data['status'] == 'success') {
                 var item = {
                     type: 'menu', id: 'selectPdt', caption: '选择货号',
-                    items: data['items'],
+                    items: data['items']
                 };
                 w2ui['div_frame'].toolbar.add(item);
                 w2ui['div_frame'].toolbar.refresh();
@@ -126,4 +123,3 @@ $remoteUrl = "../Jxc/index.php?api=jxc_product";
     });
 </script>
 </html>
-

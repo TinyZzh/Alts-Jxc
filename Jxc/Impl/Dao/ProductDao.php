@@ -69,7 +69,7 @@ class ProductDao extends MySQLDao {
      * @param array $fields
      */
     public function updateByFields($voProduct, $fields = array()) {
-        $query = $this->mysqlDB()->sqlUpdateWhere('tb_product', $voProduct->toArray($fields), array('id' => $voProduct->id));
+        $query = $this->mysqlDB()->sqlUpdateWhere('tb_product', $voProduct->toArray($fields), array('pdt_id' => $voProduct->pdt_id));
         $this->mysqlDB()->ExecuteSQL($query);
     }
 
@@ -78,7 +78,7 @@ class ProductDao extends MySQLDao {
      * @throws Exception
      */
     public function delete($id) {
-        $query = $this->mysqlDB()->sqlDeleteWhere('tb_product', array('id' => $id));
+        $query = $this->mysqlDB()->sqlDeleteWhere('tb_product', array('pdt_id' => $id));
         $this->mysqlDB()->ExecuteSQL($query);
     }
 
