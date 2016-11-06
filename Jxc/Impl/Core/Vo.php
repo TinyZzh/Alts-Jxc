@@ -12,7 +12,7 @@ namespace Jxc\Impl\Core;
 class Vo {
 
     /**
-     * µ±SELECTÖ¸¶¨×Ö¶ÎÖµµÄÊ±ºò,½¨ÒéÊ¹ÓÃ¡£»ñÈ¡±íÈ«²¿×Ö¶ÎÊ±,ÍÆ¼öÊ¹ÓÃ×Ö·û´®'*'
+     * å½“SELECTæŒ‡å®šå­—æ®µå€¼çš„æ—¶å€™,å»ºè®®ä½¿ç”¨ã€‚è·å–è¡¨å…¨éƒ¨å­—æ®µæ—¶,æ¨èä½¿ç”¨å­—ç¬¦ä¸²'*'
      * @param null $fields
      * @return string
      */
@@ -31,7 +31,7 @@ class Vo {
     }
 
     /**
-     * ×ª»»VOÎª¼üÖµ¶Ô
+     * è½¬æ¢VOä¸ºé”®å€¼å¯¹
      * @param array $fields
      * @return array
      */
@@ -52,7 +52,7 @@ class Vo {
     }
 
     /**
-     * ×ª»»VOÎª¼üÖµ¶Ô -   ÅÅ³ıÖµÎªnullµÄ×Ö¶Î
+     * è½¬æ¢VOä¸ºé”®å€¼å¯¹ -   æ’é™¤å€¼ä¸ºnullçš„å­—æ®µ
      * @param array $fields
      * @return array
      */
@@ -75,7 +75,7 @@ class Vo {
     }
 
     /**
-     * ¸³Öµ
+     * èµ‹å€¼
      * @param $data
      */
     public function convert($data) {
@@ -119,7 +119,7 @@ class Vo {
     }
 
     /**
-     * ×ª»»Êı¾İ
+     * è½¬æ¢æ•°æ®
      * @param $data
      * @deprecated
      */

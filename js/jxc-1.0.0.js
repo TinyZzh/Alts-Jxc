@@ -170,3 +170,31 @@ var w2uiFuncGridOnKeydown = function (event) {
         }
     }
 };
+
+/**
+ * 根据list的item的id删除item
+ * @param items
+ * @param id
+ * @returns {Array}
+ */
+function removeByItemId(items, id) {
+    var tmpItems = [];
+    var tmpIndex = 0;
+    var isMove = false;
+    for (var i = 0; i < items.length; i++) {
+        if (items[i].id == id) {
+            delete items[i];
+            isMove = true;
+        } else if (isMove) {
+            if (typeof(items[i]) != 'undefined') {
+                items[i].id = tmpIndex;
+                tmpItems.push(items[i]);
+                tmpIndex++;
+            }
+        } else {
+            tmpItems.push(items[i]);
+            tmpIndex++;
+        }
+    }
+    return tmpItems;
+}

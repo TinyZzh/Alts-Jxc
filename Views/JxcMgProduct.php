@@ -42,25 +42,10 @@ $remoteUrl = "../Jxc/index.php?api=mg_product";
             header: '产品信息管理',
             multiSelect: true,
             url: "<?=$remoteUrl ?>",
-            columnGroups: [
-                {caption: '产品', span: 2},
-                {caption: '颜色', master: true},
-                {caption: '尺码', span: 9},
-                {caption: '进货价', master: true}
-            ],
             columns: [
                 {field: 'pdt_id', caption: '编号', size: '10%', editable: {type: 'text'}},
                 {field: 'pdt_name', caption: '名称', size: '10%', editable: {type: 'text'}},
                 {field: 'pdt_color', caption: '颜色', size: '5%', editable: {type: 'text'}},
-                {field: 'pdt_count_0', caption: '3XS', size: '5%', editable: {type: 'text'}},
-                {field: 'pdt_count_1', caption: '2XS', size: '5%', editable: {type: 'text'}},
-                {field: 'pdt_count_2', caption: 'XS', size: '5%', editable: {type: 'text'}},
-                {field: 'pdt_count_3', caption: 'S', size: '5%', editable: {type: 'text'}},
-                {field: 'pdt_count_4', caption: 'M', size: '5%', editable: {type: 'text'}},
-                {field: 'pdt_count_5', caption: 'L', size: '5%', editable: {type: 'text'}},
-                {field: 'pdt_count_6', caption: 'XL', size: '5%', editable: {type: 'text'}},
-                {field: 'pdt_count_7', caption: '2XL', size: '5%', editable: {type: 'text'}},
-                {field: 'pdt_count_8', caption: '3XL', size: '5%', editable: {type: 'text'}},
                 {field: 'pdt_price', caption: '进货价', size: '5%', editable: {type: 'text'}}
             ],
             show: {
@@ -108,6 +93,8 @@ $remoteUrl = "../Jxc/index.php?api=mg_product";
             onKeydown: w2GridOnKeyDown
         });
         w2ui['layout'].content('main', content);
+
+//        $.ajax
 
         //  根据货号筛选
         $.getJSON("../Jxc/index.php?api=get_pdt_id_list", null, function (data) {
