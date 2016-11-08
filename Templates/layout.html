@@ -4,3 +4,15 @@
     <div id="div_right"></div>
     <div id="div_footer"></div>
 </div>
+<script type="text/javascript">
+    $('#layout').height($(window).height());
+    $('#layout').w2layout({
+        name: 'layout',
+        panels: [
+            {type: 'top', size: 50, content: 'jxc_nav'},
+            {type: 'left', size: 200, content: 'div_left'},
+            {type: 'main', size: 200},
+            {type: 'bottom', size: 50, content: 'div_footer'}
+        ]
+    });
+</script>

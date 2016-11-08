@@ -10,13 +10,15 @@ include_once "../Templates/include.php";
 <?php include_once "../Templates/head.html"; ?>
 <body id="body">
 <?php include_once "../Templates/layout.html"; ?>
+<?php include_once "../Templates/layout_left.html"; ?>
 </body>
 <?php
+use Jxc\Impl\Core\JxcConfig;
 use Jxc\Impl\Dao\CustomerDao;
 use Jxc\Impl\Dao\ProductDao;
 use Jxc\Impl\Vo\VoProduct;
 
-$dao = new CustomerDao($DB_Config);
+$dao = new CustomerDao(JxcConfig::$DB_Config);
 $resultSet = $dao->selectCustomNameList();
 $custom_list = array();
 foreach ($resultSet as $k => $v) {
@@ -25,7 +27,7 @@ foreach ($resultSet as $k => $v) {
 $pub_custom_list = json_encode($custom_list);
 //
 
-$productDao = new ProductDao($DB_Config);
+$productDao = new ProductDao(JxcConfig::$DB_Config);
 $products = $productDao->selectAll();
 
 $map = array();
@@ -51,17 +53,6 @@ $pdt_list = json_encode($pdt_list);
         console.log(this);
         console.log($(document));
 
-
-        $('#layout').height($(window).height());
-        $('#layout').w2layout({
-            name: 'layout',
-            panels: [
-                {type: 'top', size: 50, content: 'jxc_nav'},
-                {type: 'left', size: 200, content: 'div_left'},
-                {type: 'main', size: 200},
-                {type: 'bottom', size: 50, content: 'div_footer'}
-            ]
-        });
 
         var content = $('#div_right').w2grid({
             name: 'div_frame',
@@ -196,6 +187,9 @@ $pdt_list = json_encode($pdt_list);
                 w2ui['div_frame'].toolbar.refresh();
             }
         });
+
+
+
     });
 </script>
 </html>
