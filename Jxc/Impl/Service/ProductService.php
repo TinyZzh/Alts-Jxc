@@ -3,9 +3,9 @@
 namespace Jxc\Impl\Service;
 
 
+use Jxc\Impl\Core\JxcConfig;
 use Jxc\Impl\Core\JxcService;
 use Jxc\Impl\Dao\ProductDao;
-use Jxc\JxcConfig;
 
 class ProductService extends JxcService {
 

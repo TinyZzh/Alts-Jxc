@@ -9,7 +9,8 @@ Jxc\AutoLoader::register();
 //Requests::register_autoloader();
 
 //
-if (!isset($_REQUEST['api']) || !isset($JXC_SERVICE[$_REQUEST['api']])) {
+use \Jxc\Impl\Core\JxcConfig;
+if (!isset($_REQUEST['api']) || !isset(JxcConfig::$JXC_SERVICE[$_REQUEST['api']])) {
     echo json_encode(array('ret'=>-1, 'msg'=>'Unknown service.'));
     exit();
 }
@@ -17,7 +18,7 @@ if (!isset($_REQUEST['c'])) {
     echo json_encode(array('ret'=>-1, 'msg'=>'Unknown command.'));
     exit();
 }
-$clz = $JXC_SERVICE[$_REQUEST['api']];
+$clz = JxcConfig::$JXC_SERVICE[$_REQUEST['api']];
 $method = $_REQUEST['c'];
 $service = new $clz();
 

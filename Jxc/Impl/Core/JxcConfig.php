@@ -1,5 +1,5 @@
 <?php
-namespace Jxc;
+namespace Jxc\Impl\Core;
 
 /**
  * Jxc系统配置
