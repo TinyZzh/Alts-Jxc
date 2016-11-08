@@ -1,7 +1,7 @@
 <?php
 //  Object
 include_once "../Jxc/AutoLoader.php";
-include_once "../Jxc/Config.inc.php";
+include_once "../Jxc/JxcConfig.php";
 Jxc\AutoLoader::register();
 
 include_once "../Jxc/Modules/get_customer_list.php";
