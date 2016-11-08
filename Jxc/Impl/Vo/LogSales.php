@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: TinyZ
- * Date: 2016/10/26
- * Time: 22:29
- */
 
 namespace Jxc\Impl\Vo;
 

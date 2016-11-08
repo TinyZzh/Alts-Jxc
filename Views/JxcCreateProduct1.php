@@ -1,7 +1,7 @@
 <?php
 //  Autoload register
 include_once "../Jxc/AutoLoader.php";
-include_once "../Jxc/Config.inc.php";
+include_once "../Jxc/JxcConfig.php";
 Jxc\AutoLoader::register();
 
 ?>
@@ -67,16 +67,16 @@ Jxc\AutoLoader::register();
                     }
                 },
                 {field: 'pdt_color', caption: '颜色', size: '5%', editable: {type: 'pdt_color'}},
-                {field: 'pdt_count_0', caption: '3XS', size: '5%', editable: {type: 'text',}},
-                {field: 'pdt_count_1', caption: '2XS', size: '5%', editable: {type: 'text',}},
-                {field: 'pdt_count_2', caption: 'XS', size: '5%', editable: {type: 'text',}},
-                {field: 'pdt_count_3', caption: 'S', size: '5%', editable: {type: 'text',}},
-                {field: 'pdt_count_4', caption: 'M', size: '5%', editable: {type: 'text',}},
-                {field: 'pdt_count_5', caption: 'L', size: '5%', editable: {type: 'text',}},
-                {field: 'pdt_count_6', caption: 'XL', size: '5%', editable: {type: 'text',}},
-                {field: 'pdt_count_7', caption: '2XL', size: '5%', editable: {type: 'text',}},
-                {field: 'pdt_count_8', caption: '3XL', size: '5%', editable: {type: 'text',}},
-                {field: 'pdt_price', caption: '单价', size: '5%', editable: {type: 'text',}},
+                {field: 'pdt_count_0', caption: '3XS', size: '5%', editable: {type: 'text'}},
+                {field: 'pdt_count_1', caption: '2XS', size: '5%', editable: {type: 'text'}},
+                {field: 'pdt_count_2', caption: 'XS', size: '5%', editable: {type: 'text'}},
+                {field: 'pdt_count_3', caption: 'S', size: '5%', editable: {type: 'text'}},
+                {field: 'pdt_count_4', caption: 'M', size: '5%', editable: {type: 'text'}},
+                {field: 'pdt_count_5', caption: 'L', size: '5%', editable: {type: 'text'}},
+                {field: 'pdt_count_6', caption: 'XL', size: '5%', editable: {type: 'text'}},
+                {field: 'pdt_count_7', caption: '2XL', size: '5%', editable: {type: 'text'}},
+                {field: 'pdt_count_8', caption: '3XL', size: '5%', editable: {type: 'text'}},
+                {field: 'pdt_price', caption: '单价', size: '5%', editable: {type: 'text'}},
                 {field: 'pdt_total', caption: '总数', size: '5%'},
                 {field: 'total_rmb', caption: '总价', size: '10%'}
             ],
