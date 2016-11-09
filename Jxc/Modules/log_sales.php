@@ -1,11 +1,12 @@
 <?php
 
+use Jxc\Impl\Core\JxcConfig;
 use Jxc\Impl\Dao\LogSalesDao;
 use Jxc\Impl\Vo\LogSales;
 
 $response = array('status' => "error",);
 
-$logSalesDao = new LogSalesDao($DB_Config);
+$logSalesDao = new LogSalesDao(JxcConfig::$DB_Config);
 
 switch ($_REQUEST['cmd']) {
     case "get-records": {

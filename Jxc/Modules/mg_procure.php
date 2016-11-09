@@ -1,5 +1,6 @@
 <?php
 
+use Jxc\Impl\Core\JxcConfig;
 use Jxc\Impl\Dao\ProductDao;
 use Jxc\Impl\Vo\VoProduct;
 
@@ -7,7 +8,7 @@ $response = array('status' => "error",);
 
 $request = $_REQUEST;
 
-$productDao = new ProductDao($DB_Config);
+$productDao = new ProductDao(JxcConfig::$DB_Config);
 
 switch ($request['cmd']) {
     case "get-records": {

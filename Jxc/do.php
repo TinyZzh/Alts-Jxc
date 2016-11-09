@@ -2,7 +2,7 @@
 header("Content-type: text/html; charset=utf-8");
 //  Object
 include_once __DIR__ . "/AutoLoader.php";
-include_once "./Impl/Core/JxcConfig.php";
+include_once "Impl/Core/JxcConfig.php";
 Jxc\AutoLoader::register();
 //  HTTP util
 //include_once __DIR__ . "/Impl/Libs/Requests.php";

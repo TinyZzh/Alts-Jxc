@@ -4,17 +4,11 @@
  *
  */
 include_once "../Templates/include.php";
-?>
-<!DOCTYPE html>
-<html lang="zh-cn">
-<?php include_once "../Templates/head.html"; ?>
-<body id="body">
-<?php include_once "../Templates/layout.html"; ?>
-</body>
-<?php
+
+use Jxc\Impl\Core\JxcConfig;
 use Jxc\Impl\Dao\CustomerDao;
 
-$dao = new CustomerDao($DB_Config);
+$dao = new CustomerDao(JxcConfig::$DB_Config);
 $resultSet = $dao->selectCustomNameList();
 $custom_list = array();
 foreach ($resultSet as $k => $v) {
@@ -24,22 +18,15 @@ $pub_custom_list = json_encode($custom_list);
 //
 $remoteUrl = "../Jxc/index.php?api=mg_product";
 ?>
+<!DOCTYPE html>
+<html lang="zh-cn">
+<body id="body">
+</body>
 <script>
     $(document).ready(function () {
-        $('#layout').height($(window).height());
-        $('#layout').w2layout({
-            name: 'layout',
-            panels: [
-                {type: 'top', size: 50, content: 'jxc_nav'},
-                {type: 'left', size: 200, content: 'div_left'},
-                {type: 'main', size: 200},
-                {type: 'bottom', size: 50, content: 'div_footer'}
-            ]
-        });
-
-        var content = $('#div_right').w2grid({
-            name: 'div_frame',
-            header: '采购管理',
+        var content = $('#div_main_cnt').w2grid({
+            name: 'div_main_cnt',
+            header: '采购',
             multiSelect: true,
             url: "<?=$remoteUrl ?>",
             columnGroups: [
@@ -69,6 +56,7 @@ $remoteUrl = "../Jxc/index.php?api=mg_product";
                 toolbarSave: true,
                 toolbarDelete: true,
                 lineNumbers: true,
+                header: true,
                 footer: true
             },
             toolbar: {
