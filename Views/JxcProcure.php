@@ -4,15 +4,7 @@
  *
  */
 include_once "../Templates/include.php";
-?>
-<!DOCTYPE html>
-<html lang="zh-cn">
-<?php include_once "../Templates/head.html"; ?>
-<body id="body">
-<?php include_once "../Templates/layout.html"; ?>
-<?php include_once "../Templates/layout_left.php"; ?>
-</body>
-<?php
+
 use Jxc\Impl\Core\JxcConfig;
 use Jxc\Impl\Dao\CustomerDao;
 use Jxc\Impl\Dao\ProductDao;
@@ -41,24 +33,23 @@ foreach ($products as $k => $v) {
         $map[$v->pdt_id]->pdt_id = $w2ValRecId;
     }
 }
-$jsonProducts = json_encode($map);
-$pdt_list = json_encode($pdt_list);
 
 ?>
+<!DOCTYPE html>
+<html lang="zh-cn">
+<body id="body">
+</body>
 <script>
     $(document).ready(function () {
-
-        $(document).data("jxc_products", <?=$jsonProducts?>);
+        $(document).data("jxc_products", <?=json_encode($map)?>);
         console.log($(document).data("xx"));
         console.log(this);
         console.log($(document));
 
-
-        var content = $('#div_right').w2grid({
-            name: 'div_frame',
-            header: '销售管理',
+        var content = $('#div_main_cnt').w2grid({
+            name: 'div_main_cnt',
+            header: '采购',
             multiSelect: true,
-//            url: "<?//=$remoteUrl ?>//",
             columnGroups: [
                 {caption: '产品', span: 2},
                 {caption: '颜色', master: true},
@@ -72,7 +63,7 @@ $pdt_list = json_encode($pdt_list);
                     editable: {
                         type: 'list',
                         showAll: true,
-                        items: <?=$pdt_list?>
+                        items: <?=json_encode($pdt_list)?>
                     },
                     render: function (record, index, col_index) {
                         var html = this.getCellValue(index, col_index);
@@ -132,6 +123,23 @@ $pdt_list = json_encode($pdt_list);
                     event.preventDefault();
                     w2alert("[Error]货号[" + pdt_id + "]重复, 请重新输入.", "Error");
                 }
+                console.log('tinyz');
+                var request = [];
+                for (var i in this.records) {
+                    var vo = {
+                        'pdt_id':this.records[i]['recid'],
+                        'pdt_counts':[],
+                        'pdt_zk':this.records[i]['pdt_zk']
+                    };
+                    for (var j =0;j<10;j++) {
+                        console.log(this.records[i]['pdt_count' + j]);
+                        vo['pdt_counts'].push(this.records[i]['pdt_count_' + j]);
+                    }
+                    request.push(vo);
+                }
+
+                console.log(request);
+
             },
             onLoad: function (event) {
                 w2uiInitEmptyGrid(this, event);
@@ -176,19 +184,8 @@ $pdt_list = json_encode($pdt_list);
         });
         w2ui['layout'].content('main', content);
 
-        //  根据货号筛选
-        $.getJSON("../Jxc/index.php?api=get_pdt_id_list", null, function (data) {
-            if (data['status'] == 'success') {
-                var item = {
-                    type: 'menu', id: 'selectPdt', caption: '选择货号',
-                    items: data['items']
-                };
-                w2ui['div_frame'].toolbar.add(item);
-                w2ui['div_frame'].toolbar.refresh();
-            }
-        });
-
-
+        for (var i = 0; i < 2; i++)
+            w2GridAddEmptyRecord(content);
 
     });
 </script>

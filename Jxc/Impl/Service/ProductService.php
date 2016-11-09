@@ -24,7 +24,8 @@ class ProductService extends JxcService {
      * 采购
      */
     public function procure($request) {
-        $this->productDao->selectById();
+
+
 
     }
 

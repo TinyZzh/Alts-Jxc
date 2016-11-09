@@ -1,18 +1,10 @@
 <?php
 /**
- * 产品销售管理.
+ * 库存信息.
  *
  */
 include_once "../Templates/include.php";
-?>
-<!DOCTYPE html>
-<html lang="zh-cn">
-<?php include_once "../Templates/head.html"; ?>
-<body id="body">
-<?php include_once "../Templates/layout.html"; ?>
-<?php include_once "../Templates/layout_left.php"; ?>
-</body>
-<?php
+
 use Jxc\Impl\Core\JxcConfig;
 use Jxc\Impl\Dao\CustomerDao;
 use Jxc\Impl\Dao\ProductDao;
@@ -45,6 +37,10 @@ $jsonProducts = json_encode($map);
 $pdt_list = json_encode($pdt_list);
 
 ?>
+<!DOCTYPE html>
+<html lang="zh-cn">
+<body id="body">
+</body>
 <script>
     $(document).ready(function () {
 
@@ -54,8 +50,8 @@ $pdt_list = json_encode($pdt_list);
         console.log($(document));
 
 
-        var content = $('#div_right').w2grid({
-            name: 'div_frame',
+        var content = $('#div_main_cnt').w2grid({
+            name: 'div_main_cnt',
             header: '销售管理',
             multiSelect: true,
 //            url: "<?//=$remoteUrl ?>//",
