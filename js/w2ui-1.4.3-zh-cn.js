@@ -1874,10 +1874,10 @@ w2utils.keyboard = (function (obj) {
         // ----
         // properties that need to be in prototype
 
-        msgDelete       : w2utils.lang('Are you sure you want to delete selected records?'),
-        msgNotJSON      : w2utils.lang('Returned data is not in valid JSON format.'),
-        msgAJAXerror    : w2utils.lang('AJAX error. See console for more details.'),
-        msgRefresh      : w2utils.lang('Refreshing...'),
+        msgDelete       : w2utils.lang('是否确认要删除该记录?'),
+        msgNotJSON      : w2utils.lang('返回的数据不是一个有效的JSON格式.'),
+        msgAJAXerror    : w2utils.lang('AJAX错误. 在console中查看更多信息.'),
+        msgRefresh      : w2utils.lang('刷新中...'),
 
         // for easy button overwrite
         buttons: {
@@ -2216,7 +2216,7 @@ w2utils.keyboard = (function (obj) {
                 return ret;
             });
             time = (new Date()).getTime() - time;
-            if (silent !== true) setTimeout(function () { obj.status(w2utils.lang('Sorting took') + ' ' + time/1000 + ' ' + w2utils.lang('sec')); }, 10);
+            if (silent !== true) setTimeout(function () { obj.status(w2utils.lang('排序耗时') + ' ' + time/1000 + ' ' + w2utils.lang('秒')); }, 10);
             return time;
         },
 
@@ -2315,7 +2315,7 @@ w2utils.keyboard = (function (obj) {
                 this.total = this.last.searchIds.length;
             }
             time = (new Date()).getTime() - time;
-            if (silent !== true) setTimeout(function () { obj.status(w2utils.lang('Search took') + ' ' + time/1000 + ' ' + w2utils.lang('sec')); }, 10);
+            if (silent !== true) setTimeout(function () { obj.status(w2utils.lang('查询耗时') + ' ' + time/1000 + ' ' + w2utils.lang('秒')); }, 10);
             return time;
         },
 
@@ -2978,7 +2978,7 @@ w2utils.keyboard = (function (obj) {
                 var search = this.searches[s];
                 if (s == -1) {
                     if (!this.multiSearch) continue;
-                    search = { field: 'all', caption: w2utils.lang('All Fields') };
+                    search = { field: 'all', caption: w2utils.lang('全部字段') };
                 } else {
                     if (this.searches[s].hidden === true) continue;
                 }
@@ -3691,7 +3691,7 @@ w2utils.keyboard = (function (obj) {
             if (recs.length == 0) return;
             if (this.msgDelete != '' && !force) {
                 w2confirm({
-                    title   : w2utils.lang('Delete Confirmation'), 
+                    title   : w2utils.lang('确认删除框'),
                     msg     : obj.msgDelete, 
                     btn_yes : { "class": 'btn-red' },
                     callBack: function (result) {
@@ -12690,10 +12690,10 @@ var w2confirm = function (msg, title, callBack) {
 
         this.style         = '';
         this.focus         = 0;    // focus first or other element
-        this.msgNotJSON    = w2utils.lang('Return data is not in JSON format.');
-        this.msgAJAXerror  = w2utils.lang('AJAX error. See console for more details.');
-        this.msgRefresh    = w2utils.lang('Refreshing...');
-        this.msgSaving     = w2utils.lang('Saving...');
+        this.msgNotJSON    = w2utils.lang('返回的不是JSON格式数据');
+        this.msgAJAXerror  = w2utils.lang('AJAX错误. 在console中查看详细信息.');
+        this.msgRefresh    = w2utils.lang('正在刷新...');
+        this.msgSaving     = w2utils.lang('正在保存...');
 
         // events
         this.onRequest   = null;

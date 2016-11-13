@@ -7,6 +7,7 @@ $sidebar = array(
     'jxc_info_color' => '',
     'jxc_procure' => 'Views/JxcProcure.php',
     'jxc_store_show' => '',
+    'jxc_sales' => 'Views/JxcSalesOrder.php',
 
 );
 
@@ -47,7 +48,7 @@ $sidebar = array(
                     group:true,
                     nodes: [
                         {id: 'jxc_store_show', text: '库存信息', img: 'icon-page'},
-                        {id: 'jxc_store_show', text: '管理库存', img: 'icon-page'},
+                        {id: 'jxc_store_info', text: '管理库存', img: 'icon-page'},
                     ]
                 },
             ],

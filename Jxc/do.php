@@ -11,11 +11,11 @@ Jxc\AutoLoader::register();
 //
 use \Jxc\Impl\Core\JxcConfig;
 if (!isset($_REQUEST['api']) || !isset(JxcConfig::$JXC_SERVICE[$_REQUEST['api']])) {
-    echo json_encode(array('ret'=>-1, 'msg'=>'Unknown service.'));
+    echo json_encode(array('state'=>-1, 'msg'=>'Unknown service.'));
     exit();
 }
 if (!isset($_REQUEST['c'])) {
-    echo json_encode(array('ret'=>-1, 'msg'=>'Unknown command.'));
+    echo json_encode(array('state'=>-1, 'msg'=>'Unknown command.'));
     exit();
 }
 $clz = JxcConfig::$JXC_SERVICE[$_REQUEST['api']];
@@ -25,11 +25,11 @@ $service = new $clz();
 if (method_exists($service, $method)) {
     $ref = new ReflectionMethod($clz, $method);
     if (!$ref->isPublic()) {
-        echo json_encode(array('ret'=>-1, 'msg'=>'The api is not public'));
+        echo json_encode(array('state'=>-1, 'msg'=>'The api is not public'));
         exit();
     }
 } else {
-    echo json_encode(array('ret'=>-1, 'msg'=>'Unknown method.'));
+    echo json_encode(array('state'=>-1, 'msg'=>'Unknown method.'));
     exit();
 }
 
