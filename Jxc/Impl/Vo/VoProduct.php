@@ -27,6 +27,7 @@ class VoProduct extends Vo {
     public $pdt_price;   //  进货单价
     public $pdt_total;   //  库存总数
     public $total_rmb;   //  库存总价值
+    public $datetime;    //  添加时间
 
     public function __construct() {
         $this->pdt_counts = array();

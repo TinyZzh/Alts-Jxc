@@ -17,9 +17,9 @@ Jxc\AutoLoader::register();
     <link href="css/bootstrap-theme.min.css" type="text/css" rel="stylesheet">
     <link href="css/w2ui-1.4.3.min.css" type="text/css" rel="stylesheet">
     <script src="js/jquery.min.js" type="text/javascript"></script>
-    <script src="js/jxc-1.0.0.js" type="text/javascript"></script>
     <script src="js/bootstrap.min.js" type="text/javascript"></script>
     <script src="js/w2ui-1.4.3-zh-cn.js" type="text/javascript"></script>
+    <script src="js/jxc-1.0.0.js?v1.0.3" type="text/javascript"></script>
 </head>
 <body id="body">
 <div id="layout">
@@ -42,7 +42,7 @@ Jxc\AutoLoader::register();
 </script>
 <?php include_once "./Templates/layout_left.php"; ?>
 <?php
-//include_once "Views/JxcMgSales2.php";
+//include_once "Views/JxcSalesOrder.php";
 ?>
 </body>
 </html>
