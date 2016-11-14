@@ -11,17 +11,16 @@ use Jxc\Impl\Libs\DateUtil;
  * Class VoLogSales
  * @package Jxc\Impl\Vo
  */
-class LogProcure extends Vo {
+class LogProcure2 extends Vo {
 
     public $id;
-    public $datetime;   //  日期
     public $pdt_id;     //  货号
     public $ct_id;      //  消费者
     public $pdt_counts; //  数量  array
     public $pdt_total;  //  总数量
     public $pdt_price;  //  单价
     public $total_rmb;  //  总价
-
+    public $datetime;   //  日期
 
     public function __construct() {
         $this->pdt_counts = array();

@@ -89,13 +89,7 @@ $pdt_list = json_encode($pdt_list);
                 {field: 'pdt_count_6', caption: 'XL', size: '5%', editable: {type: 'text'}, render: renderSizeField},
                 {field: 'pdt_count_7', caption: '2XL', size: '5%', editable: {type: 'text'}, render: renderSizeField},
                 {field: 'pdt_count_8', caption: '3XL', size: '5%', editable: {type: 'text'}, render: renderSizeField},
-                {
-                    field: 'pdt_zk',
-                    caption: '折扣',
-                    size: '7%',
-                    render: 'percent',
-                    editable: {type: 'percent', min: 0, max: 100}
-                },
+                {field: 'pdt_zk', caption: '折扣', size: '7%', render: 'percent', editable: {type: 'percent', min: 0, max: 100}},
                 {field: 'pdt_price', caption: '进价', size: '7%'},
                 {field: 'pdt_total', caption: '总数量', size: '10%'},
                 {field: 'total_rmb', caption: '总价', size: '10%'}
