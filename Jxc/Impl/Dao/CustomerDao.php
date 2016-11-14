@@ -8,7 +8,7 @@ use Jxc\Impl\Vo\VoCustomer;
 use Jxc\Impl\Vo\VoProduct;
 
 /**
- * 产品库存表
+ * 顾客信息Dao
  * Class ProductDao
  * @package Jxc\Impl\Dao
  */
@@ -16,6 +16,18 @@ class CustomerDao extends MySQLDao {
 
     public function __construct($config) {
         parent::__construct($config);
+    }
+
+
+    public function w2uiSelect($where = array()) {
+        $sets = $this->mysqlDB()->select('tb_customer', '*', $where);
+        $data = array();
+        foreach ($sets as $k => $v) {
+            $voCustomer = new VoCustomer();
+            $voCustomer->convert($v);
+            $data[] = array('id' => $k, 'text' => "[{$voCustomer->ct_id}]:{$voCustomer->ct_name}", 'ct_id' => $voCustomer->ct_id, 'ct_address' => $voCustomer->ct_address);
+        }
+        return $data;
     }
 
     public function selectById($ids) {

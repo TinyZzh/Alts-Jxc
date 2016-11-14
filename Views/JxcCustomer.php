@@ -48,45 +48,27 @@ foreach ($products as $k => $v) {
 
         var content = $('#div_main_cnt').w2grid({
             name: 'div_main_cnt',
-            header: '采购',
+            header: '客户信息管理',
             multiSelect: true,
-            columnGroups: [
-                {caption: '产品', span: 2},
-                {caption: '颜色', master: true},
-                {caption: '尺码', span: 9},
-                {caption: '标价', span: 2},
-                {caption: '总计', span: 2}
-            ],
             columns: [
-                {
-                    field: 'pdt_id', caption: '编号', size: '10%',
-                    style:'text-align:center',
+                {field: 'ct_id', caption: '客户ID', size: '10%', style: 'text-align:center', editable: {type: 'text'}},
+                {field: 'ct_name', caption: '客户姓名', size: '10%', style: 'text-align:center', editable: {type: 'text'}},
+                {field: 'ct_address', caption: '通信地址', size: '10%', style: 'text-align:right', editable: {type: 'text'}},
+                {field: 'ct_phone', caption: '联系电话', size: '10%', style: 'text-align:right', editable: {type: 'text'}},
+                {field: 'ct_money', caption: '账户余额', size: '10%', style: 'text-align:right',
                     editable: {
-                        type: 'list',
-                        showAll: true,
-                        items: <?=json_encode($pdt_list)?>
+                        type: 'float',
+                        currencySuffix: '$'
                     },
-                    render: function (record, index, col_index) {
-                        var html = this.getCellValue(index, col_index);
-//                        console.log(html);
-                        return html.text || '';
+                    render: function (record) {
+                        console.log(record);
+                        var money = 0;
+                        if (record.changes && record.changes.ct_money) {
+                            money = record.changes.ct_money;
+                        }
+                        return '<div>¥' + ' ' + Number(money).toFixed(2) + '</div>';
                     }
-                },
-                {field: 'pdt_name', caption: '名称', size: '10%', style:'text-align:center'},
-                {field: 'pdt_color', caption: '颜色', size: '5%'},
-                {field: 'pdt_count_0', caption: '3XS', size: '5%', editable: {type: 'text'}},
-                {field: 'pdt_count_1', caption: '2XS', size: '5%', editable: {type: 'text'}},
-                {field: 'pdt_count_2', caption: 'XS', size: '5%', editable: {type: 'text'}},
-                {field: 'pdt_count_3', caption: 'S', size: '5%', editable: {type: 'text'}},
-                {field: 'pdt_count_4', caption: 'M', size: '5%', editable: {type: 'text'}},
-                {field: 'pdt_count_5', caption: 'L', size: '5%', editable: {type: 'text'}},
-                {field: 'pdt_count_6', caption: 'XL', size: '5%', editable: {type: 'text'}},
-                {field: 'pdt_count_7', caption: '2XL', size: '5%', editable: {type: 'text'}},
-                {field: 'pdt_count_8', caption: '3XL', size: '5%', editable: {type: 'text'}},
-                {field: 'pdt_zk', caption: '折扣', size: '7%', render: 'percent', editable: {type: 'percent', min: 0, max: 100}},
-                {field: 'pdt_price', caption: '进价', size: '7%'},
-                {field: 'pdt_total', caption: '总数量', size: '10%'},
-                {field: 'total_rmb', caption: '总价', size: '10%'}
+                }
             ],
             show: {
                 header: true,
@@ -101,18 +83,7 @@ foreach ($products as $k => $v) {
                 items: [
                     {type: 'break'},
                     {type: 'button', id: 'mybutton', caption: 'My other button', img: 'icon-folder'},
-                    {type: 'button', id: 'newLogSales', caption: '新增销售记录',},
-                    {
-                        type: 'menu', id: 'menuPdt', caption: '货号2',
-                        items: ["xxxx", "yyyy"],
-                        options: {
-                            url: "../Jxc/index.php?api=get_pdt_id_list",
-                            postData: {
-                                'moduleId': 'menuPdt',
-                                'aryPdtId': '1'
-                            }
-                        }
-                    }
+                    {type: 'button', id: 'newLogSales', caption: '新增销售记录',}
                 ],
                 onClick: function (target, data) {
                     console.log(target);
@@ -128,11 +99,11 @@ foreach ($products as $k => $v) {
                 var request = [];
                 for (var i in this.records) {
                     var vo = {
-                        'pdt_id':this.records[i]['recid'],
-                        'pdt_counts':[],
-                        'pdt_zk':this.records[i]['pdt_zk']
+                        'pdt_id': this.records[i]['recid'],
+                        'pdt_counts': [],
+                        'pdt_zk': this.records[i]['pdt_zk']
                     };
-                    for (var j =0;j<10;j++) {
+                    for (var j = 0; j < 10; j++) {
                         console.log(this.records[i]['pdt_count' + j]);
                         vo['pdt_counts'].push(this.records[i]['pdt_count_' + j]);
                     }

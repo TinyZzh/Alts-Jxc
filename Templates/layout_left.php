@@ -2,19 +2,12 @@
 
 
 
-$sidebar = array(
-    'jxc_info_product' => 'Views/JxcProductInfo.php',
-    'jxc_info_color' => '',
-    'jxc_procure' => 'Views/JxcProcure.php',
-    'jxc_store_show' => '',
-    'jxc_sales' => 'Views/JxcSalesOrder.php',
 
-);
 
 
 ?>
 <script>
-    $(document).data('api', <?=json_encode($sidebar)?>);
+    $(document).data('api', <?=json_encode(\Jxc\Impl\Core\JxcConfig::$SIDEBAR)?>);
 
     $(document).ready(function () {
         var div_left = $('#div_left').w2sidebar({
@@ -27,6 +20,7 @@ $sidebar = array(
                     group:true,
                     nodes: [
                         {id: 'jxc_info_product', text: '商品信息', img: 'icon-columns'},
+                        {id: 'jxc_info_custom', text: '客户信息', img: 'icon-bullet-black'},
                         {id: 'jxc_info_color', text: '颜色信息', img: 'icon-bullet-black'},
                         {id: 'jxc_info_size', text: '尺码信息', img: 'icon-page'}
                     ]

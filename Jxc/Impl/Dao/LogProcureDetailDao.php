@@ -8,15 +8,21 @@ use Jxc\Impl\Vo\LogProcureOrder;
 use Jxc\Impl\Vo\LogSales;
 
 /**
- * 采购进货日志
+ * 采购详单
  * Class LogProcureDao
  * @package Jxc\Impl\Dao
  */
-class LogProcureDao extends MySQLDao {
+class LogProcureDetailDao extends MySQLDao {
 
     public function __construct($config) {
         parent::__construct($config);
     }
+
+
+    public function selectByOrder($order) {
+
+    }
+
 
     public function selectById($ids) {
         $inId = implode(",", $ids);

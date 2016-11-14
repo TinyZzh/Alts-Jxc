@@ -6,10 +6,11 @@
 <?php include_once "../Templates/layout.html"; ?>
 </body>
 <?php
+use Jxc\Impl\Core\JxcConfig;
 use Jxc\Impl\Dao\CustomerDao;
 
-$dao = new CustomerDao($DB_Config);
-$resultSet = $dao->selectCustomNameList();
+$customDao = new CustomerDao(JxcConfig::$DB_Config);
+$resultSet = $customDao->selectCustomNameList();
 $custom_list = array();
 foreach ($resultSet as $k => $v) {
     $custom_list[] = array('id' => $k, 'text' => $v['ct_name']);
@@ -17,21 +18,22 @@ foreach ($resultSet as $k => $v) {
 $pub_custom_list = json_encode($custom_list);
 //
 $remoteUrl = "../Jxc/index.php?api=jxc_product";
+
+
+$listOfCustom = json_encode($customDao->w2uiSelect());
+
 ?>
 <script>
     $(document).ready(function () {
-        $('#layout').height($(window).height());
-        $('#layout').w2layout({
-            name: 'layout',
-            panels: [
-                {type: 'top', size: 50, content: 'jxc_nav'},
-                {type: 'left', size: 200, content: 'div_left'},
-//                { type: 'main', style: pstyle, content: 'main' },
-//                { type: 'preview', size: '50%', content: 'preview' },
-                {type: 'main', size: 200},
-                {type: 'bottom', size: 50, content: 'div_footer'}
-            ]
-        });
+        console.log(<?=$listOfCustom?>);
+//        $.getJSON('../do.php?api=custom&c=getCustomList', null, function(data) {
+//            if (data.state != 1) {
+//                w2alert("Error: Api:[custom], Cmd:[getCustomList]", "Error");
+//            }
+//
+//
+//        });
+
 
         var content = $('#div_right').w2grid({
             name: 'div_frame',
@@ -79,21 +81,29 @@ $remoteUrl = "../Jxc/index.php?api=jxc_product";
                 items: [
                     {type: 'break'},
                     {type: 'button', id: 'mybutton', caption: 'My other button', img: 'icon-folder'},
+                    {type: 'button', id: 'JxcCustomName', text: '客户名字', img: 'icon-folder', disabled:true},
+                    {type: 'button', id: 'JxcCustomAddress', text: '客户练习地址', img: 'icon-folder', disabled:true},
                     {type: 'button', id: 'newLogSales', caption: '新增销售记录',},
                     {
-                        type: 'menu', id: 'menuPdt', caption: '货号2',
-                        items: ["xxxx", "yyyy"],
-                        options: {
-                            url: "../Jxc/index.php?api=get_pdt_id_list",
-                            postData: {
-                                'moduleId': 'menuPdt',
-                                'aryPdtId': '1'
-                            }
-                        }
+                        type: 'menu', id: 'JxcCustomMenu', caption: '客户',
+                        items: <?=$listOfCustom ?>
                     }
                 ],
                 onClick: function (target, data) {
                     console.log(target);
+                    console.log(data);
+                    console.log(this);
+                    var that = this;
+                    var selected = target.split(':');
+                    if (selected.length > 1 && selected[0] == 'JxcCustomMenu') {
+                        that.set('JxcCustomMenu', {'caption':data.subItem.text});
+                        that.set('JxcCustomName', {'text':data.subItem.text});
+                        that.set('JxcCustomAddress', {'text':data.subItem.ct_address});
+
+                        that.uncheck(selected[0]);
+                    }
+
+
                 }
             },
             onLoad: function (event) {
@@ -108,7 +118,34 @@ $remoteUrl = "../Jxc/index.php?api=jxc_product";
                 w2GridAddEmptyRecord(this);
             },
             onSave: w2GridOnSaveAndUpdate,
-            onKeydown: w2uiFuncGridOnKeydown
+            onKeydown: w2uiFuncGridOnKeydown,
+            onExpand: function (event) {
+                if (w2ui.hasOwnProperty('subgrid-' + event.recid)) w2ui['subgrid-' + event.recid].destroy();
+                $('#' + event.box_id).css({
+                    margin: '0px',
+                    padding: '0px',
+                    width: '100%'
+                }).animate({height: '105px'}, 100);
+                setTimeout(function () {
+                    $('#' + event.box_id).w2grid({
+                        name: 'subgrid-' + event.recid,
+                        show: {columnHeaders: true},
+                        fixedBody: true,
+                        columns: [
+                            {field: 'lname', caption: 'Last Name', size: '30%'},
+                            {field: 'fname', caption: 'First Name', size: '30%'},
+                            {field: 'email', caption: 'Email', size: '40%'},
+                            {field: 'sdate', caption: 'Start Date', size: '90px'},
+                        ],
+                        records: [
+                            {recid: 6, fname: 'Francis', lname: 'Gatos', email: 'jdoe@gmail.com', sdate: '4/3/2012'},
+                            {recid: 7, fname: 'Mark', lname: 'Welldo', email: 'jdoe@gmail.com', sdate: '4/3/2012'},
+                            {recid: 8, fname: 'Thomas', lname: 'Bahh', email: 'jdoe@gmail.com', sdate: '4/3/2012'}
+                        ]
+                    });
+                    w2ui['subgrid-' + event.recid].resize();
+                }, 300);
+            }
         });
         w2ui['layout'].content('main', content);
 
