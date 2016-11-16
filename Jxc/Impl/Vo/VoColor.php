@@ -12,7 +12,7 @@ use Jxc\Impl\Core\Vo;
 class VoColor extends Vo {
 
     public $color_id;   //  颜色ID
-    public $name;       //  颜色名称
-    public $rgba;       //  RGBA值
+    public $color_name;       //  颜色名称
+    public $color_rgba;       //  RGBA值
 
 }

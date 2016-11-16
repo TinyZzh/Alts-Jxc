@@ -25,16 +25,18 @@ class JxcConfig {
     public static $JXC_SERVICE = array(
         'product' => 'Jxc\Impl\Service\ProductService',
         'custom' => 'Jxc\Impl\Service\CustomService',
+        'color' => 'Jxc\Impl\Service\ColorService',
     );
 
 
     public static $SIDEBAR = array(
-        'jxc_info_product' => 'Views/JxcProductInfo.php',
+        'jxc_info_product' => 'Views/JxcInfoProduct.php',
+        'jxc_info_custom' => 'Views/JxcInfoCustomer.php',
+        'jxc_info_color' => 'Views/JxcInfoColors.php',
         'jxc_procure' => 'Views/JxcProcure.php',
         'jxc_store_show' => '',
         'jxc_sales' => 'Views/JxcSalesOrder.php',
-        'jxc_info_custom' => 'Views/JxcCustomer.php',
-        'jxc_info_color' => 'Views/JxcColors.php',
+
 
     );
 }

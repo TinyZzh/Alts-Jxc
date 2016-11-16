@@ -22,7 +22,44 @@ class ColorDao extends MySQLDao {
         $sets = $this->mysqlDB()->select('tb_colors', '*', array());
         $data = array();
         foreach ($sets as $k => $v) {
-            $data[] = array('id' => $k, 'text' => $v);
+            $data[] = array('id' => $k, 'text' => $v['color_name'], 'color_id' => $v['color_id'], 'color_rgba' => $v['color_rgba']);
+        }
+        return $data;
+    }
+
+    public function w2uiSelectColorByPdtIds($ids) {
+        $inId = implode(",", $ids);
+        $query = "SELECT * FROM tb_color WHERE color_id IN (SELECT pdt_color FROM tb_product WHERE pdt_id IN ({$inId}));";
+        $sets = $this->mysqlDB()->ExecuteSQL($query);
+        $map = array();
+        foreach ($sets as $v) {
+            $voColor = new VoColor();
+            $voColor->convert($v);
+            $map[$voColor->color_id] = $voColor;
+        }
+        return $map;
+    }
+
+    public function selectById($ids) {
+        $inId = implode(",", $ids);
+        $query = "SELECT * FROM tb_colors WHERE color_id IN ({$inId});";
+        $sets = $this->mysqlDB()->ExecuteSQL($query);
+        $map = array();
+        foreach ($sets as $v) {
+            $voColor = new VoColor();
+            $voColor->convert($v);
+            $map[$voColor->color_id] = $voColor;
+        }
+        return $map;
+    }
+
+    public function select($where = array()) {
+        $sets = $this->mysqlDB()->select('tb_colors', '*', $where);
+        $data = array();
+        foreach ($sets as $k => $v) {
+            $voColor = new VoColor();
+            $voColor->convert($v);
+            $data[] = $voColor;
         }
         return $data;
     }
@@ -53,7 +90,7 @@ class ColorDao extends MySQLDao {
      * @throws Exception
      */
     public function delete($color_id) {
-        $query = $this->mysqlDB()->sqlDeleteWhere('tb_colors', array('ct_id' => $color_id));
+        $query = $this->mysqlDB()->sqlDeleteWhere('tb_colors', array('color_id' => $color_id));
         $this->mysqlDB()->ExecuteSQL($query);
     }
 

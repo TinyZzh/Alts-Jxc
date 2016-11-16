@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Index - Title</title>
+    <link href="css/jxc-1.0.0.css" type="text/css" rel="stylesheet">
+    <link href="css/bootstrap.min.css" type="text/css" rel="stylesheet">
+    <link href="css/bootstrap-theme.min.css" type="text/css" rel="stylesheet">
+    <link href="css/w2ui-1.4.3.min.css" type="text/css" rel="stylesheet">
+
+    <script src="js/jquery.min.js" type="text/javascript"></script>
+    <script src="js/jxc-1.0.0.js" type="text/javascript"></script>
+    <script src="js/bootstrap.min.js" type="text/javascript"></script>
+    <script src="js/w2ui-1.4.3-zh-cn.js" type="text/javascript"></script>
+</head>
+<body>
+<div id="layout">
+    <div id="jxc_nav" class="navbar navbar-default navbar-fixed-top" role="navigation"><p>导航栏</p></div>
+    <div id="div_left"></div>
+    <div id="div_main_cnt"></div>
+    <div id="div_right"></div>
+    <div id="div_footer"></div>
+</div>
+
+<script type="text/javascript">
+
+    var colors = [
+        {id: 0, text: '紫色', color_id: 100, rgba: '#000000'},
+        {id: 1, text: '蓝色', color_id: 100, rgba: '#00FF00'},
+        {id: 2, text: '绿色', color_id: 100, rgba: '#0000FF'},
+        {id: 3, text: '红色', color_id: 100, rgba: '#FF0000'},
+        {id: 4, text: '黑色', color_id: 100, rgba: '#FFFFFF'},
+    ];
+
+
+    $(document).ready(function () {
+        //  layout
+        $('#layout').height($(window).height());
+        $('#layout').w2layout({
+            name: 'layout',
+            panels: [
+                {type: 'top', size: 50, content: 'jxc_nav'},
+                {type: 'left', size: 200, content: 'div_left'},
+                {type: 'main', size: 200},
+                {type: 'bottom', size: 50, content: 'div_footer'}
+            ]
+        });
+
+        var popupGrid = {
+            name: 'popupGrid',
+            columns: [
+                {field: 'fname', caption: 'First Name', size: '33%', sortable: true, searchable: true},
+                {field: 'lname', caption: 'Last Name', size: '33%', sortable: true, searchable: true},
+                {field: 'email', caption: 'Email', size: '33%'},
+                {field: 'sdate', caption: 'Start Date', size: '120px', render: 'date'},
+            ],
+            records: [
+                {recid: 1, fname: 'ScJohn', lname: 'Doe', email: 'jdoe@gmail.com', sdate: '4/3/2012'},
+                {recid: 2, fname: 'ScStuart', lname: 'Motzart', email: 'jdoe@gmail.com', sdate: '4/3/2012'},
+                {recid: 3, fname: 'ScJin', lname: 'Franson', email: 'jdoe@gmail.com', sdate: '4/3/2012'},
+                {recid: 4, fname: 'ScSusan', lname: 'Ottie', email: 'jdoe@gmail.com', sdate: '4/3/2012'},
+                {recid: 5, fname: 'ScKelly', lname: 'Silver', email: 'jdoe@gmail.com', sdate: '4/3/2012'},
+                {recid: 6, fname: 'ScFrancis', lname: 'Gatos', email: 'jdoe@gmail.com', sdate: '4/3/2012'},
+                {recid: 7, fname: 'ScMark', lname: 'Welldo', email: 'jdoe@gmail.com', sdate: '4/3/2012'},
+                {recid: 8, fname: 'ScThomas', lname: 'Bahh', email: 'jdoe@gmail.com', sdate: '4/3/2012'},
+                {recid: 9, fname: 'ScSergei', lname: 'Rachmaninov', email: 'jdoe@gmail.com', sdate: '4/3/2012'}
+            ],
+            onClick: function (event) {
+                var that = this;
+                console.log(event);
+                var rec = that.get(event.recid);
+                w2ui['div_main_cnt'].set(event.recid, {
+                    'fname': rec[that.columns[event.column].field]
+                });
+                event.onComplete = function(event) {
+                    w2popup.close();
+                }
+            }
+        };
+        $().w2grid(popupGrid);
+
+        //  grid
+        var div_main = $('#div_main_cnt').w2grid({
+            name: 'div_main_cnt',
+            columns: [
+                { field: 'fname', caption: 'First Name', size: '30%', editable: { type: 'text'}},
+                { field: 'lname', caption: 'Last Name', size: '30%', editable: { type: 'text'}},
+                { field: 'email', caption: 'Email', size: '40%', editable: { type: 'text'}},
+                { field: 'sdate', caption: 'Start Date', size: '120px', editable: { type: 'text'}},
+            ],
+            records: [
+                {"recid": 1, "fname": "John", "lname": "Doe", "email": "jdoe@gmail.com", "sdate": "4/3/2012"},
+                {"recid": 2, "fname": "Stuart", "lname": "Motzart", "email": "jdoe@gmail.com", "sdate": "4/3/2012"},
+                {"recid": 3, "fname": "Jin", "lname": "Franson", "email": "jdoe@gmail.com", "sdate": "4/3/2012"},
+                {"recid": 4, "fname": "Susan", "lname": "Ottie", "email": "jdoe@gmail.com", "sdate": "4/3/2012"},
+                {"recid": 5, "fname": "Kelly", "lname": "Silver", "email": "jdoe@gmail.com", "sdate": "4/3/2012"},
+                {"recid": 6, "fname": "Francis", "lname": "Gatos", "email": "jdoe@gmail.com", "sdate": "4/3/2012"},
+                {"recid": 7, "fname": "Mark", "lname": "Welldo", "email": "jdoe@gmail.com", "sdate": "4/3/2012"},
+                {"recid": 8, "fname": "Thomas", "lname": "Bahh", "email": "jdoe@gmail.com", "sdate": "4/3/2012"},
+                {"recid": 9, "fname": "Sergei", "lname": "Rachmaninov", "email": "jdoe@gmail.com", "sdate": "4/3/2012"}
+            ],
+            onEditField: function (event) {
+                console.log(event);
+                event.preventDefault();
+                openPop();
+            }
+        });
+        w2ui['layout'].content('main', div_main);
+
+
+        function openPop() {
+            if (w2ui['pop_layout']) {
+                w2ui['pop_layout'].destroy();
+            }
+            w2popup.open({
+                title: 'Popup Title',
+//                body: '<div id="pop_layout">This is text inside the popup</div>',
+//                body: '<div id="pop_layout" style="position: absolute; left: 5px; top: 5px; right: 5px; bottom: 5px;"></div>',
+                body: '<div id="pop_layout" style="position: absolute; left: 0px; top: 0px; right: 0px; bottom: 0px;"></div>',
+//                body: '<div id="pop_layout" style="position: absolute; margin: 5px;"></div>',
+                modal: true,
+                showClose: true,
+                showMax: true,
+                width: 500,
+                height: 300,
+                onOpen: function (event) {
+                    console.log(event);
+                    event.onComplete = function (event) {
+                        console.log(event);
+                        var pop_main = $('#pop_layout').w2layout({
+                            name: 'pop_layout',
+                            padding: 4,
+                            panels: [
+//                                { type: 'left', size: '50%', resizable: true },
+                                {type: 'main'}
+                            ]
+                        });
+                        w2ui['pop_layout'].content('main', w2ui['popupGrid']);   //  w2ui['popupGrid']
+                    };
+                },
+                onToggle: function (event) {
+                    event.onComplete = function () {
+                        w2ui['pop_layout'].resize();
+                    }
+                }
+            });
+        }
+
+    });
+</script>
+
+</body>
+</html>
