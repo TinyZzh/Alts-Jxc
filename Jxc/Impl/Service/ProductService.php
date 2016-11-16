@@ -42,7 +42,7 @@ class ProductService extends JxcService {
      */
     public function savePdtInfo($request) {
         if ($verify = GameUtil::verifyRequestParams($request, array('changes'))) {
-            return array('state' => 'error', 'msg' => 'Undefined field : ' . $verify);
+            return array('status' => 'error', 'msg' => 'Undefined field : ' . $verify);
         }
         $changes = $request['changes'];
         $aryId = array();
@@ -76,7 +76,7 @@ class ProductService extends JxcService {
 
     public function removePdtInfo($request) {
         if ($verify = GameUtil::verifyRequestParams($request, array('selected'))) {
-            return array('state' => 'error', 'msg' => 'Undefined field : ' . $verify);
+            return array('status' => 'error', 'msg' => 'Undefined field : ' . $verify);
         }
         foreach ($request['selected'] as $pdt_id) {
             $this->productDao->delete($pdt_id);

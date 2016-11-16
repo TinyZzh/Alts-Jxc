@@ -17,6 +17,18 @@ class ProductDao extends MySQLDao {
         parent::__construct($config);
     }
 
+    public function w2uiSelectAll() {
+        $query = $this->mysqlDB()->sqlSelectWhere('tb_product', '*');
+        $datas = $this->mysqlDB()->ExecuteSQL($query);
+        $array = array();
+        foreach($datas as $data) {
+            $voProduct = new VoProduct();
+            $voProduct->convert($data);
+            $array[] = $voProduct;
+        }
+        return $array;
+    }
+
     public function selectById($ids) {
         $inId = implode(",", $ids);
         $query = "SELECT * FROM tb_product WHERE pdt_id IN ({$inId});";

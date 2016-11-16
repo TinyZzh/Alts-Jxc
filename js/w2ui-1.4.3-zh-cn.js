@@ -1703,7 +1703,7 @@ w2utils.keyboard = (function (obj) {
             emptyRecords    : true,
             toolbarReload   : true,
             toolbarColumns  : true,
-            toolbarSearch   : true,
+            toolbarSearch   : false,
             toolbarAdd      : false,
             toolbarEdit     : false,
             toolbarDelete   : false,

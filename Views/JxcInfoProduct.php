@@ -36,7 +36,23 @@ $remoteUrl = "../Jxc/index.php?api=mg_product";
             columns: [
                 {field: 'pdt_id', caption: '编号', size: '10%', editable: {type: 'text'}},
                 {field: 'pdt_name', caption: '名称', size: '10%', editable: {type: 'text'}},
-                {field: 'pdt_color', caption: '颜色', size: '5%', editable: {type: 'text'}},
+                {
+                    field: 'pdt_color', caption: '颜色', size: '5%',
+                    editable: {
+                        type: 'list',
+                        items: menuOfColors
+                    },
+                    render: function (record, index, col_index) {
+                        var value = this.getCellValue(index, col_index);
+                        if ($.isPlainObject(value)) {
+                            return '<div style="height:24px;text-align:center;background-color: #' + value.color_rgba + ';">' + ' ' + value.text + '</div>';
+                        } else if (cacheOfColors[value]) {
+                            var vc = cacheOfColors[value];
+                            return '<div style="height:24px;text-align:center;background-color: #' + vc.color_rgba + ';">' + ' ' + vc.color_name + '</div>';
+                        }
+                        return '<div>' + value + '</div>';
+                    }
+                },
                 {field: 'pdt_price', caption: '进货价', size: '5%', editable: {type: 'text'}},
                 {field: 'datetime', caption: '记录时间', size: '5%'}
             ],
@@ -90,7 +106,17 @@ $remoteUrl = "../Jxc/index.php?api=mg_product";
                 }
             },
             onSubmit: function (event) {
-
+                var that = this;
+                //  转换为color_id
+                for (var r in that.records) {
+                    var rec = that.records[r];
+                    if (typeof rec['changes'] != 'undefined') {
+                        console.log(rec['changes'].pdt_color);
+                        if (rec['changes'].pdt_color && $.isPlainObject(rec['changes'].pdt_color)) {
+                            rec['changes'].pdt_color = rec['changes'].pdt_color.color_id;
+                        }
+                    }
+                }
             },
             onLoad: function (event) {
                 var that = this;
@@ -105,7 +131,12 @@ $remoteUrl = "../Jxc/index.php?api=mg_product";
                 w2uiInitEmptyGrid(that, event);
             },
             onAdd: w2GridOnAdd,
-            onEditField: w2GridOnEditField,
+//            onEditField: w2GridOnEditField,
+            onEditField:function(event) {
+
+                w2popup()
+
+            },
             onSave: w2GridOnSaveAndUpdate,
             onKeydown: w2GridOnKeyDown
         });

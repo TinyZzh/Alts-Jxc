@@ -73,7 +73,18 @@ $pdt_list = json_encode($pdt_list);
                     }
                 },
                 {field: 'pdt_name', caption: '名称', size: '10%', style: 'text-align:center'},
-                {field: 'pdt_color', caption: '颜色', size: '5%'},
+                {
+                    field: 'pdt_color', caption: '颜色', size: '5%',
+                    render: function (record, index, col_index) {
+                        var html = this.getCellValue(index, col_index);
+                        console.log("颜色：" + html);
+                        if (cacheOfColors[html]) {
+                            var vc = cacheOfColors[html];
+                            return '<div style="height:24px;text-align:center;background-color: #' + vc.color_rgba + ';">' + ' ' + vc.color_name + '</div>';
+                        }
+                        return '<div>' + html + '</div>';
+                    }
+                },
                 {
                     field: 'pdt_count_0',
                     caption: '3XS',
@@ -89,7 +100,13 @@ $pdt_list = json_encode($pdt_list);
                 {field: 'pdt_count_6', caption: 'XL', size: '5%', editable: {type: 'text'}, render: renderSizeField},
                 {field: 'pdt_count_7', caption: '2XL', size: '5%', editable: {type: 'text'}, render: renderSizeField},
                 {field: 'pdt_count_8', caption: '3XL', size: '5%', editable: {type: 'text'}, render: renderSizeField},
-                {field: 'pdt_zk', caption: '折扣', size: '7%', render: 'percent', editable: {type: 'percent', min: 0, max: 100}},
+                {
+                    field: 'pdt_zk',
+                    caption: '折扣',
+                    size: '7%',
+                    render: 'percent',
+                    editable: {type: 'percent', min: 0, max: 100}
+                },
                 {field: 'pdt_price', caption: '进价', size: '7%'},
                 {field: 'pdt_total', caption: '总数量', size: '10%'},
                 {field: 'total_rmb', caption: '总价', size: '10%'}
