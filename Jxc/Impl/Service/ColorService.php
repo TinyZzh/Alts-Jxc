@@ -20,6 +20,10 @@ class ColorService extends JxcService {
         $this->colorDao = new ColorDao(JxcConfig::$DB_Config);
     }
 
+    public function w2Records() {
+        return array('status' => 'success', 'data' => $this->colorDao->w2gridRecords());
+    }
+
     /**
      * 获取顾客列表
      * @param $request

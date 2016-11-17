@@ -24,6 +24,8 @@ $remoteUrl = "../Jxc/index.php?api=mg_product";
 </body>
 <script>
     $(document).ready(function () {
+
+
         var content = $('#div_main_cnt').w2grid({
             name: 'div_main_cnt',
             header: '产品信息管理',
@@ -37,7 +39,7 @@ $remoteUrl = "../Jxc/index.php?api=mg_product";
                 {field: 'pdt_id', caption: '编号', size: '10%', editable: {type: 'text'}},
                 {field: 'pdt_name', caption: '名称', size: '10%', editable: {type: 'text'}},
                 {
-                    field: 'pdt_color', caption: '颜色', size: '5%',
+                    field: 'pdt_color', caption: '颜色', size: '80px',
                     editable: {
                         type: 'list',
                         items: menuOfColors
@@ -132,10 +134,12 @@ $remoteUrl = "../Jxc/index.php?api=mg_product";
             },
             onAdd: w2GridOnAdd,
 //            onEditField: w2GridOnEditField,
-            onEditField:function(event) {
-
-                w2popup()
-
+            onEditField: function (event) {
+                console.log(event);
+                if (this.columns[event.column].field == 'pdt_color') {  //  编辑单品颜色
+                    event.preventDefault();
+                    colorUtils.openPop(this);
+                }
             },
             onSave: w2GridOnSaveAndUpdate,
             onKeydown: w2GridOnKeyDown
@@ -143,20 +147,8 @@ $remoteUrl = "../Jxc/index.php?api=mg_product";
         w2ui['layout'].content('main', content);
 
 
-//        $.ajax
 
-        //  根据货号筛选
-        $.getJSON("../Jxc/index.php?api=get_pdt_id_list", null, function (data) {
-            console.log(data);
-            if (data['status'] == 'success') {
-                var item = {
-                    type: 'menu', id: 'selectPdt', caption: '选择货号',
-                    items: data['items']
-                };
-                w2ui['div_frame'].toolbar.add(item);
-                w2ui['div_frame'].toolbar.refresh();
-            }
-        });
+
     });
 </script>
 </html>
