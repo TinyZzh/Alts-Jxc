@@ -5,17 +5,21 @@ namespace Jxc\Impl\Service;
 use Jxc\Impl\Core\JxcConfig;
 use Jxc\Impl\Core\JxcService;
 use Jxc\Impl\Dao\CustomerDao;
+use Jxc\Impl\Dao\LogChargeDao;
 use Jxc\Impl\Libs\DateUtil;
 use Jxc\Impl\Util\GameUtil;
+use Jxc\Impl\Vo\LogCharge;
 use Jxc\Impl\Vo\VoCustomer;
 
 class CustomService extends JxcService {
 
     private $customDao;
+    private $logChargeDao;
 
     public function __construct() {
         parent::__construct();
         $this->customDao = new CustomerDao(JxcConfig::$DB_Config);
+        $this->logChargeDao = new LogChargeDao(JxcConfig::$DB_Config);
     }
 
     /**
@@ -82,8 +86,31 @@ class CustomService extends JxcService {
         return array('status' => 'success', 'deleted' => $request['selected']);
     }
 
-
-
+    public function charge($request) {
+        if ($verify = GameUtil::verifyRequestParams($request, array('ct_id', 'money'))) {
+            return array('status' => 'error', 'msg' => 'Undefined field : ' . $verify);
+        }
+        $operator = $request['op'];
+        //  单笔充值100w上限
+        $money = round($request['money'], 2);   //  四舍五入, 保留2位小数
+        if ($money <= 0.0 || $money > 1000000.0) {
+            return array('status' => 'error', 'msg' => 'Charge money is out of range : ' . $money);
+        }
+        $vo = $this->customDao->selectByCtId($request['ct_id']);
+        if ($vo) {
+            $vo->ct_money += $money;
+            //  日志
+            $logCharge = new LogCharge();
+            $logCharge->ct_id = $vo->ct_id;
+            $logCharge->money = $vo->ct_money;
+            $logCharge->datetime = DateUtil::makeTime();
+            $logCharge->operator = $operator;
+            $this->logChargeDao->insert($logCharge);
+            //  保存充值
+            $this->customDao->updateByFields($vo, array('ct_money'));
+        }
+        return array('status' => 'success');
+    }
 
 
 }

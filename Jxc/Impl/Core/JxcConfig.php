@@ -19,6 +19,10 @@ class JxcConfig {
         'pwd' => '123456',
     );
 
+    public static $PUBLIC = array(
+        'public'
+    );
+
     /**
      * Register service
      */
@@ -26,6 +30,7 @@ class JxcConfig {
         'product' => 'Jxc\Impl\Service\ProductService',
         'custom' => 'Jxc\Impl\Service\CustomService',
         'color' => 'Jxc\Impl\Service\ColorService',
+        'public' => 'Jxc\Impl\Service\PublicService',
     );
 
 

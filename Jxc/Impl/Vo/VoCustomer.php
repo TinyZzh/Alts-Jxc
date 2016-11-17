@@ -22,7 +22,7 @@ class VoCustomer extends Vo {
     public $ct_name;     //  客户姓名
     public $ct_address;  //  通信地址
     public $ct_phone;    //  联系电话
-    public $ct_money;    //  账户余额   -   手动充值
-    public $last_order;   //  上一个订单
+    public $ct_money;    //  账户余额   -   手动充值    浮点数
+    public $last_order;  //  上一个订单
 
 }
