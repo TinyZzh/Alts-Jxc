@@ -11,6 +11,7 @@ use Jxc\Impl\Core\Vo;
  * @package Jxc\Impl\Vo
  */
 class LogRefund extends Vo {
+    
     public $id;
     public $pdt_id;     //  货号
     public $ct_id;      //  消费者

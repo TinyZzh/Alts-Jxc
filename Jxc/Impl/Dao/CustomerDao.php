@@ -60,6 +60,16 @@ class CustomerDao extends MySQLDao {
         return $array;
     }
 
+    public function selectByCtId($ct_id) {
+        $sets = $this->mysqlDB()->select('tb_customer', '*', array('ct_id' => $ct_id));
+        if ($sets) {
+            $voCustomer = new VoCustomer();
+            $voCustomer->convert($sets[0]);
+            return $voCustomer;
+        }
+        return null;
+    }
+
     /**
      * @param $voCustomer VoCustomer
      * @return VoCustomer

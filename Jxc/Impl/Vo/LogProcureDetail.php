@@ -7,7 +7,7 @@ use Jxc\Impl\Core\Vo;
 use Jxc\Impl\Libs\DateUtil;
 
 /**
- * 采购详单
+ * 采购订单详单
  * Class VoLogSales
  * @package Jxc\Impl\Vo
  */
@@ -17,13 +17,14 @@ class LogProcureDetail extends Vo {
     public $order;      //  订单号
     public $pdt_id;     //  货号
     public $pdt_counts; //  数量  array
-    public $pdt_zk;     //  折扣
-    public $pdt_total;  //  总数量
-    public $pdt_price;  //  单价
-    public $total_rmb;  //  总价
+    public $pdt_zk;     //  折扣  default: 100
+    public $pdt_price;  //  采购单品单价
+    public $pdt_total;  //  采购单品总数量
+    public $total_rmb;  //  采购单品总价
 
     public function __construct() {
         $this->pdt_counts = array();
+        $this->pdt_zk = 100;
         for ($i = 0; $i < 10; $i++) {
             $this->pdt_counts[] = '';
         }
@@ -72,7 +73,7 @@ class LogProcureDetail extends Vo {
     }
 
     private function calc_total_price() {
-        return $this->pdt_total * ($this->pdt_zk / 100) * $this->pdt_price;
+        return $this->pdt_total * ($this->pdt_zk / 100.0) * $this->pdt_price;
     }
 
     private function calc_pdt_total() {

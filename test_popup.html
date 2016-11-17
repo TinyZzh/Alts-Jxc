@@ -69,10 +69,13 @@
                 var that = this;
                 console.log(event);
                 var rec = that.get(event.recid);
+
                 w2ui['div_main_cnt'].set(event.recid, {
-                    'fname': rec[that.columns[event.column].field]
+                    'changes': {
+                        'fname': rec[that.columns[event.column].field]
+                    }
                 });
-                event.onComplete = function(event) {
+                event.onComplete = function (event) {
                     w2popup.close();
                 }
             }
@@ -82,11 +85,25 @@
         //  grid
         var div_main = $('#div_main_cnt').w2grid({
             name: 'div_main_cnt',
+            url:{
+                save:'http://127.0.0.1/Alts-Jxc/'
+            },
             columns: [
-                { field: 'fname', caption: 'First Name', size: '30%', editable: { type: 'text'}},
-                { field: 'lname', caption: 'Last Name', size: '30%', editable: { type: 'text'}},
-                { field: 'email', caption: 'Email', size: '40%', editable: { type: 'text'}},
-                { field: 'sdate', caption: 'Start Date', size: '120px', editable: { type: 'text'}},
+                {
+                    field: 'fname', caption: 'First Name', size: '30%', editable: {type: 'text'},
+                    render: function (record, index, col_index) {
+                        var html = this.getCellValue(index, col_index);
+//                        console.log(html);
+                        var color = '#FFFFFF';
+                        if (html.indexOf('@') > 0) {
+                            color = '#00a23f';
+                        }
+                        return '<div style="background-color: ' + color + '">' + html || '' + '</div>';
+                    }
+                },
+                {field: 'lname', caption: 'Last Name', size: '30%', editable: {type: 'text'}},
+                {field: 'email', caption: 'Email', size: '40%', editable: {type: 'text'}},
+                {field: 'sdate', caption: 'Start Date', size: '120px', editable: {type: 'text'}},
             ],
             records: [
                 {"recid": 1, "fname": "John", "lname": "Doe", "email": "jdoe@gmail.com", "sdate": "4/3/2012"},
