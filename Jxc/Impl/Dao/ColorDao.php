@@ -53,13 +53,39 @@ class ColorDao extends MySQLDao {
         return $map;
     }
 
+    public function w2gridRecords() {
+        $sets = $this->mysqlDB()->select('tb_colors', '*', array());
+        $data = array();
+        foreach ($sets as $k => $v) {
+            $voColor = new VoColor();
+            $voColor->convert($v);
+            //  5个一组
+            $i = $k % 5;
+            $j = floor($k / 5);
+            $data[$j]['recid'] = $j;
+            $data[$j]['color'.$i] = $voColor;
+        }
+        return $data;
+    }
+
+    public function selectAll() {
+        $sets = $this->mysqlDB()->select('tb_colors', '*', array());
+        $data = array();
+        foreach ($sets as $k => $v) {
+            $voColor = new VoColor();
+            $voColor->convert($v);
+            $data[$voColor->color_id] = $voColor;
+        }
+        return $data;
+    }
+
     public function select($where = array()) {
         $sets = $this->mysqlDB()->select('tb_colors', '*', $where);
         $data = array();
         foreach ($sets as $k => $v) {
             $voColor = new VoColor();
             $voColor->convert($v);
-            $data[] = $voColor;
+            $data[$voColor->color_id] = $voColor;
         }
         return $data;
     }

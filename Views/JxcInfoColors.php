@@ -58,18 +58,18 @@ foreach ($products as $k => $v) {
             columns: [
                 {field: 'color_id', caption: '颜色ID', size: '10%', style: 'text-align:center'},
                 {
+                    field: 'color_rgba', caption: 'RGBA值', size: '80px', editable: {type: 'color'},
+                    render: function (record, index, col_index) {
+                        var rgba = this.getCellValue(index, col_index);
+                        return '<div style="height:24px;text-align:center;background-color: #' + rgba + ';">' + ' ' + rgba + '</div>';
+                    }
+                },
+                {
                     field: 'color_name',
                     caption: '颜色名称',
                     size: '10%',
                     style: 'text-align:center',
                     editable: {type: 'text'}
-                },
-                {
-                    field: 'color_rgba', caption: 'RGBA值', size: '10%', editable: {type: 'color'},
-                    render: function (record, index, col_index) {
-                        var rgba = this.getCellValue(index, col_index);
-                        return '<div style="height:24px;text-align:center;background-color: #' + rgba + ';">' + ' ' + rgba + '</div>';
-                    }
                 }
             ],
             show: {

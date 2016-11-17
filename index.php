@@ -19,7 +19,7 @@ Jxc\AutoLoader::register();
     <script src="js/jquery.min.js" type="text/javascript"></script>
     <script src="js/bootstrap.min.js" type="text/javascript"></script>
     <script src="js/w2ui-1.4.3-zh-cn.js" type="text/javascript"></script>
-    <script src="js/jxc-1.0.0.js?v1.0.3" type="text/javascript"></script>
+    <script src="js/jxc-1.0.0.js?v=<?=time()?>" type="text/javascript"></script>
 </head>
 <body id="body">
 <div id="layout">

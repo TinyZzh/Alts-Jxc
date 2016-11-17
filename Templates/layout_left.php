@@ -7,7 +7,7 @@ use Jxc\Impl\Vo\VoProduct;
 
 //  颜色缓存
 $colorDao = new ColorDao(JxcConfig::$DB_Config);
-$cacheOfColors = $colorDao->select();
+$cacheOfColors = $colorDao->selectAll();
 $menuOfColors = $colorDao->w2uiSelectAll();
 
 //  产品信息缓存
