@@ -31,7 +31,11 @@ class CustomService extends JxcService {
         return array('state' => 1, 'data' => $this->customDao->w2uiSelect());
     }
 
-
+    /**
+     * 获取会员信息
+     * @param $request
+     * @return array
+     */
     public function getAllCustomerInfo($request) {
         $data = $this->customDao->select();
         $array = array();
@@ -42,6 +46,11 @@ class CustomService extends JxcService {
         return array('status' => 'success', 'records' => $array);
     }
 
+    /**
+     * 更新会员信息
+     * @param $request
+     * @return array
+     */
     public function saveCustomerInfo($request) {
         if ($verify = GameUtil::verifyRequestParams($request, array('changes'))) {
             return array('status' => 'error', 'msg' => 'Undefined field : ' . $verify);
@@ -76,6 +85,11 @@ class CustomService extends JxcService {
         return array('status' => 'success', 'updates' => $updateAry);
     }
 
+    /**
+     * 移除会员信息
+     * @param $request
+     * @return array
+     */
     public function removeCustomerInfo($request) {
         if ($verify = GameUtil::verifyRequestParams($request, array('selected'))) {
             return array('status' => 'error', 'msg' => 'Undefined field : ' . $verify);
@@ -86,6 +100,11 @@ class CustomService extends JxcService {
         return array('status' => 'success', 'deleted' => $request['selected']);
     }
 
+    /**
+     * 充值
+     * @param $request
+     * @return array
+     */
     public function charge($request) {
         if ($verify = GameUtil::verifyRequestParams($request, array('ct_id', 'money'))) {
             return array('status' => 'error', 'msg' => 'Undefined field : ' . $verify);

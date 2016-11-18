@@ -62,10 +62,10 @@ foreach ($products as $k => $v) {
                 {field: 'ct_phone', caption: '联系电话', size: '8%', style: 'text-align:right', editable: {type: 'text'}},
                 {field: 'ct_money', caption: '账户余额', size: '7%', style: 'text-align:right',
                     editable: {
-                        type: 'float',
-                        currencySuffix: '$'
+                        type: 'float'
                     },
-                    render: function (record) {
+                    render: function (record, index, col_index) {
+                        var html = this.getCellValue(index, col_index);
                         console.log(record);
                         var money = record.ct_money;
                         if (record.changes && record.changes.ct_money) {

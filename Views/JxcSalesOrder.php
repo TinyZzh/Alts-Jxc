@@ -77,7 +77,6 @@ $pdt_list = json_encode($pdt_list);
                     field: 'pdt_color', caption: '颜色', size: '5%',
                     render: function (record, index, col_index) {
                         var html = this.getCellValue(index, col_index);
-                        console.log("颜色：" + html);
                         if (cacheOfColors[html]) {
                             var vc = cacheOfColors[html];
                             return '<div style="height:24px;text-align:center;background-color: #' + vc.color_rgba + ';">' + ' ' + vc.color_name + '</div>';

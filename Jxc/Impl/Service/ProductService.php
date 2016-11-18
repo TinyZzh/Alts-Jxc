@@ -87,10 +87,38 @@ class ProductService extends JxcService {
     /**
      * 采购
      */
-    public function procure($request) {
-
-
-
+    public function saveSalesOrder($request) {
+        if ($verify = GameUtil::verifyRequestParams($request, array('changes'))) {
+            return array('status' => 'error', 'msg' => 'Undefined field : ' . $verify);
+        }
+        $changes = $request['changes'];
+        $aryId = array();
+        foreach ($changes as $change) {
+            $aryId[$change['recid']] = 1;
+        }
+        $ids = array_keys($aryId);
+        $existMap = $this->productDao->selectById($ids);
+        $updateAry = array();
+        foreach ($changes as $change) {
+            $id = $change['recid'];
+            if (isset($existMap[$id])) {  //  update
+                $voProduct = $existMap[$id];
+                if ($voProduct instanceof VoProduct) {
+                    $voProduct->w2uiToVo($change);
+                    $this->productDao->updateByFields($voProduct);
+                    $updateAry[] = $voProduct->voToW2ui($voProduct);
+                }
+            } else {    //  insert
+                $voProduct = new VoProduct();
+                $voProduct->w2uiToVo($change);
+                $voProduct->datetime = DateUtil::makeTime();
+                $voProduct = $this->productDao->insert($voProduct);
+                $ua = $voProduct->voToW2ui($voProduct);
+                $ua->depId = $id;
+                $updateAry[] = $ua;
+            }
+        }
+        return array('status' => 'success', 'updates' => $updateAry);
     }
 
     public function getBaseShopInfoList($request) {
