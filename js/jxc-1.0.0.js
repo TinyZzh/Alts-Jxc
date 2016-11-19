@@ -246,6 +246,7 @@ var colorUtils = (function () {
     var obj = {
         version: '1.0.0',
         openPop: onOpenPop,
+        onDestroy: onDestroy,
         initJxcColorsPopup: initJxcColorPopup,
         renderJxcColorCell: onRenderColorCell,
         showColorsPopup: onShowColorPopup
@@ -270,6 +271,16 @@ var colorUtils = (function () {
     }
 
     /**
+     * 销毁popup面板
+     */
+    function onDestroy() {
+        if (w2ui['popup_jxc_colors_layout'])
+            w2ui['popup_jxc_colors_layout'].destroy();
+        if (w2ui['popup_jxc_colors_w2grid'])
+            w2ui['popup_jxc_colors_w2grid'].destroy();
+    }
+
+    /**
      * 渲染颜色格子
      * @param record
      * @param index
@@ -281,7 +292,7 @@ var colorUtils = (function () {
         if ($.isPlainObject(voColor)) {
             return '<div style="height:24px;text-align:center;background-color: #' + voColor.color_rgba + ';">' + ' ' + voColor.color_name + '</div>';
         }
-        return '<div>' + voColor.color_id + '</div>';
+        return voColor ? '<div>' + voColor.color_id + '</div>' : '';
     }
 
     /**
@@ -290,36 +301,6 @@ var colorUtils = (function () {
      * @param recordData
      */
     function initJxcColorPopup(w2gridObj, recordData) {
-        //  w2grid - colors
-        var popup_jxc_colors_w2grid = {
-            name: 'popup_jxc_colors_w2grid',
-            show: {
-                columnHeaders: false
-            },
-            columns: [
-                {field: 'color1', caption: '颜色1', size: '20%', render: onRenderColorCell},
-                {field: 'color2', caption: '颜色2', size: '20%', render: onRenderColorCell},
-                {field: 'color3', caption: '颜色3', size: '20%', render: onRenderColorCell},
-                {field: 'color4', caption: '颜色4', size: '20%', render: onRenderColorCell},
-                {field: 'color0', caption: '颜色5', size: '20%', render: onRenderColorCell},
-            ],
-            records: recordData,
-            onClick: function (event) {
-                var that = this;
-                console.log(event);
-                var rec = that.get(event.recid);
-                var targetFieldName = w2gridObj.columns[w2gridObj.last.sel_col].field;
-                var changeData = [];
-                changeData[targetFieldName] = rec[that.columns[event.column].field].color_id;
-                w2gridObj.set(w2gridObj.last.click_recid, {
-                    'changes': changeData
-                });
-                event.onComplete = function (event) {
-                    w2popup.close();
-                }
-            }
-        };
-        $().w2grid(popup_jxc_colors_w2grid);
         //  w2layout    -
         var popup_jxc_colors_layout = {
             name: 'popup_jxc_colors_layout',
@@ -329,6 +310,42 @@ var colorUtils = (function () {
             ]
         };
         $().w2layout(popup_jxc_colors_layout);
+        //  w2grid - colors
+        var popup_jxc_colors_w2grid = {
+            name: 'popup_jxc_colors_w2grid',
+            show: {
+                columnHeaders: false
+            },
+            columns: [
+                {field: 'color0', caption: '颜色0', size: '20%', render: onRenderColorCell},
+                {field: 'color1', caption: '颜色1', size: '20%', render: onRenderColorCell},
+                {field: 'color2', caption: '颜色2', size: '20%', render: onRenderColorCell},
+                {field: 'color3', caption: '颜色3', size: '20%', render: onRenderColorCell},
+                {field: 'color4', caption: '颜色4', size: '20%', render: onRenderColorCell},
+            ],
+            records: recordData,
+            onClick: function (event) {
+                var that = this;
+                console.log(event);
+                var rec = that.get(event.recid);
+                var targetFieldName = w2gridObj.columns[w2gridObj.last.sel_col].field;
+                var changeData = [];
+                //changeData['recid'] = w2gridObj.last.sel_recid;
+                changeData[targetFieldName] = rec[that.columns[event.column].field].color_id;
+                console.log(w2gridObj);
+                console.log('last_recid = ' + w2gridObj.last.sel_recid);
+                console.log(changeData);
+                w2gridObj.set(w2gridObj.last.sel_recid, {
+                    'changes': changeData
+                });
+                event.onComplete = function (event) {
+
+
+                    w2popup.close();
+                }
+            }
+        };
+        $().w2grid(popup_jxc_colors_w2grid);
     }
 
     function onShowColorPopup() {
@@ -360,5 +377,143 @@ var colorUtils = (function () {
     }
 })();
 
-var jxc_colors = {};
+/**
+ *
+ */
+var pdtUtils = (function () {
 
+    var obj = {
+        version: '1.0.0',
+        onOpen: onOpen,
+        onInitPopup: onInitPopup,
+        onRenderCell: onRenderCell,
+        onShowPopup: onShowPopup,
+        onDestroy: onDestroy
+    };
+    return obj;
+
+    /**
+     * 打开面板
+     * @param parentW2Grid
+     */
+    function onOpen(parentW2Grid) {
+        if (w2ui['popup_jxc_pdt_w2grid']) {
+            onShowPopup();
+        } else {
+            $.getJSON("Jxc/do.php?api=color&c=w2Records", null, function (data) {
+                if (data['status'] == 'success') {
+                    onInitPopup(parentW2Grid, data['data']);
+                    onShowPopup();
+                }
+            });
+        }
+    }
+
+    /**
+     * 销毁popup面板
+     */
+    function onDestroy() {
+        if (w2ui['popup_jxc_colors_layout'])
+            w2ui['popup_jxc_colors_layout'].destroy();
+        if (w2ui['popup_jxc_pdt_w2grid'])
+            w2ui['popup_jxc_pdt_w2grid'].destroy();
+    }
+
+    /**
+     * 渲染格子
+     * @param record
+     * @param index
+     * @param col_index
+     * @returns {string}
+     */
+    function onRenderCell(record, index, col_index) {
+        var voColor = this.getCellValue(index, col_index);
+        if ($.isPlainObject(voColor)) {
+            return '<div style="height:24px;text-align:center;background-color: #' + voColor.color_rgba + ';">' + ' ' + voColor.color_name + '</div>';
+        }
+        return voColor ? '<div>' + voColor.color_id + '</div>' : '';
+    }
+
+    /**
+     * 初始化颜色面板
+     * @param w2gridObj
+     * @param recordData
+     */
+    function onInitPopup(w2gridObj, recordData) {
+        var w2grid = w2gridObj;
+        var records = recordData;
+        //  w2layout    -
+        var popup_layout = {
+            name: 'popup_jxc_pdt_layout',
+            padding: 4,
+            panels: [
+                {type: 'main'}
+            ]
+        };
+        $().w2layout(popup_layout);
+        //  w2grid - colors
+        var popup_w2grid = {
+            name: 'popup_jxc_pdt_w2grid',
+            show: {
+                columnHeaders: false
+            },
+            columns: [
+                {field: 'color0', caption: '颜色0', size: '20%', render: onRenderColorCell},
+                {field: 'color1', caption: '颜色1', size: '20%', render: onRenderColorCell},
+                {field: 'color2', caption: '颜色2', size: '20%', render: onRenderColorCell},
+                {field: 'color3', caption: '颜色3', size: '20%', render: onRenderColorCell},
+                {field: 'color4', caption: '颜色4', size: '20%', render: onRenderColorCell},
+            ],
+            records: records,
+            onClick: function (event) {
+                var that = this;
+                console.log(event);
+                var rec = that.get(event.recid);
+                var targetFieldName = w2grid.columns[w2grid.last.sel_col].field;
+                var changeData = [];
+                //changeData['recid'] = w2gridObj.last.sel_recid;
+                changeData[targetFieldName] = rec[that.columns[w2grid.column].field].color_id;
+                console.log(w2grid);
+                console.log('last_recid = ' + w2grid.last.sel_recid);
+                console.log(changeData);
+                w2grid.set(w2grid.last.sel_recid, {
+                    'changes': changeData
+                });
+                event.onComplete = function (event) {
+
+
+                    w2popup.close();
+                }
+            }
+        };
+        $().w2grid(popup_w2grid);
+    }
+
+    function onShowPopup() {
+        w2popup.open({
+            title: '颜   色',
+//                body: '<div id="pop_layout">This is text inside the popup</div>',
+//                body: '<div id="pop_layout" style="position: absolute; left: 5px; top: 5px; right: 5px; bottom: 5px;"></div>',
+            body: '<div id="pop_layout" style="position: absolute; left: 0px; top: 0px; right: 0px; bottom: 0px;"></div>',
+//                body: '<div id="pop_layout" style="position: absolute; margin: 5px;"></div>',
+            modal: true,
+            showClose: true,
+            showMax: true,
+            width: 500,
+            height: 300,
+            onOpen: function (event) {
+                console.log(event);
+                event.onComplete = function (event) {
+                    console.log(event);
+                    $('#pop_layout').w2render('popup_jxc_pdt_layout');
+                    w2ui['popup_jxc_pdt_layout'].content('main', w2ui['popup_jxc_pdt_w2grid']);
+                };
+            },
+            onToggle: function (event) {
+                event.onComplete = function () {
+                    w2ui['popup_jxc_pdt_layout'].resize();
+                }
+            }
+        });
+    }
+})();

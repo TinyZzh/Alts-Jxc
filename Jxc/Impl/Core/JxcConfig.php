@@ -36,11 +36,12 @@ class JxcConfig {
 
     public static $SIDEBAR = array(
         'jxc_info_product' => 'Views/JxcInfoProduct.php',
+        'jxc_info_pdt_deleted' => 'Views/JxcInfoDeleted.php',
         'jxc_info_custom' => 'Views/JxcInfoCustomer.php',
         'jxc_info_color' => 'Views/JxcInfoColors.php',
-        'jxc_procure' => 'Views/JxcProcure.php',
+        'jxc_procure' => 'Views/JxcOrderProcure.php',
         'jxc_store_show' => '',
-        'jxc_sales' => 'Views/JxcSalesOrder.php',
+        'jxc_sales' => 'Views/JxcOrderSales.php',
 
 
     );

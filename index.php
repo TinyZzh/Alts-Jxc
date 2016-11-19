@@ -42,7 +42,7 @@ Jxc\AutoLoader::register();
 </script>
 <?php include_once "./Templates/layout_left.php"; ?>
 <?php
-//include_once "Views/JxcSalesOrder.php";
+//include_once "Views/JxcOrderSales.php";
 ?>
 </body>
 </html>

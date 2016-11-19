@@ -2,7 +2,6 @@
 
 namespace Jxc\Impl\Service;
 
-
 use Jxc\Impl\Core\JxcConfig;
 use Jxc\Impl\Core\JxcService;
 use Jxc\Impl\Dao\ProductDao;
@@ -10,7 +9,10 @@ use Jxc\Impl\Libs\DateUtil;
 use Jxc\Impl\Util\GameUtil;
 use Jxc\Impl\Vo\VoProduct;
 
-class ProductService extends JxcService {
+/**
+ * 产品相关服务
+ */
+final class ProductService extends JxcService {
 
     private $productDao;
 
@@ -25,7 +27,8 @@ class ProductService extends JxcService {
      * @return array
      */
     public function getPdtList($request) {
-        $list = $this->productDao->selectAll();
+        $flag = isset($request['flag']) ? $request['flag'] : 0;
+        $list = $this->productDao->selectAll($flag);
         $array = array();
         foreach ($list as $k => $v) {
             if ($v instanceof VoProduct) {
@@ -78,8 +81,17 @@ class ProductService extends JxcService {
         if ($verify = GameUtil::verifyRequestParams($request, array('selected'))) {
             return array('status' => 'error', 'msg' => 'Undefined field : ' . $verify);
         }
-        foreach ($request['selected'] as $pdt_id) {
-            $this->productDao->delete($pdt_id);
+        $flag = isset($request['flag']) ? $request['flag'] : 0;
+        if ($request['selected'] && count($request['selected']) > 0) {
+            $sets = $this->productDao->selectById($request['selected'], $flag);
+            $now = DateUtil::makeTime();
+            foreach ($sets as $k=>$v) {
+                if ($v instanceof VoProduct) {
+                    $v->flag = (int)(!$flag);   //  修改flag
+                    $v->timeLastOp = $now;
+                    $this->productDao->updateByFields($v, array('flag', 'timeLastOp'));
+                }
+            }
         }
         return array('status' => 'success', 'deleted' => $request['selected']);
     }
@@ -122,7 +134,6 @@ class ProductService extends JxcService {
     }
 
     public function getBaseShopInfoList($request) {
-
 
 
     }
