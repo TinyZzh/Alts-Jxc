@@ -38,7 +38,7 @@ class W2UI {
                 unset($fields[$k]);
             } else if (isset($obj->$fieldName) || property_exists($obj, $fieldName)) {
                 if (is_array($data[$fieldName]) || is_object($data[$fieldName])) {
-                    $obj->$fieldName = $data[$fieldName]['text'];
+                    $obj->$fieldName = $data[$fieldName]['text'];   //  w2ui-list
                 } else
                     $obj->$fieldName = $data[$fieldName];
             } else {

@@ -27,7 +27,7 @@ class CustomService extends JxcService {
      * @param $request
      * @return array
      */
-    public function getCustomList($request) {
+    public function getCustomList($voOp, $request) {
         return array('state' => 1, 'data' => $this->customDao->w2uiSelect());
     }
 
@@ -36,7 +36,7 @@ class CustomService extends JxcService {
      * @param $request
      * @return array
      */
-    public function getAllCustomerInfo($request) {
+    public function getAllCustomerInfo($voOp, $request) {
         $data = $this->customDao->select();
         $array = array();
         foreach ($data as $v) {
@@ -51,9 +51,9 @@ class CustomService extends JxcService {
      * @param $request
      * @return array
      */
-    public function saveCustomerInfo($request) {
+    public function saveCustomerInfo($voOp, $request) {
         if ($verify = GameUtil::verifyRequestParams($request, array('changes'))) {
-            return array('status' => 'error', 'msg' => 'Undefined field : ' . $verify);
+            return array('status' => 'error', 'message' => 'Undefined field : ' . $verify);
         }
         $changes = $request['changes'];
         $aryId = array();
@@ -90,9 +90,9 @@ class CustomService extends JxcService {
      * @param $request
      * @return array
      */
-    public function removeCustomerInfo($request) {
+    public function removeCustomerInfo($voOp, $request) {
         if ($verify = GameUtil::verifyRequestParams($request, array('selected'))) {
-            return array('status' => 'error', 'msg' => 'Undefined field : ' . $verify);
+            return array('status' => 'error', 'message' => 'Undefined field : ' . $verify);
         }
         foreach ($request['selected'] as $pdt_id) {
             $this->customDao->delete($pdt_id);
@@ -105,15 +105,15 @@ class CustomService extends JxcService {
      * @param $request
      * @return array
      */
-    public function charge($request) {
+    public function charge($voOp, $request) {
         if ($verify = GameUtil::verifyRequestParams($request, array('ct_id', 'money'))) {
-            return array('status' => 'error', 'msg' => 'Undefined field : ' . $verify);
+            return array('status' => 'error', 'message' => 'Undefined field : ' . $verify);
         }
         $operator = $request['op'];
         //  单笔充值100w上限
         $money = round($request['money'], 2);   //  四舍五入, 保留2位小数
         if ($money <= 0.0 || $money > 1000000.0) {
-            return array('status' => 'error', 'msg' => 'Charge money is out of range : ' . $money);
+            return array('status' => 'error', 'message' => 'Charge money is out of range : ' . $money);
         }
         $vo = $this->customDao->selectByCtId($request['ct_id']);
         if ($vo) {

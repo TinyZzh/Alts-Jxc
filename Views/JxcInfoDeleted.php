@@ -10,10 +10,6 @@ include_once "../Templates/include.php";
 </body>
 <script>
     $(document).ready(function () {
-        //  修改删除按钮的文字
-        var btns = w2obj.grid.prototype.buttons;
-        btns['delete'].caption = w2utils.lang('恢复');
-        btns['delete'].hint = w2utils.lang('恢复选中的记录');
         //  渲染w2grid
         var content = $('#div_main_cnt').w2grid({
             name: 'div_main_cnt',
@@ -64,6 +60,10 @@ include_once "../Templates/include.php";
             }
         });
         w2ui['layout'].content('main', content);
+        //  修改删除按钮的文字
+        w2ui['div_main_cnt_toolbar'].items[4].caption = '恢复';
+        w2ui['div_main_cnt_toolbar'].items[4].hint = '恢复选中的记录';
+        w2ui['div_main_cnt_toolbar'].refresh();
     });
 </script>
 </html>

@@ -9,6 +9,7 @@ Jxc\AutoLoader::register();
 use Jxc\Impl\Libs\W2UI;
 use Jxc\Impl\Service\ProductService;
 use Jxc\Impl\Vo\VoProduct;
+use Jxc\Impl\Vo\VoProduct2;
 
 
 $service = new ProductService();
@@ -28,14 +29,14 @@ $vo->pdt_counts = array(0,1,2,3,4,5,6,7,8);
 $vo->pdt_price = 100;
 
 
-echo json_encode($vo).'<br/>';
-$voW2 = W2UI::objToW2ui($vo);
-echo json_encode($voW2).'<br/>';
+//echo json_encode($vo).'<br/>';
+//$voW2 = W2UI::objToW2ui($vo);
+//echo json_encode($voW2).'<br/>';
 
 
-$vo2 = new VoProduct();
-$obj = W2UI::w2uiToObj($vo2, $voW2);
-echo json_encode($obj).'<br/>';
+$vo2 = new VoProduct2();
+$vo2->w2uiToVo(W2UI::objToW2ui($vo));
+echo json_encode($vo2).'<br/>';
 
 
 

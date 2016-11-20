@@ -1,6 +1,6 @@
 <?php
 /**
- * 采购订单.
+ * 销售日志.
  *
  */
 use Jxc\Impl\Core\JxcConfig;

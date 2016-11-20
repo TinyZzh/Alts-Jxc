@@ -130,9 +130,29 @@ $pdt_list = json_encode($pdt_list);
                             }
                             w2confirm("是否确定提交?", "确认提示框")
                                 .yes(function () {
-                                    grid.save();
-                                    grid.getChanges();
+//                                    grid.save();
 
+                                    var postData ={
+                                        'changes' : grid.getChanges(),
+                                        'ct_id' : 1,
+                                    };
+                                    var ajaxOptions = {
+                                        type     : 'POST',
+                                        url      : 'Jxc/do.php?api=product&c=sell',
+                                        data     : postData,
+                                        dataType : 'JSON'
+                                    };
+                                    $.ajax(ajaxOptions)
+                                        .done(function (data, status, xhr) {
+                                            if (data.status != 'success') {
+                                                w2alert(data.msg, "Error");
+                                            } else {
+                                                console.log(data);
+                                            }
+                                        })
+                                        .fail(function (xhr, status, error) {
+
+                                        });
 
                                 });
                         }
