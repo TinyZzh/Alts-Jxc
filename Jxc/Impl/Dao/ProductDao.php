@@ -34,9 +34,9 @@ class ProductDao extends MySQLDao {
     public function selectById($ids, $flag = 0) {
         $inId = "'" . implode("','", $ids) . "'";
         $query = "SELECT * FROM tb_product WHERE pdt_id IN ({$inId}) AND flag={$flag};";
-        $datas = $this->mysqlDB()->ExecuteSQL($query);
+        $sets = $this->mysqlDB()->ExecuteSQL($query);
         $map = array();
-        foreach ($datas as $data) {
+        foreach ($sets as $data) {
             $voProduct = new VoProduct();
             $voProduct->convert($data);
             $map[$voProduct->pdt_id] = $voProduct;
@@ -62,23 +62,24 @@ class ProductDao extends MySQLDao {
      */
     public function selectAll($flag = 0) {
         $query = $this->mysqlDB()->sqlSelectWhere('tb_product', '*', array('flag' => $flag));
-        $datas = $this->mysqlDB()->ExecuteSQL($query);
+        $sets = $this->mysqlDB()->ExecuteSQL($query);
         $array = array();
-        foreach ($datas as $data) {
+        foreach ($sets as $data) {
             $voProduct = new VoProduct();
             $voProduct->convert($data);
-            $array[] = $voProduct;
+            $array[$voProduct->pdt_id] = $voProduct;
         }
         return $array;
     }
 
     /**
-     * @param $voProduct VoProduct
+     * @param VoProduct $voProduct
+     * @param array $fields
      * @return VoProduct
      * @throws Exception
      */
-    public function insert($voProduct) {
-        $query = $this->mysqlDB()->sqlInsert('tb_product', $voProduct->toArray());
+    public function insert($voProduct, $fields = array()) {
+        $query = $this->mysqlDB()->sqlInsert('tb_product', $voProduct->toArray($fields));
         $this->mysqlDB()->ExecuteSQL($query);
 //        $voProduct->pdt_id = $this->mysqlDB()->getInsertId();
         return $voProduct;

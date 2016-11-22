@@ -43,13 +43,13 @@ switch ($request['cmd']) {
                 if ($voProduct instanceof VoProduct) {
                     $voProduct->w2uiToVo($change);
                     $productDao->updateByFields($voProduct);
-                    $updateAry[] = $voProduct->voToW2ui($voProduct);
+                    $updateAry[] = $voProduct->voToW2ui();
                 }
             } else {    //  insert
                 $voProduct = new VoProduct();
                 $voProduct->w2uiToVo($change);
                 $voProduct = $productDao->insert($voProduct);
-                $ua = $voProduct->voToW2ui($voProduct);
+                $ua = $voProduct->voToW2ui();
                 $ua->depId = $id;
                 $updateAry[] = $ua;
             }

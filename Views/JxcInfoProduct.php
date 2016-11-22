@@ -139,7 +139,7 @@ $remoteUrl = "../Jxc/index.php?api=mg_product";
                 console.log(event);
                 if (this.columns[event.column].field == 'pdt_color') {  //  编辑单品颜色
                     event.preventDefault();
-                    colorUtils.openPop(this);
+                    colorUtils.openPop(this, event);
                 }
             },
             onSave: w2GridOnSaveAndUpdate,

@@ -26,7 +26,7 @@ $map = array();
 $pdt_list = array();
 foreach ($products as $k => $v) {
     if ($v instanceof VoProduct) {
-//        $map[$v->pdt_id] = $v->voToW2ui($v);
+//        $map[$v->pdt_id] = $v->voToW2ui();
         $map[$v->pdt_id] = $v;
         //
         $w2ValRecId = array('id' => $k, 'text' => $v->pdt_id);
@@ -153,7 +153,6 @@ $pdt_list = json_encode($pdt_list);
                                         .fail(function (xhr, status, error) {
 
                                         });
-
                                 });
                         }
                     }

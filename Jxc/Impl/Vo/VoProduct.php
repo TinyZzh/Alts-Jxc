@@ -18,7 +18,7 @@ use Jxc\Impl\Libs\W2UI;
  * Class VoProduct
  * @package Jxc\Impl\Vo
  */
-class VoProduct extends W2PdtInfo {
+class VoProduct extends Vo {
 
     public $pdt_id;      //  货号 -   唯一ID
     public $pdt_name;    //  货号名称
@@ -31,9 +31,48 @@ class VoProduct extends W2PdtInfo {
     public $timeLastOp;  //  最后一次修改时间
     public $flag;        //  [0]有效数据  [1]废弃的
 
+    public function __construct() {
+        $this->pdt_counts = array();
+        for ($i = 0; $i < 10; $i++) {
+            $this->pdt_counts[] = '';
+        }
+    }
+
+    public function toArray($fields = array()) {
+        $map = parent::toArray($fields);
+        if (!$fields || in_array('pdt_counts', $fields)) {
+            $map['pdt_counts'] = implode("|", $this->pdt_counts);
+        }
+        return $map;
+    }
+
+    public function convert($data) {
+        parent::convert($data);
+        if (!is_array($this->pdt_counts)) {
+            $this->pdt_counts = explode("|", $this->pdt_counts);
+        }
+    }
+
+    public function voToW2ui() {
+        return W2UI::objToW2ui($this);
+    }
+
     public function w2uiToVo($data) {
-        parent::w2uiToVo($data);
-        $this->pdt_total = parent::calc_pdt_total();
-        $this->total_rmb = parent::calc_total_price();
+        W2UI::w2uiToObj($this, $data);
+        $this->pdt_total = $this->calc_pdt_total();
+        $this->total_rmb = $this->calc_total_price();
+    }
+
+    public function calc_total_price() {
+        return $this->calc_pdt_total() * $this->pdt_price;
+    }
+
+    public function calc_pdt_total() {
+        $total = 0;
+        foreach ($this->pdt_counts as $count) {
+            if ($count)
+                $total += $count;
+        }
+        return $total;
     }
 }

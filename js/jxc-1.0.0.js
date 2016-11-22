@@ -256,14 +256,15 @@ var colorUtils = (function () {
     /**
      * 打开面板
      * @param parentW2Grid
+     * @param event
      */
-    function onOpenPop(parentW2Grid) {
+    function onOpenPop(parentW2Grid, event) {
         if (w2ui['popup_jxc_colors_w2grid']) {
             onShowColorPopup();
         } else {
             $.getJSON("Jxc/do.php?api=color&c=w2Records", null, function (data) {
                 if (data['status'] == 'success') {
-                    initJxcColorPopup(parentW2Grid, data['data']);
+                    initJxcColorPopup(parentW2Grid, event, data['data']);
                     onShowColorPopup();
                 }
             });
@@ -300,7 +301,7 @@ var colorUtils = (function () {
      * @param w2gridObj
      * @param recordData
      */
-    function initJxcColorPopup(w2gridObj, recordData) {
+    function initJxcColorPopup(w2gridObj, w2Event, recordData) {
         //  w2layout    -
         var popup_jxc_colors_layout = {
             name: 'popup_jxc_colors_layout',
@@ -328,18 +329,17 @@ var colorUtils = (function () {
                 var that = this;
                 console.log(event);
                 var rec = that.get(event.recid);
-                var targetFieldName = w2gridObj.columns[w2gridObj.last.sel_col].field;
-                var changeData = [];
+                var targetFieldName = w2gridObj.columns[w2Event.column].field;
+                var changeData = w2gridObj.records[w2Event.index].changes;
                 //changeData['recid'] = w2gridObj.last.sel_recid;
                 changeData[targetFieldName] = rec[that.columns[event.column].field].color_id;
-                console.log(w2gridObj);
-                console.log('last_recid = ' + w2gridObj.last.sel_recid);
-                console.log(changeData);
+                //console.log(w2gridObj);
+                //console.log('last_recid = ' + w2gridObj.last.sel_recid);
+                //console.log(changeData);
                 w2gridObj.set(w2gridObj.last.sel_recid, {
                     'changes': changeData
                 });
                 event.onComplete = function (event) {
-
 
                     w2popup.close();
                 }
