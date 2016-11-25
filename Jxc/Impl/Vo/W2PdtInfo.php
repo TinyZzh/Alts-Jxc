@@ -8,31 +8,16 @@ use Jxc\Impl\Libs\W2UI;
 /**
  * w2ui 产品信息 -  用于过度运算
  */
-class W2PdtInfo extends Vo {
+class W2PdtInfo extends VoPdtCount {
 
     public $recid;       //  w2grid - recid
     public $pdt_id;      //  货号 -   唯一ID
-    public $pdt_counts;  //  数量 array
     public $pdt_zk;      //  折扣
     public $pdt_price;   //  单价
 
     public function __construct() {
+        parent::__construct();
         $this->pdt_zk = 100;
-        $this->pdt_counts = array();
-        for ($i = 0; $i < 10; $i++) {
-            $this->pdt_counts[] = '';
-        }
-    }
-
-    public function toArray($fields = array()) {
-        $map = parent::toArray($fields);
-        $map['pdt_counts'] = implode("|", $this->pdt_counts);
-        return $map;
-    }
-
-    public function convert($data) {
-        parent::convert($data);
-        $this->pdt_counts = explode("|", $this->pdt_counts);
     }
 
     /**

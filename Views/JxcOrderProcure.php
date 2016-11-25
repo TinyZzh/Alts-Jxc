@@ -31,6 +31,9 @@ foreach ($w2Products as $v) {
             name: 'div_main_cnt',
             header: '采购',
             multiSelect: true,
+            url: {
+                'save': 'Jxc/do.php?api=product&c=procure'
+            },
             columnGroups: [
                 {caption: '产品', span: 2},
                 {caption: '颜色', master: true},
@@ -72,14 +75,8 @@ foreach ($w2Products as $v) {
                         echo "{field: 'pdt_count_{$k}', caption: '{$v}', size: '5%', editable: {type: 'text'}},";
                     }
                 ?>
-                {
-                    field: 'pdt_zk',
-                    caption: '折扣',
-                    size: '7%',
-                    render: 'percent',
-                    editable: {type: 'percent', min: 0, max: 100}
-                },
-                {field: 'pdt_price', caption: '进价', size: '7%'},
+                {field: 'pdt_zk', caption: '折扣', size: '7%', render: 'percent', editable: {type: 'percent', min: 0, max: 100}},
+                {field: 'pdt_price', caption: '进价', size: '7%', render: 'float:2', editable:{type:'int'}},
                 {field: 'pdt_total', caption: '总数量', size: '10%'},
                 {field: 'total_rmb', caption: '总价', size: '10%'}
             ],
@@ -87,7 +84,6 @@ foreach ($w2Products as $v) {
                 header: true,
                 toolbar: true,
                 toolbarAdd: true,
-                toolbarSave: true,
                 toolbarDelete: true,
                 lineNumbers: true,
                 footer: true
@@ -95,23 +91,49 @@ foreach ($w2Products as $v) {
             toolbar: {
                 items: [
                     {type: 'break'},
-                    {type: 'button', id: 'mybutton', caption: 'My other button', img: 'icon-folder'},
-                    {type: 'button', id: 'newLogSales', caption: '新增销售记录',},
                     {
-                        type: 'menu', id: 'menuPdt', caption: '货号2',
-                        items: ["xxxx", "yyyy"],
-                        options: {
-                            url: "../Jxc/index.php?api=get_pdt_id_list",
-                            postData: {
-                                'moduleId': 'menuPdt',
-                                'aryPdtId': '1'
+                        type: 'button', id: 'btn_save_sales_order', caption: '保存', icon: 'w2ui-icon-check',
+                        onClick: function (event) {
+                            console.log(event);
+                            console.log(this);
+                            var grid = w2ui['div_main_cnt'];
+                            var pdt_id = w2GridCheckUniqueID(grid, 'pdt_id');
+                            if (pdt_id) {
+                                w2alert("[Error]货号[" + pdt_id + "]重复, 请重新输入.", "Error");
+                                return;
                             }
+                            if (grid.getChanges().length <= 0) {
+                                w2alert("[Msg]数据没有变更，不需要保存.", "Message");
+                                return;
+                            }
+                            w2confirm("是否确定提交?", "确认提示框")
+                                .yes(function () {
+                                    var postData ={
+                                        'changes' : grid.getChanges(),
+                                        'op_id' : 1,
+                                    };
+                                    var ajaxOptions = {
+                                        type     : 'POST',
+                                        url      : 'Jxc/do.php?api=product&c=procure',
+                                        data     : postData,
+                                        dataType : 'JSON'
+                                    };
+                                    $.ajax(ajaxOptions)
+                                        .done(function (data, status, xhr) {
+                                            if (data.status != 'success') {
+                                                w2alert(data.message, "Error");
+                                            } else {
+                                                grid.mergeChanges();
+                                                console.log(data);
+                                            }
+                                        })
+                                        .fail(function (xhr, status, error) {
+                                            w2alert('提交订单失败:[' + data.msg + ']', "Error");
+                                        });
+                                });
                         }
                     }
-                ],
-                onClick: function (target, data) {
-                    console.log(target);
-                }
+                ]
             },
             onSubmit: function (event) {
                 var pdt_id = w2GridCheckUniqueID(this, 'pdt_id');

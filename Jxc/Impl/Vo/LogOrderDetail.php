@@ -3,43 +3,24 @@
 namespace Jxc\Impl\Vo;
 
 
-use Jxc\Impl\Core\Vo;
-use Jxc\Impl\Libs\DateUtil;
 use Jxc\Impl\Libs\W2UI;
 
 /**
  * 订单详单
  */
-class LogOrderDetail extends Vo {
+class LogOrderDetail extends VoPdtCount {
 
     public $id;
     public $order_id;   //  订单号
-    public $type;       //  订单类型
     public $pdt_id;     //  货号
-    public $pdt_counts; //  数量  array
     public $pdt_zk;     //  折扣  default: 100
     public $pdt_price;  //  单品单价
     public $pdt_total;  //  总数量
     public $total_rmb;  //  总价
 
     public function __construct() {
+        parent::__construct();
         $this->pdt_zk = 100;
-        $this->pdt_counts = array();
-        for ($i = 0; $i < 10; $i++) {
-            $this->pdt_counts[] = '';
-        }
-    }
-
-    public function toArray($fields = array()) {
-        $map = parent::toArray($fields);
-        $map['pdt_counts'] = implode("|", $this->pdt_counts);
-        return $map;
-    }
-
-    public function convert($data) {
-        parent::convert($data);
-        $counts = explode("|", $this->pdt_counts);
-        $this->pdt_counts = $counts;
     }
 
     public function voToW2ui() {
