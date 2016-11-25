@@ -4,6 +4,7 @@ namespace Jxc\Impl\Dao;
 
 use Exception;
 use Jxc\Impl\Core\MySQLDao;
+use Jxc\Impl\Libs\W2UI;
 use Jxc\Impl\Vo\VoProduct;
 
 /**
@@ -17,21 +18,22 @@ class ProductDao extends MySQLDao {
         parent::__construct($config);
     }
 
-    public function w2uiSelectAll() {
-        $query = $this->mysqlDB()->sqlSelectWhere('tb_product', '*');
-        $datas = $this->mysqlDB()->ExecuteSQL($query);
+    public function w2uiSelectAll($flag = 0) {
+        $query = $this->mysqlDB()->sqlSelectWhere('tb_product', '*', array('flag' => $flag));
+        $sets = $this->mysqlDB()->ExecuteSQL($query);
         $array = array();
-        foreach($datas as $data) {
+        foreach ($sets as $k => $data) {
             $voProduct = new VoProduct();
             $voProduct->convert($data);
-            $array[] = $voProduct;
+            $array[$voProduct->pdt_id] = W2UI::objToW2ui($voProduct);
+            $array[$voProduct->pdt_id]['pdt_id'] = array('id' => $k, 'text' => $voProduct->pdt_id); //  w2Field => list
         }
         return $array;
     }
 
-    public function selectById($ids) {
-        $inId = implode(",", $ids);
-        $query = "SELECT * FROM tb_product WHERE pdt_id IN ({$inId});";
+    public function selectById($ids, $flag = 0) {
+        $inId = "'" . implode("','", $ids) . "'";
+        $query = "SELECT * FROM tb_product WHERE pdt_id IN ({$inId}) AND flag={$flag};";
         $datas = $this->mysqlDB()->ExecuteSQL($query);
         $map = array();
         foreach ($datas as $data) {
@@ -42,6 +44,11 @@ class ProductDao extends MySQLDao {
         return $map;
     }
 
+    /**
+     * @return array|bool|int
+     * @throws Exception
+     * @deprecated
+     */
     public function selectPdtIdList() {
         $query = "SELECT pdt_id FROM tb_product;";
         $resultSet = $this->mysqlDB()->ExecuteSQL($query);
@@ -49,14 +56,15 @@ class ProductDao extends MySQLDao {
     }
 
     /**
+     * @param int $flag
      * @return array
      * @throws Exception
      */
-    public function selectAll() {
-        $query = $this->mysqlDB()->sqlSelectWhere('tb_product', '*');
+    public function selectAll($flag = 0) {
+        $query = $this->mysqlDB()->sqlSelectWhere('tb_product', '*', array('flag' => $flag));
         $datas = $this->mysqlDB()->ExecuteSQL($query);
         $array = array();
-        foreach($datas as $data) {
+        foreach ($datas as $data) {
             $voProduct = new VoProduct();
             $voProduct->convert($data);
             $array[] = $voProduct;
@@ -94,7 +102,8 @@ class ProductDao extends MySQLDao {
         $this->mysqlDB()->ExecuteSQL($query);
     }
 
+    //  废弃的产品
 
-    //
+
 
 }

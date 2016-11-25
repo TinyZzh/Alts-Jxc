@@ -24,7 +24,8 @@ $remoteUrl = "../Jxc/index.php?api=mg_product";
 </body>
 <script>
     $(document).ready(function () {
-
+        //
+        colorUtils.onDestroy();
 
         var content = $('#div_main_cnt').w2grid({
             name: 'div_main_cnt',

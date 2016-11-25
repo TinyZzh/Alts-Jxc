@@ -1,6 +1,6 @@
 <?php
 /**
- * 库存信息.
+ * 销售订单.
  *
  */
 include_once "../Templates/include.php";
@@ -74,7 +74,7 @@ $pdt_list = json_encode($pdt_list);
                 },
                 {field: 'pdt_name', caption: '名称', size: '10%', style: 'text-align:center'},
                 {
-                    field: 'pdt_color', caption: '颜色', size: '5%',
+                    field: 'pdt_color', caption: '颜色', size: '80px',
                     render: function (record, index, col_index) {
                         var html = this.getCellValue(index, col_index);
                         if (cacheOfColors[html]) {
@@ -84,21 +84,13 @@ $pdt_list = json_encode($pdt_list);
                         return '<div>' + html + '</div>';
                     }
                 },
-                {
-                    field: 'pdt_count_0',
-                    caption: '3XS',
-                    size: '5%',
-                    editable: {type: 'numeric'},
-                    render: renderSizeField
-                },
-                {field: 'pdt_count_1', caption: '2XS', size: '5%', editable: {type: 'text'}, render: renderSizeField},
-                {field: 'pdt_count_2', caption: 'XS', size: '5%', editable: {type: 'text'}, render: renderSizeField},
-                {field: 'pdt_count_3', caption: 'S', size: '5%', editable: {type: 'text'}, render: renderSizeField},
-                {field: 'pdt_count_4', caption: 'M', size: '5%', editable: {type: 'text'}, render: renderSizeField},
-                {field: 'pdt_count_5', caption: 'L', size: '5%', editable: {type: 'text'}, render: renderSizeField},
-                {field: 'pdt_count_6', caption: 'XL', size: '5%', editable: {type: 'text'}, render: renderSizeField},
-                {field: 'pdt_count_7', caption: '2XL', size: '5%', editable: {type: 'text'}, render: renderSizeField},
-                {field: 'pdt_count_8', caption: '3XL', size: '5%', editable: {type: 'text'}, render: renderSizeField},
+                <?php
+                // {field: 'pdt_count_1', caption: '2XS', size: '5%', editable: {type: 'text'}, render: renderSizeField},
+                    $array = array( '3XS', '2XS', 'XS', 'S', 'M', 'L', 'XL', '2XL', '3XL' );
+                    foreach ($array as $k => $v) {
+                        echo "{field: 'pdt_count_{$k}', caption: '{$v}', size: '5%', editable: {type: 'text'}, render: renderSizeField},";
+                    }
+                ?>
                 {
                     field: 'pdt_zk',
                     caption: '折扣',
@@ -138,9 +130,29 @@ $pdt_list = json_encode($pdt_list);
                             }
                             w2confirm("是否确定提交?", "确认提示框")
                                 .yes(function () {
-                                    grid.save();
-                                    grid.getChanges();
+//                                    grid.save();
 
+                                    var postData ={
+                                        'changes' : grid.getChanges(),
+                                        'ct_id' : 1,
+                                    };
+                                    var ajaxOptions = {
+                                        type     : 'POST',
+                                        url      : 'Jxc/do.php?api=product&c=sell',
+                                        data     : postData,
+                                        dataType : 'JSON'
+                                    };
+                                    $.ajax(ajaxOptions)
+                                        .done(function (data, status, xhr) {
+                                            if (data.status != 'success') {
+                                                w2alert(data.msg, "Error");
+                                            } else {
+                                                console.log(data);
+                                            }
+                                        })
+                                        .fail(function (xhr, status, error) {
+
+                                        });
 
                                 });
                         }
@@ -239,21 +251,8 @@ $pdt_list = json_encode($pdt_list);
             onSave: w2GridOnSaveAndUpdate,
             onKeydown: w2GridOnKeyDown
         });
+        w2uiEmptyColumn(content, 1);
         w2ui['layout'].content('main', content);
-
-        //  根据货号筛选
-        $.getJSON("../Jxc/index.php?api=get_pdt_id_list", null, function (data) {
-            if (data['status'] == 'success') {
-                var item = {
-                    type: 'menu', id: 'selectPdt', caption: '选择货号',
-                    items: data['items']
-                };
-                w2ui['div_frame'].toolbar.add(item);
-                w2ui['div_frame'].toolbar.refresh();
-            }
-        });
-
-
     });
 </script>
 </html>

@@ -26,13 +26,13 @@ class PublicService extends JxcService {
      * @param $request
      * @return array
      */
-    public function login($request) {
+    public function login($voOp, $request) {
         if ($verify = GameUtil::verifyRequestParams($request, array('account', 'psw'))) {
-            return array('status' => 'error', 'msg' => 'Undefined field : ' . $verify);
+            return array('status' => 'error', 'message' => 'Undefined field : ' . $verify);
         }
         $voOperator = $this->operatorDao->selectByAccount($request['account']);
         if (!$voOperator) {
-            return array('status' => 'error', 'msg' => 'Unknown operator : ' . $request['account']);
+            return array('status' => 'error', 'message' => 'Unknown operator : ' . $request['account']);
         }
         $_SESSION['op_id'] = $voOperator->op_id;
         $_SESSION['op_account'] = $voOperator->op_account;
@@ -40,7 +40,7 @@ class PublicService extends JxcService {
         return array('status' => 'success');
     }
 
-    public function logout($request) {
+    public function logout($voOp, $request) {
 
     }
 

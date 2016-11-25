@@ -8,8 +8,6 @@ use Jxc\Impl\Vo\VoOperator;
 
 /**
  * 操作员Dao
- * Class ProductDao
- * @package Jxc\Impl\Dao
  */
 class OperatorDao extends MySQLDao {
 
@@ -22,10 +20,20 @@ class OperatorDao extends MySQLDao {
      * @return VoOperator|null
      */
     public function selectByAccount($account) {
-        $sets = $this->mysqlDB()->select('tb_operator', '*', array('account' => $account));
+        $sets = $this->mysqlDB()->select('tb_operator', '*', array('op_account' => $account));
         if ($sets && is_array($sets)) {
             $voOperator = new VoOperator();
             $voOperator->convert($sets[0]);
+            return $voOperator;
+        }
+        return null;
+    }
+
+    public function selectById($op_id) {
+        $sets = $this->mysqlDB()->select('tb_operator', '*', array('op_id' => $op_id));
+        if ($sets && is_array($sets)) {
+            $voOperator = new VoOperator();
+            $voOperator->parse($sets[0]);
             return $voOperator;
         }
         return null;

@@ -1,39 +1,20 @@
 <?php
 /**
- * 产品销售管理.
+ * 采购订单.
  *
  */
-include_once "../Templates/include.php";
-
 use Jxc\Impl\Core\JxcConfig;
-use Jxc\Impl\Dao\CustomerDao;
 use Jxc\Impl\Dao\ProductDao;
-use Jxc\Impl\Vo\VoProduct;
 
-$dao = new CustomerDao(JxcConfig::$DB_Config);
-$resultSet = $dao->selectCustomNameList();
-$custom_list = array();
-foreach ($resultSet as $k => $v) {
-    $custom_list[] = array('id' => $k, 'text' => $v['ct_name']);
-}
-$pub_custom_list = json_encode($custom_list);
+include_once "../Templates/include.php";
 //
-
 $productDao = new ProductDao(JxcConfig::$DB_Config);
-$products = $productDao->selectAll();
-
-$map = array();
+$w2Products = $productDao->w2uiSelectAll();
 $pdt_list = array();
-foreach ($products as $k => $v) {
-    if ($v instanceof VoProduct) {
-        $map[$v->pdt_id] = $v->voToW2ui($v);
-        //
-        $w2ValRecId = array('id' => $k, 'text' => $v->pdt_id);
-        $pdt_list[] = $w2ValRecId;
-        $map[$v->pdt_id]->pdt_id = $w2ValRecId;
-    }
+foreach ($w2Products as $v) {
+    $w2ValRecId = $v['pdt_id'];;
+    $pdt_list[] = $w2ValRecId;
 }
-
 ?>
 <!DOCTYPE html>
 <html lang="zh-cn">
@@ -41,10 +22,10 @@ foreach ($products as $k => $v) {
 </body>
 <script>
     $(document).ready(function () {
-        $(document).data("jxc_products", <?=json_encode($map)?>);
-        console.log($(document).data("xx"));
-        console.log(this);
-        console.log($(document));
+        $().data("jxc_products", <?=json_encode($w2Products)?>);
+//        console.log($(document).data("xx"));
+//        console.log(this);
+//        console.log($(document));
 
         var content = $('#div_main_cnt').w2grid({
             name: 'div_main_cnt',
@@ -60,7 +41,7 @@ foreach ($products as $k => $v) {
             columns: [
                 {
                     field: 'pdt_id', caption: '编号', size: '10%',
-                    style:'text-align:center',
+                    style: 'text-align:center',
                     editable: {
                         type: 'list',
                         showAll: true,
@@ -72,18 +53,32 @@ foreach ($products as $k => $v) {
                         return html.text || '';
                     }
                 },
-                {field: 'pdt_name', caption: '名称', size: '10%', style:'text-align:center'},
-                {field: 'pdt_color', caption: '颜色', size: '5%'},
-                {field: 'pdt_count_0', caption: '3XS', size: '5%', editable: {type: 'text'}},
-                {field: 'pdt_count_1', caption: '2XS', size: '5%', editable: {type: 'text'}},
-                {field: 'pdt_count_2', caption: 'XS', size: '5%', editable: {type: 'text'}},
-                {field: 'pdt_count_3', caption: 'S', size: '5%', editable: {type: 'text'}},
-                {field: 'pdt_count_4', caption: 'M', size: '5%', editable: {type: 'text'}},
-                {field: 'pdt_count_5', caption: 'L', size: '5%', editable: {type: 'text'}},
-                {field: 'pdt_count_6', caption: 'XL', size: '5%', editable: {type: 'text'}},
-                {field: 'pdt_count_7', caption: '2XL', size: '5%', editable: {type: 'text'}},
-                {field: 'pdt_count_8', caption: '3XL', size: '5%', editable: {type: 'text'}},
-                {field: 'pdt_zk', caption: '折扣', size: '7%', render: 'percent', editable: {type: 'percent', min: 0, max: 100}},
+                {field: 'pdt_name', caption: '名称', size: '10%', style: 'text-align:center'},
+                {
+                    field: 'pdt_color', caption: '颜色', size: '80px',
+                    render: function (record, index, col_index) {
+                        var html = this.getCellValue(index, col_index);
+                        if (cacheOfColors[html]) {
+                            var vc = cacheOfColors[html];
+                            return '<div style="height:24px;text-align:center;background-color: #' + vc.color_rgba + ';">' + ' ' + vc.color_name + '</div>';
+                        }
+                        return '<div>' + html + '</div>';
+                    }
+                },
+                <?php
+                // {field: 'pdt_count_0', caption: '3XS', size: '5%', editable: {type: 'text'}},
+                    $array = array( '3XS', '2XS', 'XS', 'S', 'M', 'L', 'XL', '2XL', '3XL' );
+                    foreach ($array as $k => $v) {
+                        echo "{field: 'pdt_count_{$k}', caption: '{$v}', size: '5%', editable: {type: 'text'}},";
+                    }
+                ?>
+                {
+                    field: 'pdt_zk',
+                    caption: '折扣',
+                    size: '7%',
+                    render: 'percent',
+                    editable: {type: 'percent', min: 0, max: 100}
+                },
                 {field: 'pdt_price', caption: '进价', size: '7%'},
                 {field: 'pdt_total', caption: '总数量', size: '10%'},
                 {field: 'total_rmb', caption: '总价', size: '10%'}
@@ -128,11 +123,11 @@ foreach ($products as $k => $v) {
                 var request = [];
                 for (var i in this.records) {
                     var vo = {
-                        'pdt_id':this.records[i]['recid'],
-                        'pdt_counts':[],
-                        'pdt_zk':this.records[i]['pdt_zk']
+                        'pdt_id': this.records[i]['recid'],
+                        'pdt_counts': [],
+                        'pdt_zk': this.records[i]['pdt_zk']
                     };
-                    for (var j =0;j<10;j++) {
+                    for (var j = 0; j < 10; j++) {
                         console.log(this.records[i]['pdt_count' + j]);
                         vo['pdt_counts'].push(this.records[i]['pdt_count_' + j]);
                     }
@@ -141,9 +136,6 @@ foreach ($products as $k => $v) {
 
                 console.log(request);
 
-            },
-            onLoad: function (event) {
-                w2uiInitEmptyGrid(this, event);
             },
             onAdd: w2GridOnAdd,
 //            onEditField: w2GridOnEditField,
@@ -158,7 +150,8 @@ foreach ($products as $k => $v) {
                     var v = event.value_new;    // example:  {id:1, text:"content"}
                     console.log(v.text);
                     if (v.text) {
-                        var info = $(document).data("jxc_products")[v.text];
+//                        var info = $().data("jxc_products")[v.text];
+                        var info = <?=json_encode($w2Products)?>[v.text];
                         if (info) {
                             //  删除
                             column.editable.items = removeByItemId(column.editable.items, v.id);
@@ -183,11 +176,8 @@ foreach ($products as $k => $v) {
             onSave: w2GridOnSaveAndUpdate,
             onKeydown: w2GridOnKeyDown
         });
+        w2GridAddEmptyRecord(content);
         w2ui['layout'].content('main', content);
-
-        for (var i = 0; i < 2; i++)
-            w2GridAddEmptyRecord(content);
-
     });
 </script>
 </html>

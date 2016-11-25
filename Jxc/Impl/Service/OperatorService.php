@@ -27,13 +27,13 @@ class OperatorService extends JxcService {
      * @param $request
      * @return array
      */
-    public function addOperator($request) {
+    public function addOperator($voOp, $request) {
         if ($verify = GameUtil::verifyRequestParams($request, array('account', 'psw', 'name', 'auth'))) {
-            return array('status' => 'error', 'msg' => 'Undefined field : ' . $verify);
+            return array('status' => 'error', 'message' => 'Undefined field : ' . $verify);
         }
         $voOperator = $this->operatorDao->selectByAccount($request['account']);
         if ($voOperator) {
-            return array('status' => 'error', 'msg' => '操作员已经存在' . $request['account']);
+            return array('status' => 'error', 'message' => '操作员已经存在' . $request['account']);
         }
         $voOperator = new VoOperator();
         $voOperator->op_account = $request['account'];
@@ -46,7 +46,7 @@ class OperatorService extends JxcService {
         return array('status' => 'success');
     }
 
-    public function delOperator($request) {
+    public function delOperator($voOp, $request) {
 
     }
 

@@ -29,11 +29,11 @@ class ColorService extends JxcService {
      * @param $request
      * @return array
      */
-    public function getColorList($request) {
+    public function getColorList($voOp, $request) {
         return array('state' => 1, 'data' => $this->colorDao->w2uiSelectAll());
     }
 
-    public function getColorInfo($request) {
+    public function getColorInfo($voOp, $request) {
         $data = $this->colorDao->select();
         $array = array();
         foreach ($data as $v) {
@@ -43,9 +43,9 @@ class ColorService extends JxcService {
         return array('status' => 'success', 'records' => $array);
     }
 
-    public function saveColorInfo($request) {
+    public function saveColorInfo($voOp, $request) {
         if ($verify = GameUtil::verifyRequestParams($request, array('changes'))) {
-            return array('status' => 'error', 'msg' => 'Undefined field : ' . $verify);
+            return array('status' => 'error', 'message' => 'Undefined field : ' . $verify);
         }
         $changes = $request['changes'];
         $aryId = array();
@@ -77,9 +77,9 @@ class ColorService extends JxcService {
         return array('status' => 'success', 'updates' => $updateAry);
     }
 
-    public function removeColorInfo($request) {
+    public function removeColorInfo($voOp, $request) {
         if ($verify = GameUtil::verifyRequestParams($request, array('selected'))) {
-            return array('status' => 'error', 'msg' => 'Undefined field : ' . $verify);
+            return array('status' => 'error', 'message' => 'Undefined field : ' . $verify);
         }
         foreach ($request['selected'] as $pdt_id) {
             $this->colorDao->delete($pdt_id);

@@ -83,6 +83,21 @@ class LogSalesDao extends MySQLDao {
     }
 
 
-    //
+    //  sales order
+
+    public function insertOrder($vo) {
+        $query = $this->mysqlDB()->sqlInsert('log_sales', $voLogSales->toArray());
+        $this->mysqlDB()->ExecuteSQL($query);
+        $voLogSales->id = $this->mysqlDB()->getInsertId();
+        return $voLogSales;
+    }
+
+
+
+
+
+
+
+
 
 }

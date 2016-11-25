@@ -13,46 +13,29 @@ Jxc\AutoLoader::register();
 //Requests::register_autoloader();
 
 //
-use \Jxc\Impl\Core\JxcConfig;
+use Jxc\Impl\Core\JxcConfig;
+use Jxc\Impl\Core\JxcService;
+
 if (!isset($_REQUEST['api']) || !isset(JxcConfig::$JXC_SERVICE[$_REQUEST['api']])) {
-    echo json_encode(array('state'=>-1, 'msg'=>'Unknown service.'));
+    echo json_encode(array('state' => -1, 'msg' => 'Unknown service.'));
     exit();
 }
 $api = $_REQUEST['api'];
 if (!isset($_REQUEST['c'])) {
-    echo json_encode(array('state'=>-1, 'msg'=>'Unknown command.'));
+    echo json_encode(array('state' => -1, 'msg' => 'Unknown command.'));
     exit();
 }
 $method = $_REQUEST['c'];
 $request = $_REQUEST;
-//  验证授权
-//if (!in_array($api, JxcConfig::$PUBLIC)) {
-//    if (!isset($_SESSION['op_account'])) {
-//        echo json_encode(array('status'=>'error', 'msg'=>'Please login first.'));
-//        exit();
-//    }
-//    if (!isset($_SESSION['op_auth']) ||
-//        ($_SESSION['op_auth'] != 'all' && !isset($_SESSION['op_auth'][$method]))
-//    ) {
-//        echo json_encode(array('status'=>'error', 'msg'=>'Please login first.'));
-//        exit();
-//    }
-//    $request['op'] = $_SESSION['op_id'];
-//}
-
+$op_id = isset($request['op']) ? $request['op'] : 1;
 $clz = JxcConfig::$JXC_SERVICE[$api];
+
 $service = new $clz();
-if (method_exists($service, $method)) {
-    $ref = new ReflectionMethod($clz, $method);
-    if (!$ref->isPublic()) {
-        echo json_encode(array('state'=>-1, 'msg'=>'The api is not public'));
-        exit();
-    }
+if ($service instanceof JxcService) {
+    $response = $service->invoke($clz, $method, $op_id, $request);
+    echo json_encode($response);
 } else {
-    echo json_encode(array('state'=>-1, 'msg'=>'Unknown method.'));
+    echo json_encode(array('status' => 'error', 'msg' => 'Unknown service.'));
     exit();
 }
-
-$response = $service->$method($request);
-echo json_encode($response);
 
