@@ -29,6 +29,7 @@ class JxcConfig {
     public static $JXC_SERVICE = array(
         'product' => 'Jxc\Impl\Service\ProductService',
         'custom' => 'Jxc\Impl\Service\CustomService',
+        'order' => 'Jxc\Impl\Service\OrderService',
         'color' => 'Jxc\Impl\Service\ColorService',
         'public' => 'Jxc\Impl\Service\PublicService',
     );
@@ -42,6 +43,8 @@ class JxcConfig {
         'jxc_procure' => 'Views/JxcOrderProcure.php',
         'jxc_store_show' => '',
         'jxc_sales' => 'Views/JxcOrderSales.php',
+        //  日志
+        'jxc_log_procure' => 'Views/JxcLogProcure.php',
 
 
     );

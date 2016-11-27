@@ -24,7 +24,8 @@ class VoProduct extends Vo {
     public $pdt_name;    //  货号名称
     public $pdt_color;   //  颜色
     public $pdt_counts;  //  库存 array
-    public $pdt_price;   //  进货单价
+    public $pdt_cost;    //  成本价
+    public $pdt_price;   //  标价
     public $pdt_total;   //  库存总数
     public $total_rmb;   //  库存总价值
     public $datetime;    //  添加时间

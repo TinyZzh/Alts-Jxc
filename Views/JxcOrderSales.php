@@ -210,7 +210,7 @@ $pdt_list = json_encode($pdt_list);
                         var changeRecord = changes[k];
                         if (changeRecord['recid'] == event.recid) {
                             for (var cField in changeRecord) {
-                                if (cField.indexOf('pdt_count_') >= 0) {
+                                if (changeRecord.hasOwnProperty(cField) && cField.indexOf('pdt_count_') >= 0) {
                                     counts[cField.substr(10)] = changeRecord[cField];
                                 } else if (cField == 'pdt_zk') {
                                     zk = Number(changeRecord[cField]);
