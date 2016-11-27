@@ -7,12 +7,34 @@ use Jxc\Impl\Core\MySQLDao;
 use Jxc\Impl\Vo\LogOrderDetail;
 
 /**
- * 订单详细日志
+ * 订单详细日志.
  */
 class LogOrderDetailDao extends MySQLDao {
 
     public function __construct($config) {
         parent::__construct($config);
+    }
+
+    /**
+     * 获取w2记录详单
+     * @param $order_id
+     * @return array
+     */
+    public function w2gridSelectByOrderId($order_id) {
+        $query = "SELECT id,order_id,logD.`pdt_id`, logD.`pdt_counts`,logD.`pdt_price`,logD.`pdt_total`,logD.`pdt_zk`,logD.`total_rmb`,tb_p.`pdt_color`,tb_p.`pdt_name`
+            FROM `log_order_detail` AS logD,`tb_product` AS tb_p WHERE logD.`pdt_id`=tb_p.`pdt_id` AND order_id={$order_id};";
+//        $sets = $this->mysqlDB()->select('log_order_detail', '*', array('order_id' => $order_id));
+        $sets = $this->mysqlDB()->ExecuteSQL($query);
+        $data = array();
+        foreach ($sets as $k => $v) {
+            $logOrderDetail = new LogOrderDetail();
+            $logOrderDetail->convert($v);
+            $logOrderDetail->recid = $logOrderDetail->id;
+            $logOrderDetail->pdt_name = $v['pdt_name'];
+            $logOrderDetail->pdt_color = $v['pdt_color'];
+            $data[$k] = $logOrderDetail->voToW2ui();
+        }
+        return $data;
     }
 
     public function select($id) {
@@ -25,7 +47,7 @@ class LogOrderDetailDao extends MySQLDao {
         return $logOrderDetail;
     }
 
-    public function selectById($ids) {
+    public function selectByIds($ids) {
         $inId = implode(",", $ids);
         $query = "SELECT * FROM log_order_detail WHERE id IN ({$inId});";
         $sets = $this->mysqlDB()->ExecuteSQL($query);
@@ -61,18 +83,6 @@ class LogOrderDetailDao extends MySQLDao {
         $logOrderDetail->id = $this->mysqlDB()->getInsertId();
         return $logOrderDetail;
     }
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 }

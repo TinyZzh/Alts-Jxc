@@ -1,10 +1,8 @@
 <?php
-/**
- * 采购订单.
- *
- */
 use Jxc\Impl\Core\JxcConfig;
+use Jxc\Impl\Dao\ColorDao;
 use Jxc\Impl\Dao\ProductDao;
+use Jxc\Impl\Vo\VoProduct;
 
 include_once "../Templates/include.php";
 //
@@ -15,26 +13,75 @@ foreach ($w2Products as $v) {
     $w2ValRecId = $v['pdt_id'];;
     $pdt_list[] = $w2ValRecId;
 }
+
+//  颜色缓存
+$colorDao = new ColorDao(JxcConfig::$DB_Config);
+$cacheOfColors = $colorDao->selectAll();
+$menuOfColors = $colorDao->w2uiSelectAll();
+
+//  产品信息缓存
+$productDao = new ProductDao(JxcConfig::$DB_Config);
+$products = $productDao->selectAll();
+$cacheOfPdtInfo = array();
+$pdt_list = array();
+foreach ($products as $k => $v) {
+    if ($v instanceof VoProduct) {
+        $cacheOfPdtInfo[$v->pdt_id] = $v;
+        $w2ValRecId = array('id' => $k, 'text' => $v->pdt_id);
+        $pdt_list[] = $w2ValRecId;
+        $cacheOfPdtInfo[$v->pdt_id]->pdt_id = $w2ValRecId;
+    }
+}
+
+
 ?>
 <!DOCTYPE html>
 <html lang="zh-cn">
+<head>
+    <meta charset="UTF-8">
+    <title>Index - Title</title>
+    <link href="../css/jxc-1.0.0.css" type="text/css" rel="stylesheet">
+    <link href="../css/bootstrap.min.css" type="text/css" rel="stylesheet">
+    <link href="../css/bootstrap-theme.min.css" type="text/css" rel="stylesheet">
+    <link href="../css/w2ui-1.4.3.min.css" type="text/css" rel="stylesheet">
+    <script src="../js/jquery.min.js" type="text/javascript"></script>
+    <script src="../js/bootstrap.min.js" type="text/javascript"></script>
+    <script src="../js/w2ui-1.4.3-zh-cn.js" type="text/javascript"></script>
+    <script src="../js/jxc-1.0.0.js?v=<?=time()?>" type="text/javascript"></script>
+</head>
 <body id="body">
-</body>
+<div id="layout">
+    <div id="jxc_nav" class="navbar navbar-default navbar-fixed-top" role="navigation"><p>导航栏</p></div>
+    <div id="div_left"></div>
+    <div id="div_right"></div>
+    <div id="div_footer"></div>
+</div>
 <script>
+    var cacheOfColors = <?=json_encode($cacheOfColors)?>;
+    var menuOfColors = <?=json_encode($menuOfColors)?>;
+    console.log(menuOfColors);
+    var cacheOfPdtInfo =<?=json_encode($cacheOfPdtInfo)?>;
+
     $(document).ready(function () {
         $().data("jxc_products", <?=json_encode($w2Products)?>);
-//        console.log($(document).data("xx"));
-//        console.log(this);
-//        console.log($(document));
-        //  先移除popup
-//        PopupUtil.onPopupDestroy();
-
+        //  layout
+        $('#layout').height($(window).height());
+        $('#layout').w2layout({
+            name: 'layout',
+            panels: [
+                {type: 'top', size: 50, content: 'jxc_nav'},
+                {type: 'left', size: 200, content: 'div_left'},
+                {type: 'main', size: 200},
+                {type: 'bottom', size: 50, content: 'div_footer'}
+            ]
+        });
+        //  content
         var content = $('#div_main_cnt').w2grid({
             name: 'div_main_cnt',
             header: '采购',
             multiSelect: true,
             url: {
-                'save': 'Jxc/do.php?api=product&c=procure'
+                'save': '../Jxc/do.php?api=product&c=procure'
             },
             columnGroups: [
                 {caption: '产品', span: 2},
@@ -63,20 +110,14 @@ foreach ($w2Products as $v) {
                 foreach ($array as $k => $v)
                     echo "{field: 'pdt_count_{$k}', caption: '{$v}', size: '5%', editable: {type: 'text'}},";
                 ?>
-                {
-                    field: 'pdt_zk',
-                    caption: '折扣',
-                    size: '7%',
-                    render: 'percent',
-                    editable: {type: 'percent', min: 0, max: 100}
-                },
+                {field: 'pdt_zk', caption: '折扣', size: '7%', render: 'percent', editable: {type: 'percent', min: 0, max: 100}},
                 {field: 'pdt_price', caption: '进价', size: '7%', render: 'float:2', editable: {type: 'int'}},
                 {field: 'pdt_total', caption: '总数量', size: '10%'},
                 {field: 'total_rmb', caption: '总价', size: '10%'}
             ],
-            show: {
-                header: true, toolbar: true, toolbarAdd: true, toolbarDelete: true, lineNumbers: true, footer: true
-            },
+            show: {header: true, toolbar: true, toolbarAdd: true, toolbarDelete: true, lineNumbers: true, footer: true,
+                toolbarSearch:true
+                },
             toolbar: {
                 items: [
                     {type: 'break'},
@@ -103,7 +144,7 @@ foreach ($w2Products as $v) {
                                     };
                                     var ajaxOptions = {
                                         type: 'POST',
-                                        url: 'Jxc/do.php?api=product&c=procure',
+                                        url: '../Jxc/do.php?api=product&c=procure',
                                         data: postData,
                                         dataType: 'JSON'
                                     };
@@ -129,7 +170,7 @@ foreach ($w2Products as $v) {
                 if ((column.field == 'pdt_id')
                     || (record && record.pdt_id == '')) {
                     event.preventDefault();
-                    var url = "Jxc/do.php?api=product&c=pdtW2gridRecords";
+                    var url = "../Jxc/do.php?api=product&c=pdtW2gridRecords";
                     $.getJSON(url, null, function (data) {
                         if (data['status'] == 'success') {
                             console.log('popup_initialized');

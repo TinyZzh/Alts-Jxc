@@ -44,17 +44,23 @@ class LogOrderDao extends MySQLDao {
      * @throws Exception
      */
     //  SELECT * FROM log_order WHERE EXISTS (SELECT * FROM log_order_detail WHERE log_order.order_id=log_order_detail.order_id AND log_order.ct_id={} AND log_order_detail.pdt_id={}) ORDER BY `datetime`
-    public function selectByCtIdAndPdtId($ct_id, $pdt_id) {
-        $var1 = "SELECT * FROM log_order_detail WHERE log_order.order_id=log_order_detail.order_id AND log_order.ct_id={$ct_id}";
-        if ($pdt_id) {
-            $var1 .= " AND log_order_detail.pdt_id={$pdt_id}";
+    public function w2uiSelectByCtIdAndPdtId($ct_id, $pdt_id) {
+        $query = '';
+        if ($ct_id) {
+            $var1 = "SELECT * FROM log_order_detail WHERE log_order.order_id=log_order_detail.order_id AND log_order.ct_id={$ct_id}";
+            if ($pdt_id) {
+                $var1 .= " AND log_order_detail.pdt_id={$pdt_id}";
+            }
+            $query = "SELECT * FROM log_order WHERE EXISTS ({$var1}) ORDER BY `datetime` DESC";
+        } else {
+            $query = $this->mysqlDB()->sqlSelectWhere('log_order', '*', array());
         }
-        $query = "SELECT * FROM log_order WHERE EXISTS ({$var1}) ORDER BY `datetime` DESC";
         $sets = $this->mysqlDB()->ExecuteSQL($query);
         $map = array();
         foreach ($sets as $data) {
             $logOrder = new LogOrder();
             $logOrder->convert($data);
+            $logOrder->recid = $logOrder->order_id;
             $map[$logOrder->order_id] = $logOrder;
         }
         return $map;
@@ -74,7 +80,7 @@ class LogOrderDao extends MySQLDao {
     }
 
     public function selectAll() {
-        $query = $this->mysqlDB()->sqlSelectWhere('log_order', '*');
+        $query = $this->mysqlDB()->sqlSelectWhere('log_order', '*', array());
         $sets = $this->mysqlDB()->ExecuteSQL($query);
         $array = array();
         foreach ($sets as $data) {

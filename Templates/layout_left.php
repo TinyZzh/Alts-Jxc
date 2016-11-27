@@ -59,9 +59,9 @@ foreach ($products as $k => $v) {
                         {id: 'jxc_procure', text: '采购', img: 'icon-page'},
                         {id: 'jxc_sales', text: '销售', img: 'icon-page'},
                         {id: 'jxc_refund', text: '退货', img: 'icon-page'},
-                        {id: 'jxc_procure_log', text: '采购日志', img: 'icon-page'},
-                        {id: 'jxc_sales_log', text: '销售日志', img: 'icon-page'},
-                        {id: 'jxc_refund_log', text: '退货日志', img: 'icon-page'}
+                        {id: 'jxc_log_procure', text: '采购日志', img: 'icon-page'},
+                        {id: 'jxc_log_sales', text: '销售日志', img: 'icon-page'},
+                        {id: 'jxc_log_refund', text: '退货日志', img: 'icon-page'}
                     ]
                 },
                 {

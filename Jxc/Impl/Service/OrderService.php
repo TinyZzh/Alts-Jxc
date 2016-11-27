@@ -21,9 +21,9 @@ use Jxc\Impl\Vo\VoProduct;
 use Jxc\Impl\Vo\W2PdtInfo;
 
 /**
- * 产品相关服务
+ * 订单相关服务
  */
-final class ProductService extends JxcService {
+final class OrderService extends JxcService {
 
     private $productDao;
     private $customerDao;
@@ -37,6 +37,44 @@ final class ProductService extends JxcService {
         $this->logOrderDao = new LogOrderDao(JxcConfig::$DB_Config);
         $this->logOrderDetailDao = new LogOrderDetailDao(JxcConfig::$DB_Config);
     }
+
+    /**
+     * 获取订单列表
+     * @param $voOp
+     * @param $request
+     * @return array
+     */
+    public function getOrderAll($voOp, $request) {
+//        if ($verify = GameUtil::verifyRequestParams($request, array('ct_id'))) {
+//            return array('status' => 'error', 'message' => 'Undefined field : ' . $verify);
+//        }
+        $ct_id = isset($request['ct_id']) ? $request['ct_id'] : null;
+        $pdt_id = isset($request['pdt_id']) ? $request['pdt_id'] : null;
+        $map = $this->logOrderDao->w2uiSelectByCtIdAndPdtId($ct_id, $pdt_id);
+
+        return array('status' => 'success', 'records' => array_values($map));
+    }
+
+    /**
+     * 获取订单详单信息
+     * @param $voOp
+     * @param $request
+     * @return array
+     */
+    public function getOrderDetail($voOp, $request) {
+        if ($verify = GameUtil::verifyRequestParams($request, array('order_id'))) {
+            return array('status' => 'error', 'message' => 'Undefined field : ' . $verify);
+        }
+        $order_id = $request['order_id'];
+        $details = $this->logOrderDetailDao->w2gridSelectByOrderId($order_id);
+
+
+        return array('status' => 'success', 'records' => array_values($details));
+    }
+
+
+
+
 
     /**
      * 获取产品信息列表
@@ -54,19 +92,6 @@ final class ProductService extends JxcService {
             }
         }
         return array('status' => 'success', 'records' => $array);
-    }
-
-    public function pdtW2gridRecords($voOp, $request) {
-        $flag = isset($request['flag']) ? $request['flag'] : 0;
-        $list = $this->productDao->selectAll($flag);
-        $array = array();
-        foreach ($list as $v) {
-            if ($v instanceof VoProduct) {
-                $v->recid = $v->pdt_id;
-                $array[] = $v;
-            }
-        }
-        return array('status' => 'success', 'records' => array_values($list));
     }
 
     /**
@@ -194,7 +219,7 @@ final class ProductService extends JxcService {
                 $total_rmb += $w2->calc_total_price();
             }
         }
-        return $this->change(JxcConst::IO_TYPE_PROCURE, $voOp, $postData, $total_rmb, null);
+        $this->change(true, $voOp, $postData, $total_rmb, null);
 //        //  订单日志
 //        $logOrder = new LogOrder();
 //        $logOrder->type = 2;
@@ -227,7 +252,7 @@ final class ProductService extends JxcService {
 //                $this->logOrderDetailDao->insert($logOrderDetail);
 //            }
 //        }
-//        return array('status' => 'success');
+        return array('status' => 'success');
     }
 
     /**
@@ -303,7 +328,7 @@ final class ProductService extends JxcService {
      */
     private function change($type, $voOp, $postData, $total_rmb, $voCustomer = null) {
         if (!$voOp || !is_array($postData)) {
-            return array('status' => 'error', 'message' => "参数错误.");
+            return array('status' => 'error', 'msg' => "参数错误.");
         }
         //  订单日志
         $logOrder = new LogOrder();
