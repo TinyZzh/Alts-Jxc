@@ -45,13 +45,13 @@ final class OrderService extends JxcService {
      * @return array
      */
     public function getOrderAll($voOp, $request) {
-//        if ($verify = GameUtil::verifyRequestParams($request, array('ct_id'))) {
-//            return array('status' => 'error', 'message' => 'Undefined field : ' . $verify);
-//        }
+        if ($verify = GameUtil::verifyRequestParams($request, array('type'))) {
+            return array('status' => 'error', 'message' => 'Undefined field : ' . $verify);
+        }
+        $type = $request['type'];
         $ct_id = isset($request['ct_id']) ? $request['ct_id'] : null;
         $pdt_id = isset($request['pdt_id']) ? $request['pdt_id'] : null;
-        $map = $this->logOrderDao->w2uiSelectByCtIdAndPdtId($ct_id, $pdt_id);
-
+        $map = $this->logOrderDao->w2uiSelectByCtIdAndPdtId($type, $ct_id, $pdt_id);
         return array('status' => 'success', 'records' => array_values($map));
     }
 
@@ -67,8 +67,6 @@ final class OrderService extends JxcService {
         }
         $order_id = $request['order_id'];
         $details = $this->logOrderDetailDao->w2gridSelectByOrderId($order_id);
-
-
         return array('status' => 'success', 'records' => array_values($details));
     }
 

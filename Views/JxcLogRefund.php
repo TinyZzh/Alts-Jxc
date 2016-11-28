@@ -1,7 +1,6 @@
 <?php
 /**
- * 销售日志.
- *
+ * 退货日志.
  */
 use Jxc\Impl\Core\JxcConfig;
 use Jxc\Impl\Dao\ProductDao;
@@ -24,9 +23,9 @@ foreach ($w2Products as $v) {
     $().data("jxc_products", <?=json_encode($w2Products)?>);
 
     var configJxc = {
-        header : '出售日志',
+        header : '退 货 日 志',
         urls : {
-            'getOrderAll': 'Jxc/do.php?api=order&c=getOrderAll&type=' + <?=\Jxc\Impl\Core\JxcConst::IO_TYPE_SALES?>,
+            'getOrderAll': 'Jxc/do.php?api=order&c=getOrderAll&type=' + <?=\Jxc\Impl\Core\JxcConst::IO_TYPE_REFUND?>,
             'getOrderDetail': 'Jxc/do.php?api=order&c=getOrderDetail'
         }
     };
