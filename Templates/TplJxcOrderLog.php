@@ -1,41 +1,13 @@
 <?php
 /**
- * 查看采购订单日志.
+ * 日志模板
  */
-use Jxc\Impl\Core\JxcConfig;
-use Jxc\Impl\Dao\ProductDao;
-
-include_once "../Templates/include.php";
-//
-$productDao = new ProductDao(JxcConfig::$DB_Config);
-$w2Products = $productDao->w2uiSelectAll();
-$pdt_list = array();
-foreach ($w2Products as $v) {
-    $w2ValRecId = $v['pdt_id'];;
-    $pdt_list[] = $w2ValRecId;
-}
-
-
 ?>
-<!DOCTYPE html>
-<html lang="zh-cn">
-<body id="body">
-</body>
 <script>
     $(document).ready(function () {
-        $().data("jxc_products", <?=json_encode($w2Products)?>);
-//        console.log($(document).data("xx"));
-//        console.log(this);
-//        console.log($(document));
-
-        var jxcUrls = {
-            'getOrderAll': 'Jxc/do.php?api=order&c=getOrderAll&type=1',
-            'getOrderDetail': 'Jxc/do.php?api=order&c=getOrderDetail',
-        };
-
         var logCnt = $().w2grid({
             name: 'div_main_cnt',
-            header: '采购日志',
+            header: configJxc.header,
             multiSelect: true,
             columns: [
                 {field: 'order_id', caption: '订单号', size: '10%', style: 'text-align:center'},
@@ -50,7 +22,7 @@ foreach ($w2Products as $v) {
                 console.log(event);
                 $.ajax({
                     type: 'GET',
-                    url: jxcUrls['getOrderDetail'],
+                    url: configJxc.urls['getOrderDetail'],
                     data: {
                         'order_id': expandEvent.recid
                     },
@@ -96,7 +68,7 @@ foreach ($w2Products as $v) {
 
         $.ajax({
             type: 'GET',
-            url: jxcUrls['getOrderAll'],
+            url: configJxc.urls['getOrderAll'],
             data: {},
             dataType: 'JSON'
         }).done(function (data, status, xhr) {
@@ -111,7 +83,6 @@ foreach ($w2Products as $v) {
         }).fail(function (xhr, status, error) {
             w2alert('HTTP ERROR:[' + error.message + ']', "Error");
         });
-
 
         function showExpand(eventOfExpand, w2Columns, w2Records) {
             if (w2ui.hasOwnProperty('subgrid-' + eventOfExpand.recid)) w2ui['subgrid-' + eventOfExpand.recid].destroy();
@@ -133,4 +104,3 @@ foreach ($w2Products as $v) {
         }
     });
 </script>
-</html>

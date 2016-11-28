@@ -45,6 +45,7 @@ class JxcConfig {
         'jxc_sales' => 'Views/JxcOrderSales.php',
         //  日志
         'jxc_log_procure' => 'Views/JxcLogProcure.php',
+        'jxc_log_sales' => 'Views/JxcLogSales.php',
 
 
     );
