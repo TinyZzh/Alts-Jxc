@@ -32,8 +32,12 @@ $clz = JxcConfig::$JXC_SERVICE[$api];
 
 $service = new $clz();
 if ($service instanceof JxcService) {
-    $response = $service->invoke($clz, $method, $op_id, $request);
-    echo json_encode($response);
+    try {
+        $response = $service->invoke($clz, $method, $op_id, $request);
+        echo json_encode($response);
+    } catch (Exception $e) {
+        echo json_encode(array('status' => 'error', 'message' => $e->getMessage()));
+    }
 } else {
     echo json_encode(array('status' => 'error', 'message' => 'Unknown service.'));
     exit();
