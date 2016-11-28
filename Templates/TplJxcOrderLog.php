@@ -85,12 +85,13 @@
         });
 
         function showExpand(eventOfExpand, w2Columns, w2Records) {
+            var height = (Math.min(10, w2Records.length) + 1) * 24 + 10;
             if (w2ui.hasOwnProperty('subgrid-' + eventOfExpand.recid)) w2ui['subgrid-' + eventOfExpand.recid].destroy();
             $('#' + eventOfExpand.box_id).css({
                 margin: '0px',
                 padding: '0px',
                 width: '100%'
-            }).animate({height: '105px'}, 100);
+            }).animate({height: height + 'px'}, 100);//            }).animate({height: '105px'}, 100);
             setTimeout(function () {
                 $('#' + eventOfExpand.box_id).w2grid({
                     name: 'subgrid-' + eventOfExpand.recid,
