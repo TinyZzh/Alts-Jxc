@@ -4,15 +4,14 @@ namespace Jxc\Impl\Service;
 
 use Jxc\Impl\Core\JxcConfig;
 use Jxc\Impl\Core\JxcService;
-use Jxc\Impl\Dao\CustomerDao;
-use Jxc\Impl\Dao\LogChargeDao;
 use Jxc\Impl\Dao\OperatorDao;
-use Jxc\Impl\Libs\DateUtil;
 use Jxc\Impl\Util\GameUtil;
-use Jxc\Impl\Vo\LogCharge;
-use Jxc\Impl\Vo\VoCustomer;
+use Jxc\Impl\Vo\VoOperator;
 
-class PublicService extends JxcService {
+/**
+ * 开放的接口
+ */
+final class PublicService extends JxcService {
 
     private $operatorDao;
 
@@ -23,6 +22,7 @@ class PublicService extends JxcService {
 
     /**
      * 登录管理系统
+     * @param VoOperator $voOp
      * @param $request
      * @return array
      */
@@ -32,8 +32,12 @@ class PublicService extends JxcService {
         }
         $voOperator = $this->operatorDao->selectByAccount($request['account']);
         if (!$voOperator) {
-            return array('status' => 'error', 'message' => 'Unknown operator : ' . $request['account']);
+            return array('status' => 'error', 'message' => '账号或密码错误!');
         }
+        if ($request['account'] !== $voOperator->op_psw) {
+            return array('status' => 'error', 'message' => '账号或密码错误!');
+        }
+
         $_SESSION['op_id'] = $voOperator->op_id;
         $_SESSION['op_account'] = $voOperator->op_account;
         $_SESSION['op_auth'] = json_decode($voOperator->op_auth);  //  TODO:   权限管理
@@ -41,7 +45,7 @@ class PublicService extends JxcService {
     }
 
     public function logout($voOp, $request) {
-
+        session_destroy();
     }
 
 }

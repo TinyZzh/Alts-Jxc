@@ -27,13 +27,16 @@ foreach ($products as $k => $v) {
 
 ?>
 <script>
+    /**
+     *  Define Cache。
+     * */
     var cacheOfColors = <?=json_encode($cacheOfColors)?>;
     var menuOfColors = <?=json_encode($menuOfColors)?>;
-    console.log(menuOfColors);
     var cacheOfPdtInfo =<?=json_encode($cacheOfPdtInfo)?>;
+    console.log(menuOfColors);
+
 
     $(document).data('api', <?=json_encode(JxcConfig::$SIDEBAR)?>);
-
 
     $(document).ready(function () {
         var div_left = $('#div_left').w2sidebar({

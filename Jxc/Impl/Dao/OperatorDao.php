@@ -17,10 +17,11 @@ class OperatorDao extends MySQLDao {
 
     /**
      * @param $account
+     * @param int $status 账户状态
      * @return VoOperator|null
      */
-    public function selectByAccount($account) {
-        $sets = $this->mysqlDB()->select('tb_operator', '*', array('op_account' => $account));
+    public function selectByAccount($account, $status = 0) {
+        $sets = $this->mysqlDB()->select('tb_operator', '*', array('op_account' => $account, 'status' => $status));
         if ($sets && is_array($sets)) {
             $voOperator = new VoOperator();
             $voOperator->convert($sets[0]);
@@ -29,14 +30,34 @@ class OperatorDao extends MySQLDao {
         return null;
     }
 
-    public function selectById($op_id) {
-        $sets = $this->mysqlDB()->select('tb_operator', '*', array('op_id' => $op_id));
+    /**
+     * @param $op_id
+     * @param int $status 账户状态
+     * @return VoOperator|null
+     */
+    public function selectById($op_id, $status = 0) {
+        $sets = $this->mysqlDB()->select('tb_operator', '*', array('op_id' => $op_id, 'status' => $status));
         if ($sets && is_array($sets)) {
             $voOperator = new VoOperator();
             $voOperator->parse($sets[0]);
             return $voOperator;
         }
         return null;
+    }
+
+    /**
+     * @param int $status 账户状态
+     * @return array
+     */
+    public function selectByStatus($status = 0) {
+        $sets = $this->mysqlDB()->select('tb_operator', '*', array('status' => $status));
+        $array = array();
+        foreach ($sets as $k => $v) {
+            $voOperator = new VoOperator();
+            $voOperator->convert($v);
+            $array[$voOperator->op_id] = $voOperator;
+        }
+        return $array;
     }
 
     /**
