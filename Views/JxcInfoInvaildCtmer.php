@@ -1,6 +1,6 @@
 <?php
 /**
- * 废弃产品管理.
+ * 历史用户管理.
  */
 include_once "../Templates/include.php";
 ?>
@@ -13,7 +13,7 @@ include_once "../Templates/include.php";
         //  渲染w2grid
         var content = $('#div_main_cnt').w2grid({
             name: 'div_main_cnt',
-            header: '废弃产品管理',
+            header: '历史客户管理',
             multiSelect: true,
             url: {
                 'get': 'Jxc/do.php?api=product&c=getPdtList&flag=1',

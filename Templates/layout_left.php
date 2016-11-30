@@ -32,11 +32,12 @@ foreach ($products as $k => $v) {
      * */
     var cacheOfColors = <?=json_encode($cacheOfColors)?>;
     var menuOfColors = <?=json_encode($menuOfColors)?>;
-    var cacheOfPdtInfo =<?=json_encode($cacheOfPdtInfo)?>;
     console.log(menuOfColors);
-
+    var cacheOfPdtInfo =<?=json_encode($cacheOfPdtInfo)?>;
 
     $(document).data('api', <?=json_encode(JxcConfig::$SIDEBAR)?>);
+
+    CacheUtil.cache(Const.CACHE_OF_COLORS, <?=json_encode($cacheOfColors)?>);
 
     $(document).ready(function () {
         var div_left = $('#div_left').w2sidebar({
@@ -75,6 +76,13 @@ foreach ($products as $k => $v) {
                         {id: 'jxc_store_info', text: '管理库存', img: 'icon-page'},
                     ]
                 },
+                {
+                    id: 'jxc_analysis', text: '开发中', img: 'icon-folder', expanded: true, expended: true,
+                    group: true,
+                    nodes: [
+                        {id: 'jxc_analysis_info', text: '显示统计', img: 'icon-page'},
+                    ]
+                }
             ],
             onClick: function (event) {
                 var urls = $(document).data('api');

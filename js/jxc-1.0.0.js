@@ -245,10 +245,6 @@ function onSizeFieldMouseOver(div_tooltip, com_name, index, col_index) {
     //div_tooltip.w2tag(str);
 }
 
-function onSizeFieldMouseOut(div_tooltip) {
-    //div_tooltip.w2tag();    //  隐藏tooltip
-}
-
 
 /**
  * 进销存颜色管理
@@ -389,6 +385,105 @@ var colorUtils = (function () {
     }
 })();
 
+
+const Const = {
+    CACHE_OF_COLORS: 'cacheOfColors',
+    CACHE_OF_CUSTOMERS: 'cacheOfCustomers',
+};
+
+/**
+ * 缓存工具
+ */
+var CacheUtil = (function () {
+
+    var map = {};
+
+    var obj = {
+        cache: cache
+    };
+    return obj;
+
+    function cache(k, v) {
+        return $.data(map, k, v);
+    }
+})();
+
+var W2Util = (function () {
+
+    var obj = {
+        renderJxcColorCell: renderJxcColorCell,
+        renderJxcCustomerNameCell: renderJxcCustomerNameCell
+    };
+    return obj;
+
+    /**
+     * w2grid - 渲染进销存系统颜色格子
+     * @param record
+     * @param index
+     * @param col_index
+     * @returns {string}
+     */
+    function renderJxcColorCell(record, index, col_index) {
+        var html = this.getCellValue(index, col_index);
+        var val = CacheUtil.cache(Const.CACHE_OF_COLORS);
+        if (val != undefined && val[html]) {
+            return '<div style="height:24px;text-align:center;background-color: \#' + val[html].color_rgba + ';">'
+                + val[html].color_name
+                + '</div>';
+        }
+        return '<div>' + html + '</div>';
+    }
+
+    /**
+     *  w2grid - 渲染客户名称
+     */
+    function renderJxcCustomerNameCell(record, index, col_index) {
+        var html = this.getCellValue(index, col_index);
+        var val = CacheUtil.cache(Const.CACHE_OF_CUSTOMERS);
+        return '<div style="text-align:center;">' + (val != undefined && val[html]) ? val[html].ct_name : html + '</div>';
+    }
+
+
+})();
+
+function popupColorsOption (w2Target, w2Index, w2Column, popGridName, popRecords) {
+    var targetGrid = w2Target;
+    var ops = {
+        name: popGridName,
+        show: {
+            columnHeaders: false
+        },
+        columns: [
+            {field: 'color0', caption: '颜色0', size: '20%', render: W2Util.renderJxcColorCell},
+            {field: 'color1', caption: '颜色1', size: '20%', render: W2Util.renderJxcColorCell},
+            {field: 'color2', caption: '颜色2', size: '20%', render: W2Util.renderJxcColorCell},
+            {field: 'color3', caption: '颜色3', size: '20%', render: W2Util.renderJxcColorCell},
+            {field: 'color4', caption: '颜色4', size: '20%', render: W2Util.renderJxcColorCell}
+        ],
+        records: popRecords,
+        onDblClick: function (event) {
+            var that = this;
+            console.log(event);
+            var rec = that.get(event.recid);
+            var targetFieldName = targetGrid.columns[w2Column].field;
+            var changeData = targetGrid.records[w2Index].changes;
+            if (!changeData) changeData = {};
+            changeData[targetFieldName] = rec[that.columns[event.column].field];
+            //console.log(w2gridObj);
+            //console.log('last_recid = ' + w2gridObj.last.sel_recid);
+            //console.log(changeData);
+            targetGrid.set(targetGrid.last.sel_recid, {
+                'changes': changeData
+            });
+            event.onComplete = function (event) {
+
+                w2popup.close();
+            }
+        }
+    };
+    return ops;
+}
+
 /**
  * 生成pop的w2grid
  * @param w2Target
@@ -407,17 +502,7 @@ function popupPdtOption(w2Target, w2Index, w2Column, popGridName, popRecords) {
         columns: [
             {field: 'pdt_id', caption: '编号', size: '10%', style: 'text-align:center'},
             {field: 'pdt_name', caption: '名称', size: '10%', style: 'text-align:center'},
-            {
-                field: 'pdt_color', caption: '颜色', size: '80px',
-                render: function (record, index, col_index) {
-                    var html = this.getCellValue(index, col_index);
-                    if (cacheOfColors[html]) {
-                        var vc = cacheOfColors[html];
-                        return '<div style="height:24px;text-align:center;background-color: #' + vc.color_rgba + ';">' + ' ' + vc.color_name + '</div>';
-                    }
-                    return '<div>' + html + '</div>';
-                }
-            },
+            {field: 'pdt_color', caption: '颜色', size: '80px', render: W2Util.renderJxcColorCell},
             {field: 'pdt_count_0', caption: '3XS', size: '5%'},
             {field: 'pdt_count_1', caption: '2XS', size: '5%'},
             {field: 'pdt_count_2', caption: ' XS', size: '5%'},
@@ -441,6 +526,79 @@ function popupPdtOption(w2Target, w2Index, w2Column, popGridName, popRecords) {
             {field: 'pdt_id', caption: '货号', type: 'text'},
             {field: 'pdt_name', caption: '名称', type: 'text'},
             {field: 'pdt_color', caption: '颜色', type: 'text'}
+        ],
+        toolbar: {
+            items: [
+                {type: 'break'}
+            ]
+        },
+        records: popRecords,
+        onDblClick: function (event) {
+            var that = this;
+            console.log(event);
+            var rec = that.get(event.recid);
+            var targetField = targetGrid.columns[w2Column].field;
+            var targetRcd = targetGrid.records[w2Index];
+            var changeData = targetRcd.changes;
+            if (changeData == undefined) changeData = [];
+            //changeData['recid'] = w2gridObj.last.sel_recid;
+            changeData[targetField] = rec[targetField];
+            changeData['pdt_price'] = rec['pdt_price'];
+            changeData['pdt_zk'] = 100; //  折扣缺省值为100
+            rec['pdt_total'] = 0;
+            rec['total_rmb'] = 0.00;
+            rec['changes'] = changeData;
+            //console.log(w2gridObj);
+            //console.log(changeData);
+            targetGrid.remove(targetGrid.last.sel_recid);
+            targetGrid.add(rec);
+            //  最后一行
+            var nextRcd = that.nextRow(targetGrid.last.sel_recid);
+            if (nextRcd == null) {
+                //  移除空白行
+                for (var i = targetGrid.records.length - 1; i >= 0; i--) {
+                    if (targetGrid.records[i][targetField] == '') {
+                        targetGrid.remove(targetGrid.records[i].recid);
+                    }
+                }
+                w2GridAddEmptyRecord(targetGrid);
+            }
+            event.onComplete = function (event) {
+
+                w2popup.close();
+            }
+        }
+    };
+    return ops;
+}
+
+function popupCustomerOption(w2Target, w2Index, w2Column, popGridName, popRecords) {
+    var targetGrid = w2Target;
+    var ops = {
+        name: popGridName,
+        header: '客户信息',
+        multiSelect: false,
+        columns: [
+            {field: 'ct_id', caption: '客户ID', size: '5%', style: 'text-align:center'},
+            {field: 'ct_name', caption: '客户姓名', size: '7%', style: 'text-align:center', editable: {type: 'text'}},
+            {field: 'ct_address', caption: '通信地址', size: '25%', style: 'text-align:right', editable: {type: 'text'}},
+            {field: 'ct_phone', caption: '联系电话', size: '8%', style: 'text-align:right', editable: {type: 'text'}},
+            {field: 'ct_money', caption: '账户余额', size: '7%', style: 'text-align:right',
+                editable: {
+                    type: 'float'
+                },
+                render: function (record, index, col_index) {
+                    console.log(record);
+                    var html = this.getCellValue(index, col_index);
+                    return '<div>¥' + Number(html).toFixed(2) + '</div>';
+                }
+            }
+        ],
+        show: { toolbar: true, toolbarSearch: true, lineNumbers: true},
+        searches: [
+            {field: 'ct_id', caption: '客户ID', type: 'text'},
+            {field: 'ct_name', caption: '客户姓名', type: 'text'},
+            {field: 'ct_phone', caption: '联系电话', type: 'text'}
         ],
         toolbar: {
             items: [

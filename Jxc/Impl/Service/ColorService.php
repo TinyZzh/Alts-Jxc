@@ -11,7 +11,10 @@ use Jxc\Impl\Util\GameUtil;
 use Jxc\Impl\Vo\VoColor;
 use Jxc\Impl\Vo\VoCustomer;
 
-class ColorService extends JxcService {
+/**
+ * 颜色服务
+ */
+final class ColorService extends JxcService {
 
     private $colorDao;
 
@@ -20,19 +23,22 @@ class ColorService extends JxcService {
         $this->colorDao = new ColorDao(JxcConfig::$DB_Config);
     }
 
-    public function w2Records() {
-        return array('status' => 'success', 'data' => $this->colorDao->w2gridRecords());
-    }
-
     /**
-     * 获取顾客列表
+     * 获取popup列表的数据
+     * @param $voOp
      * @param $request
      * @return array
      */
-    public function getColorList($voOp, $request) {
-        return array('state' => 1, 'data' => $this->colorDao->w2uiSelectAll());
+    public function w2Records($voOp, $request) {
+        return array('status' => 'success', 'records' => $this->colorDao->w2gridRecords());
     }
 
+    /**
+     *
+     * @param $voOp
+     * @param $request
+     * @return array
+     */
     public function getColorInfo($voOp, $request) {
         $data = $this->colorDao->select();
         $array = array();
@@ -43,6 +49,12 @@ class ColorService extends JxcService {
         return array('status' => 'success', 'records' => $array);
     }
 
+    /**
+     * 保存颜色信息
+     * @param $voOp
+     * @param $request
+     * @return array
+     */
     public function saveColorInfo($voOp, $request) {
         if ($verify = GameUtil::verifyRequestParams($request, array('changes'))) {
             return array('status' => 'error', 'message' => 'Undefined field : ' . $verify);
@@ -77,6 +89,12 @@ class ColorService extends JxcService {
         return array('status' => 'success', 'updates' => $updateAry);
     }
 
+    /**
+     * 删除颜色
+     * @param $voOp
+     * @param $request
+     * @return array
+     */
     public function removeColorInfo($voOp, $request) {
         if ($verify = GameUtil::verifyRequestParams($request, array('selected'))) {
             return array('status' => 'error', 'message' => 'Undefined field : ' . $verify);

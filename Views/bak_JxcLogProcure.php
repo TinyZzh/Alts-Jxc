@@ -1,23 +1,45 @@
 <?php
 /**
- * 日志模板
+ * 查看采购订单日志.
  */
+use Jxc\Impl\Core\JxcConfig;
+use Jxc\Impl\Dao\ProductDao;
+
+include_once "../Templates/include.php";
+//
+$productDao = new ProductDao(JxcConfig::$DB_Config);
+$w2Products = $productDao->w2uiSelectAll();
+$pdt_list = array();
+foreach ($w2Products as $v) {
+    $w2ValRecId = $v['pdt_id'];;
+    $pdt_list[] = $w2ValRecId;
+}
+
+
 ?>
+<!DOCTYPE html>
+<html lang="zh-cn">
+<body id="body">
+</body>
 <script>
     $(document).ready(function () {
+        $().data("jxc_products", <?=json_encode($w2Products)?>);
+//        console.log($(document).data("xx"));
+//        console.log(this);
+//        console.log($(document));
+
+        var jxcUrls = {
+            'getOrderAll': 'Jxc/do.php?api=order&c=getOrderAll&type=1',
+            'getOrderDetail': 'Jxc/do.php?api=order&c=getOrderDetail',
+        };
+
         var logCnt = $().w2grid({
             name: 'div_main_cnt',
-            header: configJxc.header,
+            header: '采购日志',
             multiSelect: true,
             columns: [
                 {field: 'order_id', caption: '订单号', size: '10%', style: 'text-align:center'},
-                <?php
-
-
-                echo "{field: 'ct_name', caption: '客户', size: '10%', style: 'text-align:center'},";
-                ?>
                 {field: 'ct_name', caption: '客户', size: '10%', style: 'text-align:center'},
-
                 {field: 'datetime', caption: '日志时间', size: '10%', style: 'text-align:center'},
                 {field: 'total_rmb', caption: '总计金额', size: '10%', style: 'text-align:center'},
                 {field: 'op_name', caption: '操作员', size: '10%', style: 'text-align:center'}
@@ -28,7 +50,7 @@
                 console.log(event);
                 $.ajax({
                     type: 'GET',
-                    url: configJxc.urls['getOrderDetail'],
+                    url: jxcUrls['getOrderDetail'],
                     data: {
                         'order_id': expandEvent.recid
                     },
@@ -41,7 +63,17 @@
                         var w2Columns = [
                             {field: 'pdt_id', caption: '编号', size: '10%', style: 'text-align:center'},
                             {field: 'pdt_name', caption: '名称', size: '10%', style: 'text-align:center'},
-                            {field: 'pdt_color', caption: '颜色', size: '80px', render: W2Util.renderJxcColorCell},
+                            {
+                                field: 'pdt_color', caption: '颜色', size: '80px',
+                                render: function (record, index, col_index) {
+                                    var html = this.getCellValue(index, col_index);
+                                    if (cacheOfColors[html]) {
+                                        var vc = cacheOfColors[html];
+                                        return '<div style="height:24px;text-align:center;background-color: #' + vc.color_rgba + ';">' + ' ' + vc.color_name + '</div>';
+                                    }
+                                    return '<div>' + html + '</div>';
+                                }
+                            },
                             <?php
                             // {field: 'pdt_count_0', caption: '3XS', size: '5%', editable: {type: 'text'}},
                             $array = array('3XS', '2XS', 'XS', 'S', 'M', 'L', 'XL', '2XL', '3XL');
@@ -64,7 +96,7 @@
 
         $.ajax({
             type: 'GET',
-            url: configJxc.urls['getOrderAll'],
+            url: jxcUrls['getOrderAll'],
             data: {},
             dataType: 'JSON'
         }).done(function (data, status, xhr) {
@@ -80,14 +112,14 @@
             w2alert('HTTP ERROR:[' + error.message + ']', "Error");
         });
 
+
         function showExpand(eventOfExpand, w2Columns, w2Records) {
-            var height = (Math.min(10, w2Records.length) + 1) * 24 + 10;
             if (w2ui.hasOwnProperty('subgrid-' + eventOfExpand.recid)) w2ui['subgrid-' + eventOfExpand.recid].destroy();
             $('#' + eventOfExpand.box_id).css({
                 margin: '0px',
                 padding: '0px',
                 width: '100%'
-            }).animate({height: height + 'px'}, 100);//            }).animate({height: '105px'}, 100);
+            }).animate({height: '105px'}, 100);
             setTimeout(function () {
                 $('#' + eventOfExpand.box_id).w2grid({
                     name: 'subgrid-' + eventOfExpand.recid,
@@ -101,3 +133,4 @@
         }
     });
 </script>
+</html>

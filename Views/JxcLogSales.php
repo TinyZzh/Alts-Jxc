@@ -24,7 +24,7 @@ foreach ($w2Products as $v) {
     $().data("jxc_products", <?=json_encode($w2Products)?>);
 
     var configJxc = {
-        header : '出售日志',
+        header : '销 售 日 志',
         urls : {
             'getOrderAll': 'Jxc/do.php?api=order&c=getOrderAll&type=' + <?=\Jxc\Impl\Core\JxcConst::IO_TYPE_SALES?>,
             'getOrderDetail': 'Jxc/do.php?api=order&c=getOrderDetail'

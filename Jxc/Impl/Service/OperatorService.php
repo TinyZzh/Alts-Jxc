@@ -141,19 +141,23 @@ final class OperatorService extends JxcService {
         return array('status' => 'success');
     }
 
+    /**
+     * [*]修改其他用户信息. 仅限于超级用户权限
+     * @param $voOp
+     * @param $request
+     * @return array
+     */
     public function opChangeOtherInfo($voOp, $request) {
         if ($verify = GameUtil::verifyRequestParams($request, array('op_account'))) {
             return array('status' => 'error', 'message' => 'Undefined field : ' . $verify);
+        }
+        if (!$this->isSuperAuth($voOp)) {
+            return array('status' => 'error', 'message' => "[*]无法修改, 操作权限不足.");
         }
         $voOperator = $this->operatorDao->selectByAccount($request['op_account']);
         if (!$voOperator) {
             return array('status' => 'error', 'message' => "操作员不存在: [{$request['op_account']}].");
         }
-
-        if ($this->isSuperAuth($voOp)) {
-
-        }
-
         $fields = array();
         $params = array('op_name', 'op_name');
         foreach ($params as $val) {

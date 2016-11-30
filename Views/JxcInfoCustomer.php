@@ -65,16 +65,12 @@ foreach ($products as $k => $v) {
                         type: 'float'
                     },
                     render: function (record, index, col_index) {
-                        var html = this.getCellValue(index, col_index);
                         console.log(record);
-                        var money = record.ct_money;
-                        if (record.changes && record.changes.ct_money) {
-                            money = record.changes.ct_money;
-                        }
-                        return '<div>¥' + ' ' + Number(money).toFixed(2) + '</div>';
+                        var html = this.getCellValue(index, col_index);
+                        return '<div>¥' + Number(html).toFixed(2) + '</div>';
                     }
                 },
-                {field: 'ct_money2', caption: '货币', size: '10%', style: 'text-align:right',
+                {field: 'ct_money2', caption: '货币2', size: '10%', style: 'text-align:right',
                     render: 'money',
                     options:{
                         currencySuffix: '¥',
