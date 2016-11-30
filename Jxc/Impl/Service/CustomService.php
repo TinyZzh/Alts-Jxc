@@ -131,5 +131,4 @@ class CustomService extends JxcService {
         return array('status' => 'success');
     }
 
-
 }

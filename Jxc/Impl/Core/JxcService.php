@@ -53,16 +53,22 @@ class JxcService {
                 return array('status' => 'error', 'message' => 'Unknown method.');
             }
             $voOperator = $this->operatorDao->selectById($op_id);
-            if (!$voOperator) {
-                return array('status' => 'error', 'message' => "操作员不存在: [{$op_id}].");
+            if (!$voOperator && !$voOperator->op_auth) {
+                return array('status' => 'error', 'message' => "操作员信息错误: [{$op_id}].\n 请联系系统管理员.");
             }
-            if (!isset($voOperator->op_auth['procure']) && !isset($voOperator->op_auth['all_allow'])) {
-                return array('status' => 'error', 'message' => "操作员权限不足: [{$op_id}] - Api : procure.");
+            if (!isset($voOperator->op_auth[JxcConst::SYSTEM_AUTHORITY_ALL])) {
+                if (isset($voOperator->op_auth[$method]) && $voOperator->op_auth[$method]) {
+                    //  no-op
+                } else {
+                    return array('status' => 'error', 'message' => "无法执行此操作!. 权限不足: [{$voOperator->op_name}] - Api:[{$method}]. \n 请联系系统管理员.");
+                }
             }
         }
         if (!is_callable(array($this, $method))) {
             return array('status' => 'error', 'message' => "未知接口: [{$method}].");
         }
+        //  TODO: 接口调用日志
+
         return call_user_func_array(array($this, $method), array($voOperator, $params));
     }
 
