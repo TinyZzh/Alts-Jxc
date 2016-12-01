@@ -38,6 +38,27 @@ final class AnalysisService extends JxcService {
         $this->logOrderDetailDao = new LogOrderDetailDao(JxcConfig::$DB_Config);
     }
 
+    /**
+     * 分析利润率
+     *
+     * <pre>
+     * #  订单的毛利润:
+     *   SELECT order_id,SUM((D.pdt_price-P.pdt_cost)*D.pdt_total) AS profit FROM log_order_detail AS D,tb_product AS P WHERE P.pdt_id=D.pdt_id GROUP BY order_id;
+     * #    统计每个用户的利润总和
+     * SELECT A.ct_id, SUM(DP.profit) AS all_profit FROM `log_order` AS A, (
+     * SELECT order_id,SUM((D.pdt_price-P.pdt_cost)*D.pdt_total) AS profit FROM log_order_detail AS D,tb_product AS P WHERE P.pdt_id=D.pdt_id GROUP BY order_id
+     * ) AS DP WHERE A.order_id=DP.order_id AND A.`type`=1 AND A.datetime BETWEEN '' AND '' GROUP BY A.ct_id
+     *
+     * </pre>
+     *
+     * @param $voOp
+     * @param $request
+     */
+    public function analysisProfit($voOp, $request) {
+
+
+
+    }
 
 
 
