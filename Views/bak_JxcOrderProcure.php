@@ -46,14 +46,20 @@ foreach ($w2Products as $v) {
             columns: [
                 {field: 'pdt_id', caption: '编号', size: '7%', style: 'text-align:center', editable: {type: 'text'}},
                 {field: 'pdt_name', caption: '名称', size: '8%', style: 'text-align:center'},
-                {field: 'pdt_color', caption: '颜色', size: '80px', render: W2Util.renderJxcColorCell},
+                {field: 'pdt_color', caption: '颜色', size: '80px', render: renderJxcColorCell},
                 <?php
                 // {field: 'pdt_count_0', caption: '3XS', size: '5%', editable: {type: 'text'}, render: renderSizeField},
                 $array = array('3XS', '2XS', 'XS', 'S', 'M', 'L', 'XL', '2XL', '3XL');
                 foreach ($array as $k => $v)
                     echo "{field: 'pdt_count_{$k}', caption: '{$v}', size: '5%', editable: {type: 'text'}},";
                 ?>
-                {field: 'pdt_zk', caption: '折扣', size: '7%', render: 'percent', editable: {type: 'percent', min: 0, max: 100}},
+                {
+                    field: 'pdt_zk',
+                    caption: '折扣',
+                    size: '7%',
+                    render: 'percent',
+                    editable: {type: 'percent', min: 0, max: 100}
+                },
                 {field: 'pdt_price', caption: '进价', size: '7%', render: 'float:2', editable: {type: 'int'}},
                 {field: 'pdt_total', caption: '总数量', size: '10%'},
                 {field: 'total_rmb', caption: '总价', size: '10%'}

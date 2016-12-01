@@ -11,7 +11,10 @@ use Jxc\Impl\Util\GameUtil;
 use Jxc\Impl\Vo\LogCharge;
 use Jxc\Impl\Vo\VoCustomer;
 
-class CustomService extends JxcService {
+/**
+ * 会员服务
+ */
+final class CustomService extends JxcService {
 
     private $customDao;
     private $logChargeDao;
@@ -37,7 +40,7 @@ class CustomService extends JxcService {
      * @return array
      */
     public function getAllCustomerInfo($voOp, $request) {
-        $data = $this->customDao->select();
+        $data = $this->customDao->selectAll();
         $array = array();
         foreach ($data as $v) {
             $v->recid = $v->ct_id;

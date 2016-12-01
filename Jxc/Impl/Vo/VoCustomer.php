@@ -24,5 +24,6 @@ class VoCustomer extends Vo {
     public $ct_phone;    //  联系电话
     public $ct_money;    //  账户余额   -   手动充值    浮点数
     public $last_order;  //  上一个订单
+    public $status;      //  客户状态   0:正常 1:废弃
 
 }

@@ -63,7 +63,7 @@ class ColorDao extends MySQLDao {
             $i = $k % 5;
             $j = floor($k / 5);
             $data[$j]['recid'] = $j;
-            $data[$j]['color'.$i] = $voColor;
+            $data[$j]['color'.$i] = $voColor->color_id;
         }
         return $data;
     }

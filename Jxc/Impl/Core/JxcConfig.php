@@ -36,16 +36,22 @@ class JxcConfig {
 
 
     public static $SIDEBAR = array(
+        //  信息
         'jxc_info_product' => 'Views/JxcInfoProduct.php',
-        'jxc_info_pdt_deleted' => 'Views/JxcInfoDeleted.php',
+        'jxc_info_pdt_deleted' => 'Views/JxcInfoInvaildPdt.php',
         'jxc_info_custom' => 'Views/JxcInfoCustomer.php',
         'jxc_info_color' => 'Views/JxcInfoColors.php',
+        //
         'jxc_procure' => 'Views/JxcOrderProcure.php',
         'jxc_store_show' => '',
         'jxc_sales' => 'Views/JxcOrderSales.php',
         //  日志
         'jxc_log_procure' => 'Views/JxcLogProcure.php',
         'jxc_log_sales' => 'Views/JxcLogSales.php',
+        'jxc_log_refund' => 'Views/JxcLogRefund.php',
+
+        //  统计分析
+        'jxc_analysis_info' => 'Analysis/A1.php',
 
 
     );

@@ -23,7 +23,7 @@ class W2UI {
             $f = 'pdt_count_' . $k;
             $w2Data[$f] = $v;
         }
-        unset($w2Data['pdt_counts']);
+//        unset($w2Data['pdt_counts']);
         return $w2Data;
     }
 

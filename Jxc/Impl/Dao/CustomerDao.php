@@ -49,23 +49,24 @@ class CustomerDao extends MySQLDao {
         return $resultSet;
     }
 
-    public function select($where = array()) {
-        $resultSet = $this->mysqlDB()->select('tb_customer', '*', $where);
+    public function selectAll($status = 0) {
+        $sets = $this->mysqlDB()->select('tb_customer', '*', array('status' => $status));
         $array = array();
-        foreach ($resultSet as $data) {
+        foreach ($sets as $data) {
             $voCustomer = new VoCustomer();
             $voCustomer->convert($data);
-            $array[] = $voCustomer;
+            $array[$voCustomer->ct_id] = $voCustomer;
         }
         return $array;
     }
 
     /**
      * @param $ct_id
+     * @param int $status
      * @return VoCustomer|null
      */
-    public function selectByCtId($ct_id) {
-        $sets = $this->mysqlDB()->select('tb_customer', '*', array('ct_id' => $ct_id));
+    public function selectByCtId($ct_id, $status = 0) {
+        $sets = $this->mysqlDB()->select('tb_customer', '*', array('ct_id' => $ct_id, 'status' => $status));
         if ($sets) {
             $voCustomer = new VoCustomer();
             $voCustomer->convert($sets[0]);

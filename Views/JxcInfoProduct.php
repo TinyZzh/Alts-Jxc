@@ -137,9 +137,18 @@ $remoteUrl = "../Jxc/index.php?api=mg_product";
 //            onEditField: w2GridOnEditField,
             onEditField: function (event) {
                 console.log(event);
+                var that = this;
                 if (this.columns[event.column].field == 'pdt_color') {  //  编辑单品颜色
                     event.preventDefault();
-                    colorUtils.openPop(this, event);
+//                    colorUtils.openPop(this, event);
+                    $.getJSON("Jxc/do.php?api=color&c=w2Records", null, function (data) {
+                        if (data['status'] == 'success') {
+                            var colorsOptions = popupColorsOption(that, event.index, event.column, 'pop_w2grid_colors', data['records']);
+                            PopupUtil.onPopupShow({
+                                subOptions: colorsOptions
+                            });
+                        }
+                    });
                 }
             },
             onSave: w2GridOnSaveAndUpdate,
