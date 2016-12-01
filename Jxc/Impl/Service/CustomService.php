@@ -27,6 +27,7 @@ final class CustomService extends JxcService {
 
     /**
      * 获取顾客列表
+     * @param $voOp
      * @param $request
      * @return array
      */
@@ -36,6 +37,7 @@ final class CustomService extends JxcService {
 
     /**
      * 获取会员信息
+     * @param $voOp
      * @param $request
      * @return array
      */
@@ -51,6 +53,7 @@ final class CustomService extends JxcService {
 
     /**
      * 更新会员信息
+     * @param $voOp
      * @param $request
      * @return array
      */
@@ -90,6 +93,7 @@ final class CustomService extends JxcService {
 
     /**
      * 移除会员信息
+     * @param $voOp
      * @param $request
      * @return array
      */
@@ -105,6 +109,7 @@ final class CustomService extends JxcService {
 
     /**
      * 充值
+     * @param $voOp
      * @param $request
      * @return array
      */
