@@ -19,7 +19,7 @@
                 {field: 'ct_name', caption: '客户', size: '10%', style: 'text-align:center'},
 
                 {field: 'datetime', caption: '日志时间', size: '10%', style: 'text-align:center'},
-                {field: 'total_rmb', caption: '总计金额', size: '10%', style: 'text-align:center'},
+                {field: 'total_rmb', caption: '总计金额', size: '10%', render: 'money:2'},
                 {field: 'op_name', caption: '操作员', size: '10%', style: 'text-align:center'}
             ],
             show: {toolbar: true, header: true, footer: true, lineNumbers: true},
@@ -50,9 +50,9 @@
                             }
                             ?>
                             {field: 'pdt_zk', caption: '折扣', size: '7%', render: 'percent'},
-                            {field: 'pdt_price', caption: '进价', size: '7%', render: 'float:2'},
+                            {field: 'pdt_price', caption: '单价', size: '7%', render: 'money:2'},
                             {field: 'pdt_total', caption: '总数量', size: '10%'},
-                            {field: 'total_rmb', caption: '总价', size: '10%'}
+                            {field: 'total_rmb', caption: '总价', size: '10%', render: 'money:2'}
                         ];
                         showExpand(expandEvent, w2Columns, data.records);
                     }

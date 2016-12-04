@@ -19,7 +19,7 @@ Jxc\AutoLoader::register();
     <script src="js/jquery.min.js" type="text/javascript"></script>
     <script src="js/bootstrap.min.js" type="text/javascript"></script>
     <script src="js/w2ui-1.4.3-zh-cn.js" type="text/javascript"></script>
-    <script src="js/jxc-1.0.0.js?v=<?=time()?>" type="text/javascript"></script>
+    <script src="js/jxc-1.0.0.js?v=<?= time() ?>" type="text/javascript"></script>
 
     <script src="http://echarts.baidu.com/dist/echarts.js" type="text/javascript"></script>
     <script src="http://echarts.baidu.com/asset/theme/vintage.js" type="text/javascript"></script>
@@ -32,6 +32,10 @@ Jxc\AutoLoader::register();
     <div id="div_footer"></div>
 </div>
 <script type="text/javascript">
+    //  locale
+    w2utils.settings.locale = 'zh-cn';
+    w2utils.settings.currencyPrefix = '￥';
+    //  initialize layout
     $('#layout').height($(window).height());
     $('#layout').w2layout({
         name: 'layout',

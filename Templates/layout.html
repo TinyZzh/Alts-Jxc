@@ -6,6 +6,14 @@
     <div id="div_footer"></div>
 </div>
 <script type="text/javascript">
+    //
+    w2utils.locale({
+        locale: "zh-cn",
+        currencyPrefix: "￥",
+        currencySuffix: "",
+    });
+
+
     $('#layout').height($(window).height());
     $('#layout').w2layout({
         name: 'layout',

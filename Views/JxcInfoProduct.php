@@ -56,7 +56,8 @@ $remoteUrl = "../Jxc/index.php?api=mg_product";
                         return '<div>' + value + '</div>';
                     }
                 },
-                {field: 'pdt_price', caption: '进货价', size: '5%', editable: {type: 'text'}},
+                {field: 'pdt_cost', caption: '成本价', size: '5%', editable: {type: 'float'}, render: 'money:2'},
+                {field: 'pdt_price', caption: '进货价', size: '5%', editable: { type: 'float'}, render: 'money:2'},
                 {field: 'datetime', caption: '记录时间', size: '5%'}
             ],
             show: {
