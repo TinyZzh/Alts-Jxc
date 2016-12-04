@@ -53,10 +53,16 @@ foreach ($w2Products as $v) {
                 foreach ($array as $k => $v)
                     echo "{field: 'pdt_count_{$k}', caption: '{$v}', size: '5%', editable: {type: 'text'}},";
                 ?>
-                {field: 'pdt_zk', caption: '折扣', size: '7%', render: 'percent', editable: {type: 'percent', min: 0, max: 100}},
-                {field: 'pdt_price', caption: '进价', size: '7%', render: 'float:2', editable: {type: 'int'}},
+                {
+                    field: 'pdt_zk',
+                    caption: '折扣',
+                    size: '7%',
+                    render: 'percent',
+                    editable: {type: 'percent', min: 0, max: 100}
+                },
+                {field: 'pdt_price', caption: '单价', size: '7%', render: 'money:2', editable: {type: 'float'}},
                 {field: 'pdt_total', caption: '总数量', size: '10%'},
-                {field: 'total_rmb', caption: '总价', size: '10%'}
+                {field: 'total_rmb', caption: '总价', size: '10%', render: 'money:2'}
             ],
             show: {
                 header: true, toolbar: true, toolbarAdd: true, toolbarDelete: true, lineNumbers: true, footer: true
@@ -127,6 +133,7 @@ foreach ($w2Products as $v) {
                 }
             },
             onChange: function (event) {
+                console.log(event);
                 var that = this;
                 var column = this.columns[event.column];
                 var record = that.records[event.index];
@@ -138,26 +145,30 @@ foreach ($w2Products as $v) {
                     w2alert("[Error]请先输入货号.", "Error");
                     return;
                 }
-                var total = 0;
-                var zk = 100;
-                var counts = [];
-                for (var e = 0; e < this.columns.length; e++) {
-                    var col = that.columns[e];
-                    var val = that.getCellValue(event.index, e, false);
-                    if (col.field.indexOf('pdt_count_') >= 0) {
-                        var tmpIndex = col.field.substr(10);
-                        counts[tmpIndex] = (event.column == e) ? Number(event.value_new) : val;
-                    } else if (col.field == 'pdt_zk') {
-                        zk = (event.column == e) ? Number(event.value_new).toFixed(0) : val;
-                        if (zk <= 0) zk = 100;
-                    }
-                }
-                counts.map(function (v) {
-                    total += Number(v);
-                });
-                var total_rmb = Number((record['pdt_price'] * zk / 100)).toFixed(2) * total;
                 console.log('xxyy');
-                event.onComplete = function (event) {
+                event.onComplete = function (evt2) {
+                    var total = 0;
+                    var price = 0.0;
+                    var zk = 100;
+                    var counts = [];
+                    for (var e = 0; e < that.columns.length; e++) {
+                        var col = that.columns[e];
+                        var val = that.getCellValue(event.index, e, false);
+                        if (col.field.indexOf('pdt_count_') >= 0) {
+                            var tmpIndex = col.field.substr(10);
+                            counts[tmpIndex] = (event.column == e) ? Number(event.value_new) : val;
+                        } else if (col.field == 'pdt_zk') {
+                            zk = (event.column == e) ? Number(event.value_new).toFixed(0) : val;
+                            if (zk <= 0) zk = 100;
+                        } else if (col.field == 'pdt_price') {
+                            price = Number(val).toFixed(2);
+                        }
+                    }
+                    counts.map(function (v) {
+                        total += Number(v);
+                    });
+                    var total_rmb = Number((price * zk / 100)).toFixed(2) * total;
+
                     that.set(record['recid'], {
                         'pdt_total': total,
                         'total_rmb': total_rmb

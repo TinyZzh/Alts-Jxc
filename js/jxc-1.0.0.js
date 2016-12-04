@@ -216,34 +216,6 @@ function removeByItemId(items, id) {
 }
 
 
-function renderSizeField(record, index, col_index) {
-    var html = this.getCellValue(index, col_index);
-    return '<div onmouseout="onSizeFieldMouseOut($(this));" ' +
-        ' onmouseover="onSizeFieldMouseOver($(this), \'' + this.name + '\', ' + index + ', ' + col_index + '); " ' +
-        ' style=" height: 24px; ">'
-        + html + '</div>' || '';
-}
-
-/**
- * 字段[尺码]的tooltip
- * @param com_name
- * @param index
- * @param col_index
- */
-function onSizeFieldMouseOver(div_tooltip, com_name, index, col_index) {
-    var grid = w2ui[com_name];
-    var j = grid.columns[col_index].field.substr(10);
-    var record = grid.records[index];
-    if (record['pdt_id'] == undefined || record['pdt_id'] == '') {
-        //w2alert("[Error]请先输入货号.", "Error");
-        return;
-    }
-    var pdt_id = typeof(record['pdt_id']) == 'object' ? record['pdt_id'].text : record['pdt_id'];
-    var limit = cacheOfPdtInfo[pdt_id].pdt_counts[j] || 0;
-    var str = '<div style="padding: 5px">最大数量:[' + limit + ']</div>';
-    div_tooltip.w2overlay(str);
-    //div_tooltip.w2tag(str);
-}
 
 
 /**
@@ -412,7 +384,10 @@ var W2Util = (function () {
 
     var obj = {
         renderJxcColorCell: renderJxcColorCell,
-        renderJxcCustomerNameCell: renderJxcCustomerNameCell
+        renderJxcCustomerNameCell: renderJxcCustomerNameCell,
+        renderJxcPdtSizeCell: renderJxcPdtSizeCell,
+        onMouseOverPdtSizeCell: onMouseOverPdtSizeCell,
+        onMouseOutPdtSizeCell: onMouseOutPdtSizeCell
     };
     return obj;
 
@@ -443,6 +418,41 @@ var W2Util = (function () {
         return '<div style="text-align:center;">' + (val != undefined && val[html]) ? val[html].ct_name : html + '</div>';
     }
 
+    /**
+     * w2grid - 选择单品尺寸(库存tooltip)
+     */
+    function renderJxcPdtSizeCell(record, index, col_index) {
+        var html = this.getCellValue(index, col_index);
+        return '<div onmouseout="W2Util.onMouseOutPdtSizeCell($(this));" ' +
+            ' onmouseover="W2Util.onMouseOverPdtSizeCell($(this), \'' + this.name + '\', ' + index + ', ' + col_index + '); " ' +
+            ' style=" height: 24px; ">'
+            + html + '</div>' || '';
+    }
+
+    /**
+     * 字段[尺码]的tooltip
+     * @param com_name
+     * @param index
+     * @param col_index
+     */
+    function onMouseOverPdtSizeCell(div_tooltip, com_name, index, col_index) {
+        var grid = w2ui[com_name];
+        var j = grid.columns[col_index].field.substr(10);
+        var record = grid.records[index];
+        if (record['pdt_id'] == undefined || record['pdt_id'] == '') {
+            //w2alert("[Error]请先输入货号.", "Error");
+            return;
+        }
+        var pdt_id = typeof(record['pdt_id']) == 'object' ? record['pdt_id'].text : record['pdt_id'];
+        var limit = cacheOfPdtInfo[pdt_id].pdt_counts[j] || 0;
+        var str = '<div style="padding: 5px">最大数量:[' + limit + ']</div>';
+        div_tooltip.w2overlay(str);
+        //div_tooltip.w2tag(str);
+    }
+
+    function onMouseOutPdtSizeCell(div_tooltip) {
+        //div_tooltip.w2tag();    //  隐藏tooltip
+    }
 
 })();
 

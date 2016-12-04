@@ -59,48 +59,21 @@ $pdt_list = json_encode($pdt_list);
                 {caption: '总计', span: 2}
             ],
             columns: [
-                {
-                    field: 'pdt_id', caption: '编号', size: '10%',
-                    editable: {
-                        type: 'list',
-                        showAll: true,
-                        items: <?=$pdt_list?>
-                    },
-                    render: function (record, index, col_index) {
-                        var html = this.getCellValue(index, col_index);
-//                        console.log(html);
-                        return html.text || '';
-                    }
-                },
+                {field: 'pdt_id', caption: '编号', size: '7%', style: 'text-align:center', editable: {type: 'text'}},
                 {field: 'pdt_name', caption: '名称', size: '10%', style: 'text-align:center'},
-                {
-                    field: 'pdt_color', caption: '颜色', size: '80px',
-                    render: function (record, index, col_index) {
-                        var html = this.getCellValue(index, col_index);
-                        if (cacheOfColors[html]) {
-                            var vc = cacheOfColors[html];
-                            return '<div style="height:24px;text-align:center;background-color: #' + vc.color_rgba + ';">' + ' ' + vc.color_name + '</div>';
-                        }
-                        return '<div>' + html + '</div>';
-                    }
-                },
+                {field: 'pdt_color', caption: '颜色', size: '80px', render: W2Util.renderJxcColorCell},
                 <?php
                 // {field: 'pdt_count_1', caption: '2XS', size: '5%', editable: {type: 'text'}, render: renderSizeField},
                     $array = array( '3XS', '2XS', 'XS', 'S', 'M', 'L', 'XL', '2XL', '3XL' );
                     foreach ($array as $k => $v) {
-                        echo "{field: 'pdt_count_{$k}', caption: '{$v}', size: '5%', editable: {type: 'text'}, render: renderSizeField},";
+                        echo "{field: 'pdt_count_{$k}', caption: '{$v}', size: '5%', editable: {type: 'text'}, render: W2Util.renderJxcPdtSizeCell},";
                     }
                 ?>
-                {
-                    field: 'pdt_zk',
-                    caption: '折扣',
-                    size: '7%',
-                    render: 'percent',
-                    editable: {type: 'percent', min: 0, max: 100}
-                },
-                {field: 'pdt_price', caption: '进价', size: '7%'},
+                {field: 'pdt_zk', caption: '折扣', size: '7%',
+                    editable: {type: 'percent', min: 0, max: 100}, render: 'percent'},
+                {field: 'pdt_price', caption: '单价', size: '7%', render: 'money:2', editable: {type: 'float'}},
                 {field: 'pdt_total', caption: '总数量', size: '10%'},
-                {field: 'total_rmb', caption: '总价', size: '10%'}
+                {field: 'total_rmb', caption: '总价', size: '10%', render: 'money:2'}
             ],
             show: {
                 header: true,
@@ -158,93 +131,69 @@ $pdt_list = json_encode($pdt_list);
                     }
                 ]
             },
-            onSubmit: function (event) {
-                var pdt_id = w2GridCheckUniqueID(this, 'pdt_id');
-                if (pdt_id) {
+            onEditField: function (event) {
+                console.log(event);
+                var that = this;
+                var column = that.columns[event.column];
+                var record = that.records[event.index];
+                if ((column.field == 'pdt_id')
+                    || (record && record.pdt_id == '')) {
                     event.preventDefault();
-                    w2alert("[Error]货号[" + pdt_id + "]重复, 请重新输入.", "Error");
+                    var url = "Jxc/do.php?api=product&c=pdtW2gridRecords";
+                    $.getJSON(url, null, function (data) {
+                        if (data['status'] == 'success') {
+                            console.log('popup_initialized');
+//                            var pdtOptions = popupPdtOption(that, event.index, event.column, 'pop_w2grid_pdt', data['records']);
+                            var pdtOptions = popupPdtOption(that, event.index, 0, 'pop_w2grid_pdt', data['records']);
+                            PopupUtil.onPopupShow({
+                                subOptions: pdtOptions
+                            });
+                        }
+                    });
                 }
             },
             onChange: function (event) {
                 console.log(event);
                 var that = this;
                 var column = this.columns[event.column];
-                if (column.field == "pdt_id") {
-                    if (column.editable.type == 'list') {
-                        var v = event.value_new;    // example:  {id:1, text:"content"}
-                        if (v.text) {
-                            var info = cacheOfPdtInfo[v.text];
-                            info.recid = typeof(info.pdt_id) == 'object' ? info.pdt_id.text : info.pdt_id;
-                            if (info) {
-                                //  删除
-                                column.editable.items = removeByItemId(column.editable.items, v.id);
-                                //  移除空白行
-                                for (var i = 0; i < that.records.length; i++) {
-                                    var firstField = that.columns[0].field;
-                                    if (that.records[i][firstField] == '') {
-                                        that.remove(that.records[i].recid);
-                                    }
-                                }
-                                that.remove(event['recid']);
-                                that.add(info);
-                                w2GridAddEmptyRecord(that);
-                            } else {
-                                w2alert("[Error]产品信息不存在!", "Error");
-                            }
-                        }
-                    }
-                } else {
-                    if (event.value_new == '') {
-                        return;
-                    }
-                    var record = that.records[event.index];
-                    if (record['pdt_id'] == undefined || record['pdt_id'] == '') {
-                        w2alert("[Error]请先输入货号.", "Error");
-                        return;
-                    }
+                var record = that.records[event.index];
+                if (event.value_new == '') {
+                    event.preventDefault();
+                    return;
+                }
+                if (record['pdt_id'] == undefined || record['pdt_id'] == '') {
+                    w2alert("[Error]请先输入货号.", "Error");
+                    return;
+                }
+                console.log('xxyy');
+                event.onComplete = function (evt2) {
                     var total = 0;
-                    var zk = record['pdt_zk'] ? Number(record['pdt_zk']).toFixed(0) : 100;
+                    var price = 0.0;
+                    var zk = 100;
                     var counts = [];
-                    var changes = that.getChanges();
-                    for (var k = 0; k < changes.length; k++) {
-                        var changeRecord = changes[k];
-                        if (changeRecord['recid'] == event.recid) {
-                            for (var cField in changeRecord) {
-                                if (changeRecord.hasOwnProperty(cField) && cField.indexOf('pdt_count_') >= 0) {
-                                    counts[cField.substr(10)] = changeRecord[cField];
-                                } else if (cField == 'pdt_zk') {
-                                    zk = Number(changeRecord[cField]);
-                                }
-                            }
-                            break;
+                    for (var e = 0; e < that.columns.length; e++) {
+                        var col = that.columns[e];
+                        var val = that.getCellValue(event.index, e, false);
+                        if (col.field.indexOf('pdt_count_') >= 0) {
+                            var tmpIndex = col.field.substr(10);
+                            counts[tmpIndex] = (event.column == e) ? Number(event.value_new) : val;
+                        } else if (col.field == 'pdt_zk') {
+                            zk = (event.column == e) ? Number(event.value_new).toFixed(0) : val;
+                            if (zk <= 0) zk = 100;
+                        } else if (col.field == 'pdt_price') {
+                            price = Number(val).toFixed(2);
                         }
-                    }
-                    if (column.field.indexOf('pdt_count_') >= 0) {
-                        var tmpIndex = column.field.substr(10);
-                        if (cacheOfPdtInfo[event.recid]) {
-                            var cache = cacheOfPdtInfo[event.recid];
-                            if (Number(event.value_new) > Number(cache.pdt_counts[tmpIndex])) {
-                                event.preventDefault();
-                                w2alert("[Error]不能超过库存上限.Max : [" + cache.pdt_counts[tmpIndex] + "].", "Error");
-                                return;
-                            }
-                        }
-                        counts[tmpIndex] = event.value_new;
-                    } else if (column.field == 'pdt_zk') {
-                        zk = Number(event.value_new).toFixed(0);
                     }
                     counts.map(function (v) {
                         total += Number(v);
                     });
-                    var total_rmb = Number((record['pdt_price'] * zk / 100)).toFixed(2) * total;
-                    console.log('xxyy');
-                    event.onComplete = function (event) {
-                        that.set(record['recid'], {
-                            'pdt_total': total,
-                            'total_rmb': total_rmb
-                        });
-                    };
-                }
+                    var total_rmb = Number((price * zk / 100)).toFixed(2) * total;
+
+                    that.set(record['recid'], {
+                        'pdt_total': total,
+                        'total_rmb': total_rmb
+                    });
+                };
             },
             onAdd: w2GridOnAdd,
             onSave: w2GridOnSaveAndUpdate,
