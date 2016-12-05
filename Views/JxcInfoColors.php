@@ -64,13 +64,7 @@ foreach ($products as $k => $v) {
                         return '<div style="height:24px;text-align:center;background-color: #' + rgba + ';">' + ' ' + rgba + '</div>';
                     }
                 },
-                {
-                    field: 'color_name',
-                    caption: '颜色名称',
-                    size: '10%',
-                    style: 'text-align:center',
-                    editable: {type: 'text'}
-                }
+                {field: 'color_name', caption: '名称', size: '10%', style: 'text-align:center', editable: {type: 'text'}}
             ],
             show: {
                 header: true,
@@ -94,9 +88,7 @@ foreach ($products as $k => $v) {
             onKeydown: w2GridOnKeyDown
         });
         w2ui['layout'].content('main', content);
-
-        for (var i = 0; i < 2; i++)
-            w2GridAddEmptyRecord(content);
+        w2GridAddEmptyRecord(content);
     });
 </script>
 </html>

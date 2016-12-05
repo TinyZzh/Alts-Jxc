@@ -22,23 +22,13 @@ include_once "../Templates/include.php";
             columns: [
                 {field: 'pdt_id', caption: '货号', size: '5%'},
                 {field: 'pdt_name', caption: '名称', size: '10%'},
-                {
-                    field: 'pdt_color', caption: '颜色', size: '80px',
-                    render: function (record, index, col_index) {
-                        var value = this.getCellValue(index, col_index);
-                        if (cacheOfColors[value]) {
-                            var vc = cacheOfColors[value];
-                            return '<div style="height:24px;text-align:center;background-color: #' + vc.color_rgba + ';">' + ' ' + vc.color_name + '</div>';
-                        }
-                        return '<div>' + value + '</div>';
-                    }
-                },
+                {field: 'pdt_color', caption: '颜色', size: '80px', render: W2Util.renderJxcColorCell},
                 <?php
                 // {field: 'pdt_count_1', caption: '2XS', size: '5%', editable: {type: 'text'}, render: renderSizeField},
-                    $array = array( '3XS', '2XS', 'XS', 'S', 'M', 'L', 'XL', '2XL', '3XL' );
-                    foreach ($array as $k => $v) {
-                        echo "{field: 'pdt_count_{$k}', caption: '{$v}', size: '5%'},";
-                    }
+                $array = array('3XS', '2XS', 'XS', 'S', 'M', 'L', 'XL', '2XL', '3XL');
+                foreach ($array as $k => $v) {
+                    echo "{field: 'pdt_count_{$k}', caption: '{$v}', size: '5%'},";
+                }
                 ?>
                 {field: 'pdt_price', caption: '进货价', size: '5%'},
                 {field: 'datetime', caption: '记录时间', size: '150px'},
@@ -50,8 +40,8 @@ include_once "../Templates/include.php";
                 toolbar: true,
                 header: true,
                 footer: true,
-                lineNumbers:true,
-                toolbarDelete:true
+                lineNumbers: true,
+                toolbarDelete: true
             },
             toolbar: {
                 items: [

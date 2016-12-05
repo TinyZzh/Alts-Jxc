@@ -40,21 +40,11 @@ $remoteUrl = "../Jxc/index.php?api=mg_product";
                 {field: 'pdt_id', caption: '编号', size: '10%', editable: {type: 'text'}},
                 {field: 'pdt_name', caption: '名称', size: '10%', editable: {type: 'text'}},
                 {
-                    field: 'pdt_color', caption: '颜色', size: '80px',
-                    editable: {
-                        type: 'list',
-                        items: menuOfColors
-                    },
-                    render: function (record, index, col_index) {
-                        var value = this.getCellValue(index, col_index);
-                        if ($.isPlainObject(value)) {
-                            return '<div style="height:24px;text-align:center;background-color: #' + value.color_rgba + ';">' + ' ' + value.text + '</div>';
-                        } else if (cacheOfColors[value]) {
-                            var vc = cacheOfColors[value];
-                            return '<div style="height:24px;text-align:center;background-color: #' + vc.color_rgba + ';">' + ' ' + vc.color_name + '</div>';
-                        }
-                        return '<div>' + value + '</div>';
-                    }
+                    field: 'pdt_color',
+                    caption: '颜色',
+                    size: '80px',
+                    editable: {type: 'text'},
+                    render: W2Util.renderJxcColorCell
                 },
                 {field: 'pdt_cost', caption: '成本价', size: '5%', editable: {type: 'float'}, render: 'money:2'},
                 {field: 'pdt_price', caption: '进货价', size: '5%', editable: { type: 'float'}, render: 'money:2'},
@@ -156,10 +146,6 @@ $remoteUrl = "../Jxc/index.php?api=mg_product";
             onKeydown: w2GridOnKeyDown
         });
         w2ui['layout'].content('main', content);
-
-
-
-
     });
 </script>
 </html>

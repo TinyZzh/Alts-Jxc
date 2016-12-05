@@ -6,7 +6,7 @@ namespace Jxc\Impl\Vo;
 use Jxc\Impl\Core\Vo;
 
 /**
- * 充值记录
+ * 充值记录日志
  */
 class LogCharge extends Vo {
 

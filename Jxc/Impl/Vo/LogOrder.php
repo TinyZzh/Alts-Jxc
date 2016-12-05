@@ -12,7 +12,7 @@ use Jxc\Impl\Libs\DateUtil;
 class LogOrder extends Vo {
 
     public $order_id;   //  订单号
-    public $type;       //  订单类型
+    public $type;       //  订单类型    见JxcConst::IO_TYPE_PROCURE
     public $datetime;   //  订单时间
     public $ct_id;      //  客户ID
     public $ct_name;    //  客户名称

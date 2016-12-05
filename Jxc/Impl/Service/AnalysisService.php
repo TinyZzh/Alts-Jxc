@@ -21,7 +21,7 @@ use Jxc\Impl\Vo\VoProduct;
 use Jxc\Impl\Vo\W2PdtInfo;
 
 /**
- * 分析
+ * 统计分析服务
  */
 final class AnalysisService extends JxcService {
 
