@@ -30,7 +30,6 @@ foreach ($w2Products as $v) {
             'getOrderDetail': 'Jxc/do.php?api=order&c=getOrderDetail'
         }
     };
-
 </script>
 <?php
 include_once "../Templates/TplJxcOrderLog.php";

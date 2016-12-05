@@ -73,13 +73,8 @@ foreach ($products as $k => $v) {
             },
             toolbar: {
                 items: [
-                    {type: 'break'},
-                    {type: 'button', id: 'mybutton', caption: 'My other button', img: 'icon-folder'},
-                    {type: 'button', id: 'newLogSales', caption: '新增销售记录',}
-                ],
-                onClick: function (target, data) {
-                    console.log(target);
-                }
+                    {type: 'break'}
+                ]
             },
             onLoad: function (event) {
                 w2uiInitEmptyGrid(this, event);
@@ -89,10 +84,7 @@ foreach ($products as $k => $v) {
             onKeydown: w2GridOnKeyDown
         });
         w2ui['layout'].content('main', content);
-
-        for (var i = 0; i < 2; i++)
-            w2GridAddEmptyRecord(content);
-
+        w2GridAddEmptyRecord(content);
     });
 </script>
 </html>

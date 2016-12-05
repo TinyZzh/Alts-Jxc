@@ -10,9 +10,11 @@ namespace Jxc\Impl\Dao;
 use Jxc\Impl\Core\JxcConfig;
 use Jxc\Impl\Core\JxcConst;
 use Jxc\Impl\Core\MySQLDao;
-use Jxc\Impl\Vo\LogOrder;
 use Jxc\Impl\Vo\LogOrderDetail;
 
+/**
+ * 统计分析
+ */
 final class AnalysisDao extends MySQLDao {
 
     private $productDao;
@@ -62,7 +64,7 @@ final class AnalysisDao extends MySQLDao {
         foreach ($sets as $data) {
             $logOrderDetail = new LogOrderDetail();
             $logOrderDetail->convert($data);
-            $counts =  array();
+            $counts = array();
             if (isset($map[$logOrderDetail->pdt_id])) {
                 $counts = $map[$logOrderDetail->pdt_id];
                 $map[$logOrderDetail->pdt_id] = $counts;
@@ -75,7 +77,6 @@ final class AnalysisDao extends MySQLDao {
                 }
             }
         }
-
 
 
     }
