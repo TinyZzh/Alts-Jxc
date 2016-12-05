@@ -13,8 +13,6 @@ use Jxc\Impl\Core\Vo;
 
 /**
  * 消费者-会员
- * Class VoCustomer
- * @package Jxc\Impl\Vo
  */
 class VoCustomer extends Vo {
 

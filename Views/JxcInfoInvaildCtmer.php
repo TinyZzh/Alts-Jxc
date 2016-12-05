@@ -44,7 +44,7 @@ include_once "../Templates/include.php";
                 {field: 'datetime', caption: '记录时间', size: '150px'},
                 {field: 'pdt_total', caption: '总数量', size: '5%'},
                 {field: 'total_rmb', caption: '总价', size: '5%'},
-                {field: 'timeLastOp', caption: '最后一次操作时间', size: '150px'},
+                {field: 'timeLastOp', caption: '最后操作时间', size: '150px'}
             ],
             show: {
                 toolbar: true,

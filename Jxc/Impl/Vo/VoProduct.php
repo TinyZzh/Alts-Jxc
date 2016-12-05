@@ -10,13 +10,10 @@ namespace Jxc\Impl\Vo;
 
 
 use Jxc\Impl\Core\Vo;
-use Jxc\Impl\Libs\DateUtil;
 use Jxc\Impl\Libs\W2UI;
 
 /**
  * 产品库存信息
- * Class VoProduct
- * @package Jxc\Impl\Vo
  */
 class VoProduct extends Vo {
 

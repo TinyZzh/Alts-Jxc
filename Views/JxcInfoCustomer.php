@@ -60,28 +60,7 @@ foreach ($products as $k => $v) {
                 {field: 'ct_name', caption: '客户姓名', size: '7%', style: 'text-align:center', editable: {type: 'text'}},
                 {field: 'ct_address', caption: '通信地址', size: '25%', style: 'text-align:right', editable: {type: 'text'}},
                 {field: 'ct_phone', caption: '联系电话', size: '8%', style: 'text-align:right', editable: {type: 'text'}},
-                {field: 'ct_money', caption: '账户余额', size: '7%', style: 'text-align:right',
-                    editable: {
-                        type: 'float'
-                    },
-                    render: function (record, index, col_index) {
-                        console.log(record);
-                        var html = this.getCellValue(index, col_index);
-                        return '<div>¥' + Number(html).toFixed(2) + '</div>';
-                    }
-                },
-                {field: 'ct_money2', caption: '货币2', size: '10%', style: 'text-align:right',
-                    render: 'money',
-                    options:{
-                        currencySuffix: '¥',
-                        currencyPrecision:2,
-                    },
-                    editable: {
-                        type: 'money',
-                        currencySuffix: '¥',
-                        currencyPrecision:2,
-                    }
-                }
+                {field: 'ct_money', caption: '账户余额', size: '7%', editable: {type: 'float'}, render: 'money:2'}
             ],
             show: {
                 header: true,
@@ -94,13 +73,8 @@ foreach ($products as $k => $v) {
             },
             toolbar: {
                 items: [
-                    {type: 'break'},
-                    {type: 'button', id: 'mybutton', caption: 'My other button', img: 'icon-folder'},
-                    {type: 'button', id: 'newLogSales', caption: '新增销售记录',}
-                ],
-                onClick: function (target, data) {
-                    console.log(target);
-                }
+                    {type: 'break'}
+                ]
             },
             onLoad: function (event) {
                 w2uiInitEmptyGrid(this, event);
@@ -110,10 +84,7 @@ foreach ($products as $k => $v) {
             onKeydown: w2GridOnKeyDown
         });
         w2ui['layout'].content('main', content);
-
-        for (var i = 0; i < 2; i++)
-            w2GridAddEmptyRecord(content);
-
+        w2GridAddEmptyRecord(content);
     });
 </script>
 </html>

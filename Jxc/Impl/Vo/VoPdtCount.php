@@ -3,7 +3,6 @@
 namespace Jxc\Impl\Vo;
 
 use Jxc\Impl\Core\Vo;
-use Jxc\Impl\Libs\W2UI;
 
 /**
  * 产品数量信息
