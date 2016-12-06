@@ -49,7 +49,7 @@
         var popupGrid = {
             name: 'popupGrid',
             columns: [
-                {field: 'fname', caption: 'First Name', size: '33%', sortable: true, searchable: true},
+                {field: 'fname', caption: 'First Name', size: '33%', sortable: true, searchable: true, info: true},
                 {field: 'lname', caption: 'Last Name', size: '33%', sortable: true, searchable: true},
                 {field: 'email', caption: 'Email', size: '33%'},
                 {field: 'sdate', caption: 'Start Date', size: '120px', render: 'date'},
@@ -85,8 +85,8 @@
         //  grid
         var div_main = $('#div_main_cnt').w2grid({
             name: 'div_main_cnt',
-            url:{
-                save:'http://127.0.0.1/Alts-Jxc/'
+            url: {
+                save: 'http://127.0.0.1/Alts-Jxc/'
             },
             columns: [
                 {
@@ -101,7 +101,18 @@
                         return '<div style="background-color: ' + color + '">' + html || '' + '</div>';
                     }
                 },
-                {field: 'lname', caption: 'Last Name', size: '30%', editable: {type: 'text'}},
+                {
+                    field: 'lname', caption: 'Last Name', size: '30%', editable: {type: 'text'}, info: {
+                    icon: 'fa-flag',
+                    style: '',
+                    render: function (record) {
+                        return '<table>' +
+                            '   <tr><td>Field1</td><td>Value1</td></tr>' +
+                            '   <tr><td>Field2</td><td>Some value</td></tr>' +
+                            '</table>';
+                    }
+                },
+                },
                 {field: 'email', caption: 'Email', size: '40%', editable: {type: 'text'}},
                 {field: 'sdate', caption: 'Start Date', size: '120px', editable: {type: 'text'}},
             ],

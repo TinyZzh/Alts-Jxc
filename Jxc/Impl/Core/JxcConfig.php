@@ -52,6 +52,8 @@ class JxcConfig {
 
         //  统计分析
         'jxc_analysis_info' => 'Analysis/A1.php',
+        //  系统管理
+        'sys_self_info' => 'Views/SysSelfInfo.php',
 
 
     );

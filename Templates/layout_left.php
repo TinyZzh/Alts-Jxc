@@ -81,6 +81,7 @@ foreach ($products as $k => $v) {
                     group: true,
                     nodes: [
                         {id: 'jxc_analysis_info', text: '显示统计', img: 'icon-page'},
+                        {id: 'sys_self_info', text: '个人信息', img: 'icon-page'},
                     ]
                 }
             ],
