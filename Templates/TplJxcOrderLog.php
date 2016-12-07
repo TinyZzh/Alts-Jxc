@@ -2,6 +2,8 @@
 /**
  * 日志模板
  */
+use Jxc\Impl\Core\JxcConst;
+
 ?>
 <script>
     $(document).ready(function () {
@@ -12,17 +14,20 @@
             columns: [
                 {field: 'order_id', caption: '订单号', size: '10%', style: 'text-align:center'},
                 <?php
-
-
-                echo "{field: 'ct_name', caption: '客户', size: '10%', style: 'text-align:center'},";
+                    if (JxcConst::IO_TYPE_PROCURE != $type)
+                        echo "{field: 'ct_name', caption: '客户', size: '10%', style: 'text-align:center'},";
                 ?>
-                {field: 'ct_name', caption: '客户', size: '10%', style: 'text-align:center'},
-
+//                {field: 'ct_name', caption: '客户', size: '10%', style: 'text-align:center'},
                 {field: 'datetime', caption: '日志时间', size: '10%', style: 'text-align:center'},
                 {field: 'total_rmb', caption: '总计金额', size: '10%', render: 'money:2'},
                 {field: 'op_name', caption: '操作员', size: '10%', style: 'text-align:center'}
             ],
-            show: {toolbar: true, header: true, footer: true, lineNumbers: true},
+            searches: [
+                {field: 'order_id', caption: '订单号', type: 'int'},
+                {field: 'ct_name', caption: '客户姓名', type: 'text'},
+                {field: 'datetime', caption: '日志时间', type: 'text'}
+            ],
+            show: {toolbar: true, header: true, footer: true, lineNumbers: true, toolbarSearch: true},
             onExpand: function (event) {
                 var expandEvent = event;
                 console.log(event);

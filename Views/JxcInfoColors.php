@@ -41,10 +41,6 @@ foreach ($products as $k => $v) {
 </body>
 <script>
     $(document).ready(function () {
-        $(document).data("jxc_products", <?=json_encode($map)?>);
-        console.log($(document).data("xx"));
-        console.log(this);
-        console.log($(document));
 
         var content = $('#div_main_cnt').w2grid({
             name: 'div_main_cnt',

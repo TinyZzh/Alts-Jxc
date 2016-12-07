@@ -60,6 +60,17 @@ final class OperatorService extends JxcService {
     }
 
     /**
+     * 获取个人信息
+     * @param VoOperator $voOp
+     * @param $request
+     * @return array
+     */
+    public function getSelfOperator($voOp, $request) {
+        $voOp->recid = $voOp->op_id;
+        return array('status' => 'success', 'record' => $voOp);
+    }
+
+    /**
      * 改变操作员状态
      * @param $voOp
      * @param $request
