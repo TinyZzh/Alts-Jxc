@@ -43,9 +43,11 @@ final class JxcConfig {
     public static $SIDEBAR = array(
         //  信息
         'jxc_info_product' => 'Views/JxcInfoProduct.php',
-        'jxc_info_pdt_deleted' => 'Views/JxcInfoInvaildPdt.php',
         'jxc_info_custom' => 'Views/JxcInfoCustomer.php',
         'jxc_info_color' => 'Views/JxcInfoColors.php',
+        'jxc_info_size' => '',
+        'jxc_info_invalid_pdt' => 'Views/JxcInfoInvalidPdt.php',
+        'jxc_info_invalid_ctm' => 'Views/JxcInfoInvalidCtmer.php',
         //
         'jxc_procure' => 'Views/JxcOrderProcure.php',
         'jxc_store_show' => '',

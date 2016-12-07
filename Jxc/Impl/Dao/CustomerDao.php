@@ -30,9 +30,9 @@ class CustomerDao extends MySQLDao {
         return $data;
     }
 
-    public function selectById($ids) {
+    public function selectById($ids, $status = 0) {
         $inId = implode(",", $ids);
-        $query = "SELECT * FROM tb_customer WHERE ct_id IN ({$inId});";
+        $query = "SELECT * FROM tb_customer WHERE ct_id IN ({$inId}) AND status={$status};";
         $sets = $this->mysqlDB()->ExecuteSQL($query);
         $map = array();
         foreach ($sets as $v) {

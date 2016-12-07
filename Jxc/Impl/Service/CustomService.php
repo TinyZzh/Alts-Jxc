@@ -41,8 +41,9 @@ final class CustomService extends JxcService {
      * @param $request
      * @return array
      */
-    public function getAllCustomerInfo($voOp, $request) {
-        $data = $this->customDao->selectAll();
+    public function records($voOp, $request) {
+        $status = isset($request['status']) ? $request['status'] : 0;
+        $data = $this->customDao->selectAll($status);
         $array = array();
         foreach ($data as $v) {
             $v->recid = $v->ct_id;
@@ -101,8 +102,15 @@ final class CustomService extends JxcService {
         if ($verify = GameUtil::verifyRequestParams($request, array('selected'))) {
             return array('status' => 'error', 'message' => 'Undefined field : ' . $verify);
         }
-        foreach ($request['selected'] as $pdt_id) {
-            $this->customDao->delete($pdt_id);
+        $status = isset($request['status']) ? $request['status'] : 0;
+        if ($request['selected'] && count($request['selected']) > 0) {
+            $sets = $this->customDao->selectById($request['selected'], $status);
+            foreach ($sets as $k => $v) {
+                if ($v instanceof VoCustomer) {
+                    $v->status = (int)(!$status);
+                    $this->customDao->updateByFields($v, array('status'));
+                }
+            }
         }
         return array('status' => 'success', 'deleted' => $request['selected']);
     }
