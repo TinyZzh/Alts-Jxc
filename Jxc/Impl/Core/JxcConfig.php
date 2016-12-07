@@ -6,7 +6,12 @@ namespace Jxc\Impl\Core;
  * Class JxcConfig
  * @package Jxc
  */
-class JxcConfig {
+final class JxcConfig {
+
+    /**
+     * 接口调用日志
+     */
+    public static $API_DEBUG_LOG = true;
 
     /**
      * Database Config
@@ -16,7 +21,7 @@ class JxcConfig {
         'port' => 3306,
         'dbname' => 'erp_jxc',
         'user' => 'root',
-        'pwd' => '123456',
+        'pwd' => 'wooduan',
     );
 
     public static $PUBLIC = array(

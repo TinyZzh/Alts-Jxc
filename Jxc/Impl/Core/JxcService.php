@@ -67,10 +67,6 @@ class JxcService {
         if (!is_callable(array($this, $method))) {
             return array('status' => 'error', 'message' => "未知接口: [{$method}].");
         }
-        //  TODO: 接口调用日志
-
         return call_user_func_array(array($this, $method), array($voOperator, $params));
     }
-
-
 }
