@@ -216,8 +216,6 @@ function removeByItemId(items, id) {
 }
 
 
-
-
 /**
  * 进销存颜色管理
  */
@@ -383,6 +381,7 @@ var CacheUtil = (function () {
 var W2Util = (function () {
 
     var obj = {
+        request: request,
         renderJxcColorCell: renderJxcColorCell,
         renderJxcCustomerNameCell: renderJxcCustomerNameCell,
         renderJxcPdtSizeCell: renderJxcPdtSizeCell,
@@ -390,6 +389,29 @@ var W2Util = (function () {
         onMouseOutPdtSizeCell: onMouseOutPdtSizeCell
     };
     return obj;
+
+    /**
+     * Http请求
+     * @param url
+     * @param params
+     * @param callback
+     */
+    function request(url, params, callback) {
+        if (url == undefined || callback == undefined) return;
+        var options = {
+            type: 'GET',
+            url: '',
+            data: {},
+            dataType: 'JSON'
+        };
+        options.url = url;
+        $.extend(options.data, {}, params);
+        $.ajax(options)
+            .done(callback)
+            .fail(function (xhr, status, error) {
+            w2alert('HTTP ERROR:[' + error.message + ']', "Error");
+        });
+    }
 
     /**
      * w2grid - 渲染进销存系统颜色格子
@@ -456,7 +478,7 @@ var W2Util = (function () {
 
 })();
 
-function popupColorsOption (w2Target, w2Index, w2Column, popGridName, popRecords) {
+function popupColorsOption(w2Target, w2Index, w2Column, popGridName, popRecords) {
     var targetGrid = w2Target;
     var ops = {
         name: popGridName,
@@ -593,7 +615,8 @@ function popupCustomerOption(w2Target, w2Index, w2Column, popGridName, popRecord
             {field: 'ct_name', caption: '客户姓名', size: '7%', style: 'text-align:center', editable: {type: 'text'}},
             {field: 'ct_address', caption: '通信地址', size: '25%', style: 'text-align:right', editable: {type: 'text'}},
             {field: 'ct_phone', caption: '联系电话', size: '8%', style: 'text-align:right', editable: {type: 'text'}},
-            {field: 'ct_money', caption: '账户余额', size: '7%', style: 'text-align:right',
+            {
+                field: 'ct_money', caption: '账户余额', size: '7%', style: 'text-align:right',
                 editable: {
                     type: 'float'
                 },
@@ -604,7 +627,7 @@ function popupCustomerOption(w2Target, w2Index, w2Column, popGridName, popRecord
                 }
             }
         ],
-        show: { toolbar: true, toolbarSearch: true, lineNumbers: true},
+        show: {toolbar: true, toolbarSearch: true, lineNumbers: true},
         searches: [
             {field: 'ct_id', caption: '客户ID', type: 'text'},
             {field: 'ct_name', caption: '客户姓名', type: 'text'},

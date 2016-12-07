@@ -11,7 +11,8 @@ Jxc\AutoLoader::register();
 <html lang="zh-cn">
 <head>
     <meta charset="UTF-8">
-    <title>Index - Title</title>
+    <meta name="title" content="奥蕾泰森 - 进销存管理系统">
+    <title>奥蕾泰森 - 进销存管理系统</title>
     <link href="css/jxc-1.0.0.css" type="text/css" rel="stylesheet">
     <link href="css/bootstrap.min.css" type="text/css" rel="stylesheet">
     <link href="css/bootstrap-theme.min.css" type="text/css" rel="stylesheet">
