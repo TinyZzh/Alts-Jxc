@@ -53,7 +53,8 @@ foreach ($products as $k => $v) {
                         {id: 'jxc_info_custom', text: '客户信息', img: 'icon-bullet-black'},
                         {id: 'jxc_info_color', text: '颜色信息', img: 'icon-bullet-black'},
                         {id: 'jxc_info_size', text: '尺码信息', img: 'icon-page'},
-                        {id: 'jxc_info_pdt_deleted', text: '废弃商品信息', img: 'icon-page'}
+                        {id: 'jxc_info_invalid_pdt', text: '历史商品', img: 'icon-page'},
+                        {id: 'jxc_info_invalid_ctm', text: '历史客户', img: 'icon-page'}
                     ]
                 },
                 {

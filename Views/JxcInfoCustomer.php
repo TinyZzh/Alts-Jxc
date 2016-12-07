@@ -6,7 +6,7 @@
     var configJxc = {
         header : '客户信息管理',
         urls : {
-            'get': 'Jxc/do.php?api=custom&c=getAllCustomerInfo',
+            'get': 'Jxc/do.php?api=custom&c=records',
             'save': 'Jxc/do.php?api=custom&c=saveCustomerInfo',
             'remove': 'Jxc/do.php?api=custom&c=removeCustomerInfo'
         },
