@@ -21,7 +21,7 @@ final class JxcConfig {
         'port' => 3306,
         'dbname' => 'erp_jxc',
         'user' => 'root',
-        'pwd' => 'wooduan',
+        'pwd' => '123456',
     );
 
     public static $PUBLIC = array(

@@ -2,7 +2,7 @@
 
 namespace Jxc;
 
-class AutoLoader {
+final class AutoLoader {
 
     private $directory;
     private $prefixLength;
@@ -32,5 +32,3 @@ class AutoLoader {
         self::$includes[$clzName] = 1;
     }
 }
-
-

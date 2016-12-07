@@ -2,7 +2,6 @@
 /**
  * 历史产品管理.
  */
-include_once "../Templates/include.php";
 ?>
 <!DOCTYPE html>
 <html lang="zh-cn">
@@ -10,11 +9,9 @@ include_once "../Templates/include.php";
 </body>
 <script>
     $(document).ready(function () {
-        //  渲染w2grid
         var content = $('#div_main_cnt').w2grid({
             name: 'div_main_cnt',
             header: '废弃产品管理',
-            multiSelect: true,
             url: {
                 'get': 'Jxc/do.php?api=product&c=getPdtList&flag=1',
                 'remove': 'Jxc/do.php?api=product&c=removePdtInfo&flag=1'
@@ -34,26 +31,12 @@ include_once "../Templates/include.php";
                 {field: 'datetime', caption: '记录时间', size: '150px'},
                 {field: 'pdt_total', caption: '总数量', size: '5%'},
                 {field: 'total_rmb', caption: '总价', size: '5%'},
-                {field: 'timeLastOp', caption: '最后一次操作时间', size: '150px'},
+                {field: 'timeLastOp', caption: '最后一次操作时间', size: '150px'}
             ],
-            show: {
-                toolbar: true,
-                header: true,
-                footer: true,
-                lineNumbers: true,
-                toolbarDelete: true
-            },
-            toolbar: {
-                items: [
-                    {type: 'break'}
-                ]
-            }
+            multiSelect: true,
+            show: { toolbar: true, header: true, footer: true, lineNumbers: true, toolbarDelete: true}
         });
         w2ui['layout'].content('main', content);
-        //  修改删除按钮的文字
-        w2ui['div_main_cnt_toolbar'].items[4].caption = '恢复';
-        w2ui['div_main_cnt_toolbar'].items[4].hint = '恢复选中的记录';
-        w2ui['div_main_cnt_toolbar'].refresh();
     });
 </script>
 </html>
