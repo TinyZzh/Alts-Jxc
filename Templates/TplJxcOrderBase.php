@@ -3,6 +3,8 @@
  * 销售订单.
  *
  */
+use Jxc\Impl\Core\JxcConst;
+
 include_once "../Templates/include.php";
 
 ?>
@@ -76,7 +78,11 @@ include_once "../Templates/include.php";
                 // {field: 'pdt_count_1', caption: '2XS', size: '5%', editable: {type: 'text'}, render: renderSizeField},
                 $array = array('3XS', '2XS', 'XS', 'S', 'M', 'L', 'XL', '2XL', '3XL');
                 foreach ($array as $k => $v) {
-                    echo "{field: 'pdt_count_{$k}', caption: '{$v}', size: '5%', editable: {type: 'text'}, render: W2Util.renderJxcPdtSizeCell},";
+                    if ($type == JxcConst::IO_TYPE_SALES) {
+                        echo "{field: 'pdt_count_{$k}', caption: '{$v}', size: '5%', editable: {type: 'text'}, render: W2Util.renderJxcPdtSizeCell},";
+                    } else {
+                        echo "{field: 'pdt_count_{$k}', caption: '{$v}', size: '5%', editable: {type: 'text'}},";
+                    }
                 }
                 ?>
                 {
@@ -90,7 +96,7 @@ include_once "../Templates/include.php";
             show: {
                 header: true, toolbar: true, toolbarAdd: true, toolbarDelete: true, lineNumbers: true, footer: true
             },
-            toolbar: { items: toolbar_items},
+            toolbar: {items: toolbar_items},
             onEditField: function (event) {
                 console.log(event);
                 var that = this;
