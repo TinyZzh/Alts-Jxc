@@ -314,6 +314,7 @@ final class ProductService extends JxcService {
         }
         $logOrder->total_rmb = $total_rmb;
         $logOrder->datetime = DateUtil::makeTime();
+        $logOrder->log_date = DateUtil::dateTime();
         $logOrder->op_id = $voOp->op_id;
         $logOrder->op_name = $voOp->op_name;
         $logOrder = $this->logOrderDao->insert($logOrder);

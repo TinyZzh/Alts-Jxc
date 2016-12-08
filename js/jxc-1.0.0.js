@@ -241,6 +241,8 @@ var W2Util = (function () {
 
     var obj = {
         request: request,
+        exportW2grid: exportW2grid,
+        exportXLSX: exportXLSX,
         renderJxcColorCell: renderJxcColorCell,
         renderJxcCustomerNameCell: renderJxcCustomerNameCell,
         renderJxcPdtSizeCell: renderJxcPdtSizeCell,
@@ -268,8 +270,8 @@ var W2Util = (function () {
         $.ajax(options)
             .done(callback)
             .fail(function (xhr, status, error) {
-            w2alert('HTTP ERROR:[' + error.message + ']', "Error");
-        });
+                w2alert('HTTP ERROR:[' + error.message + ']', "Error");
+            });
     }
 
     /**
@@ -333,6 +335,116 @@ var W2Util = (function () {
 
     function onMouseOutPdtSizeCell(div_tooltip) {
         //div_tooltip.w2tag();    //  隐藏tooltip
+    }
+
+    /**
+     * 导出w2grid的记录
+     * @param name
+     * @param w2grid
+     */
+    function exportW2grid(name, w2grid) {
+        var columns = w2grid.columns,
+            records = w2grid.records;
+        var data = [];
+        var frow = [];
+        for (var e = 0; e < columns.length; e++) {
+            frow[e] = columns[e].caption;
+        }
+        data[0] = frow;
+        var searchIds = w2grid.last.searchIds;
+        if (searchIds && searchIds.length > 0) {
+            w2grid.last.searchIds.map(function (rec_ind, ind) {
+                var row = [];
+                for (var j = 0; j < columns.length; j++) {
+                    row[j] = records[rec_ind][columns[j].field];
+                }
+                data[ind + 1] = row;
+            })
+        } else {
+            records.map(function (record, ind) {
+                var row = [];
+                for (var j = 0; j < columns.length; j++) {
+                    row[j] = record[columns[j].field];
+                }
+                data[ind + 1] = row;
+            });
+        }
+        exportXLSX(name, data);
+    }
+
+    /**
+     * 导出xlsx
+     * @param name
+     * @param data
+     */
+    function exportXLSX(name, data) {
+        var wb = {SheetNames: [], Sheets: {}};
+        wb.SheetNames.push(name);
+        wb.Sheets[name] = createSheet(data);
+        var wopts = {bookType: 'xlsx', bookSST: false, type: 'binary'};
+        var wbout = XLSX.write(wb, wopts);
+        data = string2ArrayBuffer(wbout);
+        saveAs(new Blob([data], {type: "application/vnd.ms-excel;utf-8"}), name + ".xlsx", true);
+    }
+
+    /**
+     * Creates an Excel spreadsheet from a data string
+     * @memberof TableExport.prototype
+     * @param data {String}
+     * @returns {Number} epoch time
+     */
+    function createSheet(data) {
+        var ws = {};
+        var range = {s: {c: 10000000, r: 10000000}, e: {c: 0, r: 0}};
+        for (var R = 0; R != data.length; ++R) {
+            for (var C = 0; C != data[R].length; ++C) {
+                if (range.s.r > R) range.s.r = R;
+                if (range.s.c > C) range.s.c = C;
+                if (range.e.r < R) range.e.r = R;
+                if (range.e.c < C) range.e.c = C;
+                var cell = {v: data[R][C]};
+                if (cell.v == null) continue;
+                var cell_ref = XLSX.utils.encode_cell({c: C, r: R});
+
+                if (typeof cell.v === 'number') cell.t = 'n';
+                else if (typeof cell.v === 'boolean') cell.t = 'b';
+                else if (cell.v instanceof Date) {
+                    cell.t = 'n';
+                    cell.z = XLSX.SSF._table[14];
+                    cell.v = dateNum(cell.v);
+                }
+                else cell.t = 's';
+                ws[cell_ref] = cell;
+            }
+        }
+        if (range.s.c < 10000000) ws['!ref'] = XLSX.utils.encode_range(range);
+        return ws;
+    }
+
+    /**
+     * Formats datetimes for compatibility with Excel
+     * @memberof TableExport.prototype
+     * @param v {Number}
+     * @param date1904 {Date}
+     * @returns {Number} epoch time
+     */
+    function dateNum(v, date1904) {
+        if (date1904) v += 1462;
+        var epoch = Date.parse(v);
+        return (epoch - new Date(Date.UTC(1899, 11, 30))) / (24 * 60 * 60 * 1000);
+    }
+
+    /**
+     * Converts a string to an arraybuffer
+     * @param s {String}
+     * @memberof TableExport.prototype
+     * @returns {ArrayBuffer}
+     */
+    function string2ArrayBuffer(s) {
+        var buf = new ArrayBuffer(s.length);
+        var view = new Uint8Array(buf);
+        for (var i = 0; i != s.length; ++i) view[i] = s.charCodeAt(i) & 0xFF;
+        return buf;
     }
 
 })();
@@ -464,7 +576,7 @@ function popupPdtOption(w2Target, w2Index, w2Column, popGridName, popRecords) {
 }
 
 function popupCustomerOption(w2Target, w2Index, w2Column, popGridName, popRecords) {
-    var targetGrid = w2Target;
+    var targetToolbar = w2Target;
     var ops = {
         name: popGridName,
         header: '客户信息',
@@ -474,17 +586,7 @@ function popupCustomerOption(w2Target, w2Index, w2Column, popGridName, popRecord
             {field: 'ct_name', caption: '客户姓名', size: '7%', style: 'text-align:center', editable: {type: 'text'}},
             {field: 'ct_address', caption: '通信地址', size: '25%', style: 'text-align:right', editable: {type: 'text'}},
             {field: 'ct_phone', caption: '联系电话', size: '8%', style: 'text-align:right', editable: {type: 'text'}},
-            {
-                field: 'ct_money', caption: '账户余额', size: '7%', style: 'text-align:right',
-                editable: {
-                    type: 'float'
-                },
-                render: function (record, index, col_index) {
-                    console.log(record);
-                    var html = this.getCellValue(index, col_index);
-                    return '<div>¥' + Number(html).toFixed(2) + '</div>';
-                }
-            }
+            {field: 'ct_money', caption: '账户余额', size: '7%', editable: {type: 'float'}, render: 'money:2'}
         ],
         show: {toolbar: true, toolbarSearch: true, lineNumbers: true},
         searches: [
@@ -492,44 +594,15 @@ function popupCustomerOption(w2Target, w2Index, w2Column, popGridName, popRecord
             {field: 'ct_name', caption: '客户姓名', type: 'text'},
             {field: 'ct_phone', caption: '联系电话', type: 'text'}
         ],
-        toolbar: {
-            items: [
-                {type: 'break'}
-            ]
-        },
         records: popRecords,
         onDblClick: function (event) {
             var that = this;
             console.log(event);
             var rec = that.get(event.recid);
-            var targetField = targetGrid.columns[w2Column].field;
-            var targetRcd = targetGrid.records[w2Index];
-            var changeData = targetRcd.changes;
-            if (changeData == undefined) changeData = [];
-            //changeData['recid'] = w2gridObj.last.sel_recid;
-            changeData[targetField] = rec[targetField];
-            changeData['pdt_price'] = rec['pdt_price'];
-            changeData['pdt_zk'] = 100; //  折扣缺省值为100
-            rec['pdt_total'] = 0;
-            rec['total_rmb'] = 0.00;
-            rec['changes'] = changeData;
-            //console.log(w2gridObj);
-            //console.log(changeData);
-            targetGrid.remove(targetGrid.last.sel_recid);
-            targetGrid.add(rec);
-            //  最后一行
-            var nextRcd = that.nextRow(targetGrid.last.sel_recid);
-            if (nextRcd == null) {
-                //  移除空白行
-                for (var i = targetGrid.records.length - 1; i >= 0; i--) {
-                    if (targetGrid.records[i][targetField] == '') {
-                        targetGrid.remove(targetGrid.records[i].recid);
-                    }
-                }
-                w2GridAddEmptyRecord(targetGrid);
-            }
+            targetToolbar.set('label_custom_id', {'caption': rec['ct_id']});
+            targetToolbar.set('label_custom_name', {'caption': rec['ct_name']});
+            targetToolbar.set('label_custom_adr', {'caption': rec['ct_address']});
             event.onComplete = function (event) {
-
                 w2popup.close();
             }
         }
