@@ -14,13 +14,10 @@
                 items: [
                     {type: 'break'},
                     {
-                        type: 'button', id: 'pdt_save', caption: '保存', icon: 'w2ui-icon-check',
+                        type: 'button', id: 'export_excel', caption: '导出Excel',
                         onClick: function (event) {
                             console.log(event);
-
-                            var dataTable = $("#grid_div_main_cnt_records table").tableExport();
-
-                            dataTable.export2file();
+                            W2Util.exportW2grid(w2ui['div_main_cnt'].name, w2ui['div_main_cnt']);
                         }
                     }
                 ]

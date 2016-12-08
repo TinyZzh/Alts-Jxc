@@ -14,10 +14,11 @@ use Jxc\Impl\Core\JxcConst;
             columns: [
                 {field: 'order_id', caption: '订单号', size: '10%', style: 'text-align:center'},
                 <?php
-                    if (JxcConst::IO_TYPE_PROCURE != $type)
-                        echo "{field: 'ct_name', caption: '客户', size: '10%', style: 'text-align:center'},";
+                if (JxcConst::IO_TYPE_PROCURE != $type)
+                    echo "{field: 'ct_name', caption: '客户', size: '10%', style: 'text-align:center'},";
+                //{field: 'ct_name', caption: '客户', size: '10%', style: 'text-align:center'},
                 ?>
-//                {field: 'ct_name', caption: '客户', size: '10%', style: 'text-align:center'},
+                {field: 'log_date', caption: '日期', size: '10%', style: 'text-align:center'},
                 {field: 'datetime', caption: '日志时间', size: '10%', style: 'text-align:center'},
                 {field: 'total_rmb', caption: '总计金额', size: '10%', render: 'money:2'},
                 {field: 'op_name', caption: '操作员', size: '10%', style: 'text-align:center'}
@@ -25,9 +26,21 @@ use Jxc\Impl\Core\JxcConst;
             searches: [
                 {field: 'order_id', caption: '订单号', type: 'int'},
                 {field: 'ct_name', caption: '客户姓名', type: 'text'},
-                {field: 'datetime', caption: '日志时间', type: 'text'}
+                {field: 'log_date', caption: '日期', type: 'date'}
             ],
             show: {toolbar: true, header: true, footer: true, lineNumbers: true, toolbarSearch: true},
+            toolbar: {
+                items: [
+                    {type: 'break'},
+                    {
+                        type: 'button', id: 'export_excel', caption: '导出Excel',
+                        onClick: function (event) {
+                            console.log(event);
+                            W2Util.exportW2grid(w2ui['div_main_cnt'].name, w2ui['div_main_cnt']);
+                        }
+                    }
+                ]
+            },
             onExpand: function (event) {
                 var expandEvent = event;
                 console.log(event);

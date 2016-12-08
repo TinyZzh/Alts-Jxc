@@ -11,7 +11,7 @@
     $(document).ready(function () {
         var content = $('#div_main_cnt').w2grid({
             name: 'div_main_cnt',
-            header: '废弃产品管理',
+            header: '历史产品管理',
             url: {
                 'get': 'Jxc/do.php?api=product&c=getPdtList&flag=1',
                 'remove': 'Jxc/do.php?api=product&c=removePdtInfo&flag=1'
