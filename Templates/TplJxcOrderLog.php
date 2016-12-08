@@ -18,7 +18,7 @@ use Jxc\Impl\Core\JxcConst;
                     echo "{field: 'ct_name', caption: '客户', size: '10%', style: 'text-align:center'},";
                 //{field: 'ct_name', caption: '客户', size: '10%', style: 'text-align:center'},
                 ?>
-                {field: 'log_date', caption: '日期', size: '10%', style: 'text-align:center'},
+                {field: 'log_date', caption: '日期', size: '10%', style: 'text-align:center', render: 'date:yyyy-dd-mm'},
                 {field: 'datetime', caption: '日志时间', size: '10%', style: 'text-align:center'},
                 {field: 'total_rmb', caption: '总计金额', size: '10%', render: 'money:2'},
                 {field: 'op_name', caption: '操作员', size: '10%', style: 'text-align:center'}

@@ -4,7 +4,9 @@
  *
  */
 include_once "../Templates/include.php";
+use Jxc\Impl\Core\JxcConst;
 
+$type = JxcConst::IO_TYPE_SALES;
 ?>
 <!DOCTYPE html>
 <html lang="zh-cn">
@@ -36,14 +38,13 @@ include_once "../Templates/include.php";
                         });
                     }
                 },
+                {type: 'break'},
                 {type: 'button', id: 'label_custom_id', caption: '', disabled: true},
                 {type: 'button', id: 'label_custom_name', caption: '', disabled: true},
                 {type: 'button', id: 'label_custom_adr', caption: '', disabled: true}
             ]
         }
     };
-
-
 </script>
 <?php
 include_once "../Templates/TplJxcOrderBase.php";
