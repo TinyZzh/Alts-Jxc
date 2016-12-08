@@ -12,7 +12,17 @@
             },
             toolbar: {
                 items: [
-                    {type: 'break'}
+                    {type: 'break'},
+                    {
+                        type: 'button', id: 'pdt_save', caption: '保存', icon: 'w2ui-icon-check',
+                        onClick: function (event) {
+                            console.log(event);
+
+                            var dataTable = $("#grid_div_main_cnt_records table").tableExport();
+
+                            dataTable.export2file();
+                        }
+                    }
                 ]
             },
             onLoad: function (event) {
