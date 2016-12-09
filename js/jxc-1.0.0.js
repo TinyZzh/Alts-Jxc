@@ -306,10 +306,9 @@ var W2Util = (function () {
      */
     function renderJxcPdtSizeCell(record, index, col_index) {
         var html = this.getCellValue(index, col_index);
-        return '<div onmouseout="W2Util.onMouseOutPdtSizeCell($(this));" ' +
-            ' onmouseover="W2Util.onMouseOverPdtSizeCell($(this), \'' + this.name + '\', ' + index + ', ' + col_index + '); " ' +
-            ' style=" height: 24px; ">'
-            + html + '</div>' || '';
+        return '<div onmouseout="W2Util.onMouseOutPdtSizeCell($(this));" '
+            + ' onmouseover="W2Util.onMouseOverPdtSizeCell($(this), \'' + this.name + '\', ' + index + ', ' + col_index + ');">'
+            + (html || '') + '</div>';
     }
 
     /**

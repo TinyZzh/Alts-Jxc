@@ -51,18 +51,19 @@ foreach ($w2Products as $v) {
                 // {field: 'pdt_count_0', caption: '3XS', size: '5%', editable: {type: 'text'}, render: renderSizeField},
                 $array = array('3XS', '2XS', 'XS', 'S', 'M', 'L', 'XL', '2XL', '3XL');
                 foreach ($array as $k => $v)
-                    echo "{field: 'pdt_count_{$k}', caption: '{$v}', size: '5%', editable: {type: 'text'}},";
+                    echo "{field: 'pdt_count_{$k}', caption: '{$v}', size: '55px', editable: {type: 'text'}},";
                 ?>
                 {
                     field: 'pdt_zk',
                     caption: '折扣',
-                    size: '7%',
+                    size: '80px',
                     render: 'percent',
                     editable: {type: 'percent', min: 0, max: 100}
                 },
-                {field: 'pdt_price', caption: '单价', size: '7%', render: 'money:2', editable: {type: 'float'}},
-                {field: 'pdt_total', caption: '总数量', size: '10%'},
-                {field: 'total_rmb', caption: '总价', size: '10%', render: 'money:2'}
+                {field: 'pdt_price', caption: '单价', size: '80px', render: 'money:2', editable: {type: 'float'}},
+                {field: 'pdt_total', caption: '总数量', size: '80px'},
+                {field: 'total_rmb', caption: '总价', size: '120px', render: 'money:2'},
+                {field: 'pdt_comment', caption: '备注', size: '10%', editable: {type: 'text'}}
             ],
             show: {
                 header: true, toolbar: true, toolbarAdd: true, toolbarDelete: true, lineNumbers: true, footer: true

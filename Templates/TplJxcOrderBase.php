@@ -68,7 +68,8 @@ include_once "../Templates/include.php";
                 {caption: '颜色', master: true},
                 {caption: '尺码', span: 9},
                 {caption: '标价', span: 2},
-                {caption: '总计', span: 2}
+                {caption: '总计', span: 2},
+                {caption: '备注', master: true}
             ],
             columns: [
                 {field: 'pdt_id', caption: '编号', size: '7%', style: 'text-align:center', editable: {type: 'text'}},
@@ -79,19 +80,17 @@ include_once "../Templates/include.php";
                 $array = array('3XS', '2XS', 'XS', 'S', 'M', 'L', 'XL', '2XL', '3XL');
                 foreach ($array as $k => $v) {
                     if ($type == JxcConst::IO_TYPE_SALES) {
-                        echo "{field: 'pdt_count_{$k}', caption: '{$v}', size: '5%', editable: {type: 'text'}, render: W2Util.renderJxcPdtSizeCell},";
+                        echo "{field: 'pdt_count_{$k}', caption: '{$v}', size: '55px',style:'text-align:center', editable: {type: 'text'}, render: W2Util.renderJxcPdtSizeCell},";
                     } else {
-                        echo "{field: 'pdt_count_{$k}', caption: '{$v}', size: '5%', editable: {type: 'text'}},";
+                        echo "{field: 'pdt_count_{$k}', caption: '{$v}', size: '55px',style:'text-align:center', editable: {type: 'text'}},";
                     }
                 }
                 ?>
-                {
-                    field: 'pdt_zk', caption: '折扣', size: '7%',
-                    editable: {type: 'percent', min: 0, max: 100}, render: 'percent'
-                },
-                {field: 'pdt_price', caption: '单价', size: '7%', render: 'money:2', editable: {type: 'float'}},
-                {field: 'pdt_total', caption: '总数量', size: '10%'},
-                {field: 'total_rmb', caption: '总价', size: '10%', render: 'money:2'}
+                {field: 'pdt_zk', caption: '折扣', size: '80px', editable: {type: 'percent', min: 0, max: 100}, render: 'percent'},
+                {field: 'pdt_price', caption: '单价', size: '80px', render: 'money:2', editable: {type: 'float'}},
+                {field: 'pdt_total', caption: '总数量', size: '80px', style: 'text-align:center'},
+                {field: 'total_rmb', caption: '总价', size: '120px', render: 'money:2'},
+                {field: 'pdt_comment', caption: '备注', size: '15%', editable: {type: 'text'}}
             ],
             show: {
                 header: true, toolbar: true, toolbarAdd: true, toolbarDelete: true, lineNumbers: true, footer: true
