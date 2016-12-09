@@ -18,13 +18,11 @@ Jxc\AutoLoader::register();
     <link href="css/bootstrap-theme.min.css" type="text/css" rel="stylesheet">
     <link href="css/w2ui-1.4.3.min.css" type="text/css" rel="stylesheet">
     <script src="js/jquery.min.js" type="text/javascript"></script>
-    <script src="js/bootstrap.min.js" type="text/javascript"></script>
     <script src="js/w2ui-1.4.3-zh-cn.js" type="text/javascript"></script>
-    <script src="js/jxc-1.0.0.js?v=<?= time() ?>" type="text/javascript"></script>
+    <script src="js/jxc-1.0.0.min.js?v=<?= time() ?>" type="text/javascript"></script>
 <!--  excel export  -->
     <script src="js/FileSaver.min.js" type="text/javascript"></script>
     <script src="js/xlsx.core.min.js" type="text/javascript"></script>
-    <script src="js/tableexport.min.js" type="text/javascript"></script>
 
     <script src="http://echarts.baidu.com/dist/echarts.js" type="text/javascript"></script>
     <script src="http://echarts.baidu.com/asset/theme/vintage.js" type="text/javascript"></script>

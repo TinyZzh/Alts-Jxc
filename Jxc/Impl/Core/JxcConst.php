@@ -19,5 +19,16 @@ final class JxcConst {
     //  状态
     const STATUS_NORMAL = 0;    //  正常
     const STATUS_DESTROY = 1;   //  废弃
+
+    //  订单状态
+    const ORDER_STATUS_SUBMIT = 0;      //  已提交(销售)
+    const ORDER_STATUS_CONFIRM = 1;     //  确认订单(仓库)
+    const ORDER_STATUS_PREPARE = 2;     //  配货中(仓库)
+    const ORDER_STATUS_OK = 3;          //  确认发货(销售)
+    const ORDER_STATUS_CANCEL = 4;      //  取消发货(销售)
+    const ORDER_STATUS_CF_OK = 5;       //  确认发货(仓库)    -   录入物流信息
+    const ORDER_STATUS_CF_CANCEL = 6;   //  确认取消发货(仓库)
+    const ORDER_STATUS_DESTROY = 7;     //  已废弃
+
 }
 

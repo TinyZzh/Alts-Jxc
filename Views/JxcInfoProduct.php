@@ -18,11 +18,12 @@
                 'save': 'Jxc/do.php?api=product&c=savePdtInfo'
             },
             columns: [
-                {field: 'pdt_id', caption: '编号', size: '10%', editable: {type: 'text'}},
+                {field: 'pdt_id', caption: '货号', size: '8%', editable: {type: 'text'}},
                 {field: 'pdt_name', caption: '名称', size: '10%', editable: {type: 'text'}},
                 {field: 'pdt_color', caption: '颜色', size: '80px', editable: {type: 'text'}, render: W2Util.renderJxcColorCell},
-                {field: 'pdt_cost', caption: '成本价', size: '5%', editable: {type: 'float'}, render: 'money:2'},
-                {field: 'pdt_price', caption: '进货价', size: '5%', editable: { type: 'float'}, render: 'money:2'},
+                {field: 'pdt_cost', caption: '成本价', size: '80px', editable: {type: 'float'}, render: 'money:2'},
+                {field: 'pdt_price', caption: '进货价', size: '80px', editable: { type: 'float'}, render: 'money:2'},
+                {field: 'pdt_comment', caption: '备注', size: '10%', editable: { type: 'text'}},
                 {field: 'datetime', caption: '记录时间', size: '5%'}
             ],
             multiSelect: true,

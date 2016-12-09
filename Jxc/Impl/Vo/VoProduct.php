@@ -24,6 +24,7 @@ class VoProduct extends Vo {
     public $pdt_cost;    //  成本价
     public $pdt_price;   //  标价
     public $pdt_total;   //  库存总数
+    public $pdt_comment; //  备注
     public $total_rmb;   //  库存总价值
     public $datetime;    //  添加时间
     public $timeLastOp;  //  最后一次修改时间

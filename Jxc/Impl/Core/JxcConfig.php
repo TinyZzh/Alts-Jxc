@@ -23,6 +23,13 @@ final class JxcConfig {
         'user' => 'root',
         'pwd' => 'wooduan',
     );
+    public static $DB_ALiYun_Config = array(
+        'host' => 'bdm254844558.my3w.com',
+        'port' => 3306,
+        'dbname' => 'bdm254844558_db',
+        'user' => 'bdm254844558',
+        'pwd' => 'godlike88115',
+    );
 
     public static $PUBLIC = array(
         'public'

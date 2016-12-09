@@ -1,8 +1,4 @@
-/**
- * Created by TinyZ on 2016/10/26.
- */
-
-
+/*! tinyzzh-jxc v1.0.0 | (c) 2016, 2026 TinyZ, Inc. | Apache License Version 2.0 */
 /**
  * w2ui-grid创建新行
  * @param grid
@@ -306,10 +302,9 @@ var W2Util = (function () {
      */
     function renderJxcPdtSizeCell(record, index, col_index) {
         var html = this.getCellValue(index, col_index);
-        return '<div onmouseout="W2Util.onMouseOutPdtSizeCell($(this));" ' +
-            ' onmouseover="W2Util.onMouseOverPdtSizeCell($(this), \'' + this.name + '\', ' + index + ', ' + col_index + '); " ' +
-            ' style=" height: 24px; ">'
-            + html + '</div>' || '';
+        return '<div onmouseout="W2Util.onMouseOutPdtSizeCell($(this));" '
+            + ' onmouseover="W2Util.onMouseOverPdtSizeCell($(this), \'' + this.name + '\', ' + index + ', ' + col_index + ');">'
+            + (html || '') + '</div>';
     }
 
     /**
@@ -389,7 +384,6 @@ var W2Util = (function () {
 
     /**
      * Creates an Excel spreadsheet from a data string
-     * @memberof TableExport.prototype
      * @param data {String}
      * @returns {Number} epoch time
      */
@@ -423,7 +417,6 @@ var W2Util = (function () {
 
     /**
      * Formats datetimes for compatibility with Excel
-     * @memberof TableExport.prototype
      * @param v {Number}
      * @param date1904 {Date}
      * @returns {Number} epoch time
@@ -437,7 +430,6 @@ var W2Util = (function () {
     /**
      * Converts a string to an arraybuffer
      * @param s {String}
-     * @memberof TableExport.prototype
      * @returns {ArrayBuffer}
      */
     function string2ArrayBuffer(s) {

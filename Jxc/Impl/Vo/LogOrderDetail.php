@@ -17,6 +17,7 @@ class LogOrderDetail extends VoPdtCount {
     public $pdt_price;  //  单品单价
     public $pdt_total;  //  总数量
     public $total_rmb;  //  总价
+    public $pdt_comment;//  备注
 
     public function __construct() {
         parent::__construct();

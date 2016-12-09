@@ -61,16 +61,17 @@ use Jxc\Impl\Core\JxcConst;
                             {field: 'pdt_name', caption: '名称', size: '10%', style: 'text-align:center'},
                             {field: 'pdt_color', caption: '颜色', size: '80px', render: W2Util.renderJxcColorCell},
                             <?php
-                            // {field: 'pdt_count_0', caption: '3XS', size: '5%', editable: {type: 'text'}},
+                            // {field: 'pdt_count_0', caption: '3XS', size: '50px', style:'text-align:center'},
                             $array = array('3XS', '2XS', 'XS', 'S', 'M', 'L', 'XL', '2XL', '3XL');
                             foreach ($array as $k => $v) {
-                                echo "{field: 'pdt_count_{$k}', caption: '{$v}', size: '5%'},";
+                                echo "{field:'pdt_count_{$k}',caption: '{$v}',size:'55px',style:'text-align:center'},";
                             }
                             ?>
-                            {field: 'pdt_zk', caption: '折扣', size: '7%', render: 'percent'},
-                            {field: 'pdt_price', caption: '单价', size: '7%', render: 'money:2'},
-                            {field: 'pdt_total', caption: '总数量', size: '10%'},
-                            {field: 'total_rmb', caption: '总价', size: '10%', render: 'money:2'}
+                            {field: 'pdt_zk', caption: '折扣', size: '80px', render: 'percent'},
+                            {field: 'pdt_price', caption: '单价', size: '80px', render: 'money:2'},
+                            {field: 'pdt_total', caption: '总数量', size: '80px'},
+                            {field: 'total_rmb', caption: '总价', size: '120px', render: 'money:2'},
+                            {field: 'pdt_comment', caption: '备注', size: '15%'}
                         ];
                         showExpand(expandEvent, w2Columns, data.records);
                     }
