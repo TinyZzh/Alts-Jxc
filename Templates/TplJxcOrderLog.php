@@ -18,9 +18,9 @@ use Jxc\Impl\Core\JxcConst;
                     echo "{field: 'ct_name', caption: '客户', size: '10%', style: 'text-align:center'},";
                 //{field: 'ct_name', caption: '客户', size: '10%', style: 'text-align:center'},
                 ?>
-                {field: 'log_date', caption: '日期', size: '10%', style: 'text-align:center', render: 'date:yyyy-dd-mm'},
-                {field: 'datetime', caption: '日志时间', size: '10%', style: 'text-align:center'},
-                {field: 'total_rmb', caption: '总计金额', size: '10%', render: 'money:2'},
+                {field: 'log_date', caption: '日期', size: '100px', style: 'text-align:center', render: 'date:yyyy-dd-mm'},
+                {field: 'datetime', caption: '日志时间', size: '160px', style: 'text-align:center'},
+                {field: 'total_rmb', caption: '总计金额', size: '100px', render: 'money:2'},
                 {field: 'op_name', caption: '操作员', size: '10%', style: 'text-align:center'}
             ],
             searches: [
@@ -70,7 +70,7 @@ use Jxc\Impl\Core\JxcConst;
                             {field: 'pdt_zk', caption: '折扣', size: '80px', render: 'percent'},
                             {field: 'pdt_price', caption: '单价', size: '80px', render: 'money:2'},
                             {field: 'pdt_total', caption: '总数量', size: '80px'},
-                            {field: 'total_rmb', caption: '总价', size: '120px', render: 'money:2'},
+                            {field: 'total_rmb', caption: '总价', size: '100px', render: 'money:2'},
                             {field: 'pdt_comment', caption: '备注', size: '15%'}
                         ];
                         showExpand(expandEvent, w2Columns, data.records);

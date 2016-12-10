@@ -19,11 +19,8 @@ use Jxc\Impl\Vo\VoOperator;
  */
 final class OperatorService extends JxcService {
 
-    private $operatorDao;
-
     public function __construct() {
         parent::__construct();
-        $this->operatorDao = new OperatorDao(JxcConfig::$DB_Config);
     }
 
     /**
@@ -68,6 +65,32 @@ final class OperatorService extends JxcService {
     public function getSelfOperator($voOp, $request) {
         $voOp->recid = $voOp->op_id;
         return array('status' => 'success', 'record' => $voOp);
+    }
+
+    public function w2GetSelfOperator($voOp, $request) {
+        $voOp->recid = $voOp->op_id;
+        return array('status' => 'success', 'recid' => $voOp->op_id, 'record' => $voOp);
+    }
+
+    public function w2OpChangeAuth($voOp, $request) {
+        if ($verify = GameUtil::verifyRequestParams($request, array('record'))) {
+            return array('status' => 'error', 'message' => 'Undefined field : ' . $verify);
+        }
+        return $this->opChangeAuth($voOp, $request['record']);
+    }
+
+    public function w2OpChangeSelfInfo($voOp, $request) {
+        if ($verify = GameUtil::verifyRequestParams($request, array('record'))) {
+            return array('status' => 'error', 'message' => 'Undefined field : ' . $verify);
+        }
+        return $this->opChangeSelfInfo($voOp, $request['record']);
+    }
+
+    public function w2OpChangeSelfPsw($voOp, $request) {
+        if ($verify = GameUtil::verifyRequestParams($request, array('record'))) {
+            return array('status' => 'error', 'message' => 'Undefined field : ' . $verify);
+        }
+        return $this->opChangeSelfPsw($voOp, $request['record']);
     }
 
     /**
@@ -124,11 +147,14 @@ final class OperatorService extends JxcService {
      * @return array
      */
     public function opChangeSelfPsw($voOp, $request) {
-        if ($verify = GameUtil::verifyRequestParams($request, array('old_psw', 'op_psw'))) {
+        if ($verify = GameUtil::verifyRequestParams($request, array('psw_old', 'psw_new'))) {
             return array('status' => 'error', 'message' => 'Undefined field : ' . $verify);
         }
-        $psw = $request['op_psw'];
-        if (($request['old_psw'] == $request['op_psw']) || !$psw || $voOp->op_psw !== $request['old_psw']) {
+        $psw = $request['psw_new'];
+        if (count($psw) <= 0) {
+            return array('status' => 'error', 'message' => "密码长度错误.");
+        }
+        if (($request['psw_old'] == $request['psw_new']) || $voOp->op_psw != $request['psw_old']) {
             return array('status' => 'error', 'message' => "修改失败, 密码错误.");
         }
         $voOp->op_psw = $psw;
@@ -138,12 +164,11 @@ final class OperatorService extends JxcService {
 
     public function opChangeSelfInfo($voOp, $request) {
         $fields = array();
-        $params = array('op_name', 'op_name');
+        $params = array('op_account', 'op_name', 'op_phone');
         foreach ($params as $val) {
             if (isset($request[$val])) {
-                $f = $request[$val];
-                $voOp->$f = $request[$val];
-                $fields[] = $f;
+                $voOp->$val = $request[$val];
+                $fields[] = $val;
             }
         }
         if ($fields) {
@@ -151,6 +176,8 @@ final class OperatorService extends JxcService {
         }
         return array('status' => 'success');
     }
+
+    //  修改其他人 - 仅限于Admin
 
     /**
      * [*]修改其他用户信息. 仅限于超级用户权限
@@ -170,7 +197,7 @@ final class OperatorService extends JxcService {
             return array('status' => 'error', 'message' => "操作员不存在: [{$request['op_account']}].");
         }
         $fields = array();
-        $params = array('op_name', 'op_name');
+        $params = array('op_account', 'op_name', 'op_phone');
         foreach ($params as $val) {
             if (isset($request[$val])) {
                 $f = $request[$val];

@@ -13,11 +13,9 @@ use Jxc\Impl\Vo\VoOperator;
  */
 final class PublicService extends JxcService {
 
-    private $operatorDao;
 
     public function __construct() {
         parent::__construct();
-        $this->operatorDao = new OperatorDao(JxcConfig::$DB_Config);
     }
 
     /**
@@ -27,20 +25,25 @@ final class PublicService extends JxcService {
      * @return array
      */
     public function login($voOp, $request) {
-        if ($verify = GameUtil::verifyRequestParams($request, array('account', 'psw'))) {
+        if ($verify = GameUtil::verifyRequestParams($request, array('record'))) {
             return array('status' => 'error', 'message' => 'Undefined field : ' . $verify);
         }
-        $voOperator = $this->operatorDao->selectByAccount($request['account']);
+        if ($verify = GameUtil::verifyRequestParams($request['record'], array('account', 'psw'))) {
+            return array('status' => 'error', 'message' => 'Undefined field : ' . $verify);
+        }
+        $record = $request['record'];
+        $voOperator = $this->operatorDao->selectByAccount($record['account']);
         if (!$voOperator) {
             return array('status' => 'error', 'message' => '账号或密码错误!');
         }
-        if ($request['account'] !== $voOperator->op_psw) {
+        if ($record['psw'] !== $voOperator->op_psw) {
             return array('status' => 'error', 'message' => '账号或密码错误!');
         }
 
         $_SESSION['op_id'] = $voOperator->op_id;
         $_SESSION['op_account'] = $voOperator->op_account;
-        $_SESSION['op_auth'] = json_decode($voOperator->op_auth);  //  TODO:   权限管理
+        $_SESSION['op_name'] = $voOperator->op_name;
+        $_SESSION['op_auth'] = $voOperator->op_auth;  //  TODO:   权限管理
         return array('status' => 'success');
     }
 

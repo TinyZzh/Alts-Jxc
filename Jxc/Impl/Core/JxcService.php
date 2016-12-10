@@ -56,7 +56,10 @@ class JxcService {
             if (!$voOperator && !$voOperator->op_auth) {
                 return array('status' => 'error', 'message' => "操作员信息错误: [{$op_id}].\n 请联系系统管理员.");
             }
-            if (!isset($voOperator->op_auth[JxcConst::SYSTEM_AUTHORITY_ALL])) {
+            if (isset($voOperator->op_auth[JxcConst::SYSTEM_AUTHORITY_ALL])
+                && $voOperator->op_auth[JxcConst::SYSTEM_AUTHORITY_ALL]) {
+                //  no-op
+            } else {
                 if (isset($voOperator->op_auth[$method]) && $voOperator->op_auth[$method]) {
                     //  no-op
                 } else {
