@@ -21,7 +21,7 @@ final class JxcConfig {
         'port' => 3306,
         'dbname' => 'erp_jxc',
         'user' => 'root',
-        'pwd' => 'wooduan',
+        'pwd' => '123456',
     );
     public static $DB_ALiYun_Config = array(
         'host' => 'bdm254844558.my3w.com',
@@ -39,10 +39,12 @@ final class JxcConfig {
      * Register service
      */
     public static $JXC_SERVICE = array(
-        'product' => 'Jxc\Impl\Service\ProductService',
-        'custom' => 'Jxc\Impl\Service\CustomService',
-        'order' => 'Jxc\Impl\Service\OrderService',
+        'analysis' => 'Jxc\Impl\Service\AnalysisService',
         'color' => 'Jxc\Impl\Service\ColorService',
+        'custom' => 'Jxc\Impl\Service\CustomService',
+        'operator' => 'Jxc\Impl\Service\OperatorService',
+        'order' => 'Jxc\Impl\Service\OrderService',
+        'product' => 'Jxc\Impl\Service\ProductService',
         'public' => 'Jxc\Impl\Service\PublicService',
     );
 
@@ -57,8 +59,8 @@ final class JxcConfig {
         'jxc_info_invalid_ctm' => 'Views/JxcInfoInvalidCtmer.php',
         //
         'jxc_procure' => 'Views/JxcOrderProcure.php',
-        'jxc_store_show' => '',
         'jxc_sales' => 'Views/JxcOrderSales.php',
+        'jxc_refund' => 'Views/JxcOrderRefund.php',
         //  日志
         'jxc_log_procure' => 'Views/JxcLogProcure.php',
         'jxc_log_sales' => 'Views/JxcLogSales.php',
@@ -68,6 +70,7 @@ final class JxcConfig {
         'jxc_analysis_info' => 'Analysis/A1.php',
         //  系统管理
         'sys_self_info' => 'Views/SysSelfInfo.php',
+        'sys_change_psw' => 'Views/SysChangePsw.php',
 
 
     );

@@ -89,7 +89,7 @@ include_once "../Templates/include.php";
                 {field: 'pdt_zk', caption: '折扣', size: '80px', editable: {type: 'percent', min: 0, max: 100}, render: 'percent'},
                 {field: 'pdt_price', caption: '单价', size: '80px', render: 'money:2', editable: {type: 'float'}},
                 {field: 'pdt_total', caption: '总数量', size: '80px', style: 'text-align:center'},
-                {field: 'total_rmb', caption: '总价', size: '120px', render: 'money:2'},
+                {field: 'total_rmb', caption: '总价', size: '100px', render: 'money:2'},
                 {field: 'pdt_comment', caption: '备注', size: '15%', editable: {type: 'text'}}
             ],
             show: {

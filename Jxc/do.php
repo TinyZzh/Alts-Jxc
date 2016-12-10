@@ -29,9 +29,12 @@ if (!isset($_REQUEST['c'])) {
 }
 $method = $_REQUEST['c'];
 $request = $_REQUEST;
-$op_id = isset($request['op']) ? $request['op'] : 1;    //  TODO: 缺省的权限为-1
+$op_id = -1;    //  TODO: 缺省的权限为-1
 $clz = JxcConfig::$JXC_SERVICE[$api];
 try {
+    if(isset($_SESSION['op_id'])) {
+        $op_id = $_SESSION['op_id'];
+    }
     $service = new $clz();
     if ($service instanceof JxcService) {
         $response = null;
