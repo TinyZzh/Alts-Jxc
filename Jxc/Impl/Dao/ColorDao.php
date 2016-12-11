@@ -107,7 +107,7 @@ class ColorDao extends MySQLDao {
      * @param array $fields
      */
     public function updateByFields($voColor, $fields = array()) {
-        $query = $this->mysqlDB()->sqlUpdateWhere('tb_colors', $voColor->toArray($fields), array('ct_id' => $voColor->color_id));
+        $query = $this->mysqlDB()->sqlUpdateWhere('tb_colors', $voColor->toArray($fields), array('color_id' => $voColor->color_id));
         $this->mysqlDB()->ExecuteSQL($query);
     }
 
