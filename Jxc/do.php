@@ -30,35 +30,28 @@ if (!isset($_REQUEST['c'])) {
 $method = $_REQUEST['c'];
 $request = $_REQUEST;
 $op_id = -1;    //  TODO: 缺省的权限为-1
-$clz = JxcConfig::$JXC_SERVICE[$api];
 try {
     if(isset($_SESSION['op_id'])) {
         $op_id = $_SESSION['op_id'];
     }
-    $service = new $clz();
-    if ($service instanceof JxcService) {
-        $response = null;
-        try {
-            //  Invoke service function
-            $response = $service->invoke($clz, $method, $op_id, $request);
-        } catch (Exception $e) {
-            $response = array('status' => 'error', 'message' => $e->getMessage());
-        }
-        //  API invoked log.
-        if (JxcConfig::$API_DEBUG_LOG) {
-            $logIADao = new LogInvokeApiDao(JxcConfig::$DB_Config);
-            $logIA = new LogInvokeApi();
-            $logIA->service = $api;
-            $logIA->request = json_encode($request);
-            $logIA->response = json_encode($response);
-            $logIA->op = $op_id;
-            $logIADao->insert($logIA);
-        }
-        echo json_encode($response);
-    } else {
-        echo json_encode(array('status' => 'error', 'message' => 'Unknown service.'));
-        exit();
+    $response = null;
+    try {
+        //  Invoke service function
+        $response = JxcService::invokeApi($api, $method, $op_id, $request);
+    } catch (Exception $e) {
+        $response = array('status' => 'error', 'message' => $e->getMessage());
     }
+    //  API invoked log.
+    if (JxcConfig::$API_DEBUG_LOG) {
+        $logIADao = new LogInvokeApiDao(JxcConfig::$DB_Config);
+        $logIA = new LogInvokeApi();
+        $logIA->service = $api;
+        $logIA->request = json_encode($request);
+        $logIA->response = json_encode($response);
+        $logIA->op = $op_id;
+        $logIADao->insert($logIA);
+    }
+    echo json_encode($response);
 } catch (Exception $e) {
     exit(403);
 }

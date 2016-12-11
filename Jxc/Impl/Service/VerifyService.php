@@ -21,9 +21,9 @@ use Jxc\Impl\Vo\VoProduct;
 use Jxc\Impl\Vo\W2PdtInfo;
 
 /**
- * 产品相关服务
+ * 审核相关服务
  */
-final class ProductService extends JxcService {
+final class VerifyService extends JxcService {
 
     private $productDao;
     private $customerDao;
@@ -37,6 +37,10 @@ final class ProductService extends JxcService {
         $this->logOrderDao = new LogOrderDao(JxcConfig::$DB_Config);
         $this->logOrderDetailDao = new LogOrderDetailDao(JxcConfig::$DB_Config);
     }
+
+
+
+
 
     /**
      * 获取产品信息列表

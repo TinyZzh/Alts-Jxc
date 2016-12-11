@@ -39,7 +39,7 @@ final class ColorService extends JxcService {
      * @param $request
      * @return array
      */
-    public function getColorInfo($voOp, $request) {
+    public function w2GetColorInfo($voOp, $request) {
         $data = $this->colorDao->select();
         $array = array();
         foreach ($data as $v) {
@@ -50,7 +50,7 @@ final class ColorService extends JxcService {
     }
 
     /**
-     * 保存颜色信息
+     * w2保存更新颜色信息
      * @param $voOp
      * @param $request
      * @return array
@@ -90,7 +90,7 @@ final class ColorService extends JxcService {
     }
 
     /**
-     * 删除颜色
+     * w2删除颜色
      * @param $voOp
      * @param $request
      * @return array

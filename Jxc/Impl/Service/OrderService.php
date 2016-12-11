@@ -3,22 +3,12 @@
 namespace Jxc\Impl\Service;
 
 use Jxc\Impl\Core\JxcConfig;
-use Jxc\Impl\Core\JxcConst;
 use Jxc\Impl\Core\JxcService;
 use Jxc\Impl\Dao\CustomerDao;
 use Jxc\Impl\Dao\LogOrderDao;
 use Jxc\Impl\Dao\LogOrderDetailDao;
-use Jxc\Impl\Dao\OperatorDao;
 use Jxc\Impl\Dao\ProductDao;
-use Jxc\Impl\Libs\DateUtil;
-use Jxc\Impl\Libs\W2UI;
 use Jxc\Impl\Util\GameUtil;
-use Jxc\Impl\Vo\LogOrder;
-use Jxc\Impl\Vo\LogOrderDetail;
-use Jxc\Impl\Vo\VoCustomer;
-use Jxc\Impl\Vo\VoOperator;
-use Jxc\Impl\Vo\VoProduct;
-use Jxc\Impl\Vo\W2PdtInfo;
 
 /**
  * 订单相关服务
@@ -55,6 +45,19 @@ final class OrderService extends JxcService {
         return array('status' => 'success', 'records' => array_values($map));
     }
 
+
+    public function getSalesOrder($voOp, $request) {
+        if ($verify = GameUtil::verifyRequestParams($request, array('type'))) {
+            return array('status' => 'error', 'message' => 'Undefined field : ' . $verify);
+        }
+        $type = $request['type'];
+        $ct_id = isset($request['ct_id']) ? $request['ct_id'] : null;
+        $pdt_id = isset($request['pdt_id']) ? $request['pdt_id'] : null;
+        $map = $this->logOrderDao->w2uiSelectByCtIdAndPdtId($type, $ct_id, $pdt_id);
+        return array('status' => 'success', 'records' => array_values($map));
+    }
+
+
     /**
      * 获取订单详单信息
      * @param $voOp
@@ -70,6 +73,5 @@ final class OrderService extends JxcService {
         return array('status' => 'success', 'records' => array_values($details));
     }
 
-    
 
 }

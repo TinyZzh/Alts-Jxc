@@ -6,7 +6,7 @@
     var configJxc = {
         header: '颜色信息管理',
         urls: {
-            'get': 'Jxc/do.php?api=color&c=getColorInfo',
+            'get': 'Jxc/do.php?api=color&c=w2GetColorInfo',
             'save': 'Jxc/do.php?api=color&c=saveColorInfo',
             'remove': 'Jxc/do.php?api=color&c=removeColorInfo'
         },
