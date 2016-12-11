@@ -16,6 +16,14 @@ class DateUtil {
         return date("Y-m-d H:i:s", $timestamp);
     }
 
+    public static function localTime($timestamp = null) {
+        return date("H:i:s", $timestamp);
+    }
+
+    public static function localDate($timestamp = null) {
+        return date("Y-m-d", $timestamp);
+    }
+
     /**
      * 获取当前日
      * @return int The day of the month
