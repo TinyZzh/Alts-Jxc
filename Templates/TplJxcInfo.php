@@ -8,7 +8,7 @@
             multiSelect: true,
             show: {
                 header: true, toolbar: true, toolbarAdd: true, toolbarSave: true, toolbarDelete: true,
-                lineNumbers: true, footer: true
+                lineNumbers: true, footer: true, toolbarEdit: true
             },
             toolbar: {
                 items: [
@@ -24,6 +24,11 @@
             },
             onLoad: function (event) {
                 w2uiInitEmptyGrid(this, event);
+            },
+            onEdit: function (event) {
+                console.log(event);
+                var that = this;
+                that.editField(event.recid, that.last.sel_col);
             },
             onAdd: w2GridOnAdd,
             onSave: w2GridOnSaveAndUpdate,
