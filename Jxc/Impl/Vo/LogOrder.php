@@ -18,7 +18,7 @@ final class LogOrder extends Vo {
     public $ct_name;    //  客户名称
     public $total_rmb;  //  订单涉及总金额
     public $comment;    //  订单备注
-    public $lastUpdateTime;  //  最后一次修改时间
+    public $datetime;   //  最后一次修改时间
     //  审核
     public $op_id;      //  经办人ID
     public $op_name;    //  经办人名称

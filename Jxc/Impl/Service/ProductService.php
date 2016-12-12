@@ -285,15 +285,16 @@ final class ProductService extends JxcService {
         //  订单日志
         $logOrder = new LogOrder();
         $logOrder->type = $type;
+        $logOrder->status = JxcConst::STATUS_NORMAL;
+        $logOrder->log_date = DateUtil::localDate();
+        $logOrder->total_rmb = $total_rmb;
+        $logOrder->datetime = DateUtil::makeTime();
+        $logOrder->op_id = $voOp->op_id;
+        $logOrder->op_name = $voOp->op_name;
         if ($voCustomer) {
             $logOrder->ct_id = $voCustomer->ct_id;
             $logOrder->ct_name = $voCustomer->ct_name;
         }
-        $logOrder->total_rmb = $total_rmb;
-        $logOrder->log_date = DateUtil::localDate();
-        $logOrder->op_id = $voOp->op_id;
-        $logOrder->op_name = $voOp->op_name;
-        $logOrder->lastUpdateTime = DateUtil::makeTime();
         $logOrder = $this->logOrderDao->insert($logOrder);
         //  更新库存
         $listOfPdt = $this->productDao->selectById(array_keys($postData));
