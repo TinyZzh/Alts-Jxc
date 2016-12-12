@@ -62,11 +62,10 @@ final class ProductService extends JxcService {
         $array = array();
         foreach ($list as $v) {
             if ($v instanceof VoProduct) {
-                $v->recid = $v->pdt_id;
-                $array[] = $v;
+                $array[] = $v->voToW2ui();
             }
         }
-        return array('status' => 'success', 'records' => array_values($list));
+        return array('status' => 'success', 'records' => $array);
     }
 
     /**
