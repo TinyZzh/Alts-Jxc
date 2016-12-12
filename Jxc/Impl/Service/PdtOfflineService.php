@@ -21,9 +21,9 @@ use Jxc\Impl\Vo\VoProduct;
 use Jxc\Impl\Vo\W2PdtInfo;
 
 /**
- * 产品相关服务
+ * 进销存服务  -  [单机版]
  */
-final class ProductService extends JxcService {
+final class PdtOfflineService extends JxcService {
 
     private $productDao;
     private $customerDao;
@@ -288,7 +288,7 @@ final class ProductService extends JxcService {
         $logOrder->status = JxcConst::STATUS_NORMAL;
         $logOrder->log_date = DateUtil::localDate();
         $logOrder->total_rmb = $total_rmb;
-        $logOrder->datetime = DateUtil::makeTime();
+        $logOrder->lastUpdateTime = DateUtil::makeTime();
         $logOrder->op_id = $voOp->op_id;
         $logOrder->op_name = $voOp->op_name;
         if ($voCustomer) {

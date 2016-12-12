@@ -21,7 +21,9 @@ class W2UI {
         //  counts
         foreach ($vo->pdt_counts as $k => $v) {
             $f = 'pdt_count_' . $k;
-            $w2Data[$f] = $v;
+            if ($v) {
+                $w2Data[$f] = $v;
+            }
         }
 //        unset($w2Data['pdt_counts']);
         return $w2Data;
