@@ -108,6 +108,8 @@ include_once "../Templates/include.php";
                         if (data['status'] == 'success') {
                             var pdtOptions = popupPdtOption(that, event.index, 0, 'pop_w2grid_pdt', data['records']);
                             PopupUtil.onPopupShow({
+                                width: 910,
+                                height: 500,
                                 subOptions: pdtOptions
                             });
                         }

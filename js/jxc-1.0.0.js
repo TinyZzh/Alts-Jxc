@@ -495,28 +495,21 @@ function popupPdtOption(w2Target, w2Index, w2Column, popGridName, popRecords) {
         header: '产品',
         multiSelect: false,
         columns: [
-            {field: 'pdt_id', caption: '编号', size: '10%', style: 'text-align:center'},
-            {field: 'pdt_name', caption: '名称', size: '10%', style: 'text-align:center'},
+            {field: 'pdt_id', caption: '编号', size: '80px', style: 'text-align:center'},
+            {field: 'pdt_name', caption: '名称', size: '120px', style: 'text-align:center'},
             {field: 'pdt_color', caption: '颜色', size: '80px', render: W2Util.renderJxcColorCell},
-            {field: 'pdt_count_0', caption: '3XS', size: '5%'},
-            {field: 'pdt_count_1', caption: '2XS', size: '5%'},
-            {field: 'pdt_count_2', caption: ' XS', size: '5%'},
-            {field: 'pdt_count_3', caption: '  S', size: '5%'},
-            {field: 'pdt_count_4', caption: '  M', size: '5%'},
-            {field: 'pdt_count_5', caption: '  L', size: '5%'},
-            {field: 'pdt_count_6', caption: ' XL', size: '5%'},
-            {field: 'pdt_count_7', caption: '2XL', size: '5%'},
-            {field: 'pdt_count_8', caption: '3XL', size: '5%'},
-            {field: 'pdt_zk', caption: '折扣', size: '7%', render: 'percent'},
-            {field: 'pdt_price', caption: '进价', size: '7%', render: 'float:2'},
-            {field: 'pdt_total', caption: '总数量', size: '10%'},
-            {field: 'total_rmb', caption: '总价', size: '10%'}
+            {field: 'pdt_count_0', caption: '3XS', size: '55px', render: 'int'},
+            {field: 'pdt_count_1', caption: '2XS', size: '55px', render: 'int'},
+            {field: 'pdt_count_2', caption: ' XS', size: '55px', render: 'int'},
+            {field: 'pdt_count_3', caption: '  S', size: '55px', render: 'int'},
+            {field: 'pdt_count_4', caption: '  M', size: '55px', render: 'int'},
+            {field: 'pdt_count_5', caption: '  L', size: '55px', render: 'int'},
+            {field: 'pdt_count_6', caption: ' XL', size: '55px', render: 'int'},
+            {field: 'pdt_count_7', caption: '2XL', size: '55px', render: 'int'},
+            {field: 'pdt_count_8', caption: '3XL', size: '55px', render: 'int'},
+            {field: 'pdt_total', caption: '总数量', size: '80px', render: 'int'}
         ],
-        show: {
-            toolbar: true,
-            toolbarSearch: true,
-            lineNumbers: true
-        },
+        show: {toolbar: true, toolbarSearch: true, lineNumbers: true},
         searches: [
             {field: 'pdt_id', caption: '货号', type: 'text'},
             {field: 'pdt_name', caption: '名称', type: 'text'},
@@ -535,18 +528,28 @@ function popupPdtOption(w2Target, w2Index, w2Column, popGridName, popRecords) {
             var targetField = targetGrid.columns[w2Column].field;
             var targetRcd = targetGrid.records[w2Index];
             var changeData = targetRcd.changes;
-            if (changeData == undefined) changeData = [];
-            //changeData['recid'] = w2gridObj.last.sel_recid;
+            if (changeData == undefined) changeData = {};
             changeData[targetField] = rec[targetField];
             changeData['pdt_price'] = rec['pdt_price'];
             changeData['pdt_zk'] = 100; //  折扣缺省值为100
-            rec['pdt_total'] = 0;
-            rec['total_rmb'] = 0.00;
-            rec['changes'] = changeData;
+            targetRcd['recid'] = rec['pdt_id'];
+            targetGrid.set(rec['pdt_id'], {
+                pdt_id: rec[targetField],
+                pdt_name: rec['pdt_name'],
+                pdt_color: rec['pdt_color'],
+                pdt_total: 0,
+                total_rmb: 0.00,
+                changes: changeData,
+            });
+            // targetRcd['pdt_id'] = rec[targetField];
+            // targetRcd['pdt_total'] = 0;
+            // targetRcd['total_rmb'] = 0.00;
+            // targetRcd['changes'] = changeData;
             //console.log(w2gridObj);
             //console.log(changeData);
-            targetGrid.remove(targetGrid.last.sel_recid);
-            targetGrid.add(rec);
+            // targetGrid.remove(targetGrid.last.sel_recid);
+            // targetGrid.add(targetRcd);
+            // targetGrid.refresh();
             //  最后一行
             var nextRcd = that.nextRow(targetGrid.last.sel_recid);
             if (nextRcd == null) {
@@ -614,6 +617,8 @@ var PopupUtil = (function () {
             name_layout: 'popup_w2layout_jxc',
             content: null,  //  Popup Content
             max: true,
+            width: 500,
+            height: 300,
             subRender: renderW2grid,  //  content render
             sub_type: 'w2grid',
             subOptions: {
@@ -665,6 +670,8 @@ var PopupUtil = (function () {
 
     function popupShow() {
         console.log(obj);
+        var width = obj.options.width;
+        var height = obj.options.height;
         w2popup.open({
             title: '产   品',
 //                body: '<div id="pop_layout">This is text inside the popup</div>',
@@ -674,8 +681,8 @@ var PopupUtil = (function () {
             modal: true,
             showClose: true,
             showMax: true,
-            width: 500,
-            height: 300,
+            width: width,
+            height: height,
             onOpen: function (event) {
                 console.log(event);
                 event.onComplete = function (event) {
