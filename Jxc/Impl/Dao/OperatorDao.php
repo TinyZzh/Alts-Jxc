@@ -31,21 +31,6 @@ class OperatorDao extends MySQLDao {
     }
 
     /**
-     * @param $op_id
-     * @param int $status 账户状态
-     * @return VoOperator|null
-     */
-    public function selectById($op_id, $status = 0) {
-        $sets = $this->mysqlDB()->select('tb_operator', '*', array('op_id' => $op_id, 'status' => $status));
-        if ($sets && is_array($sets)) {
-            $voOperator = new VoOperator();
-            $voOperator->parse($sets[0]);
-            return $voOperator;
-        }
-        return null;
-    }
-
-    /**
      * @param int $status 账户状态
      * @return array
      */
@@ -58,6 +43,31 @@ class OperatorDao extends MySQLDao {
             $array[$voOperator->op_id] = $voOperator;
         }
         return $array;
+    }
+
+    public function selectAll() {
+        $sets = $this->mysqlDB()->select('tb_operator', '*', array());
+        $array = array();
+        foreach ($sets as $k => $v) {
+            $voOperator = new VoOperator();
+            $voOperator->convert($v);
+            $array[$voOperator->op_id] = $voOperator;
+        }
+        return $array;
+    }
+
+    /**
+     * @param $op_id
+     * @return VoOperator|null
+     */
+    public function selectById($op_id) {
+        $sets = $this->mysqlDB()->select('tb_operator', '*', array('op_id' => $op_id));
+        if ($sets && is_array($sets)) {
+            $voOperator = new VoOperator();
+            $voOperator->convert($sets[0]);
+            return $voOperator;
+        }
+        return null;
     }
 
     /**

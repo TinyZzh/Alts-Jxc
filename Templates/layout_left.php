@@ -84,6 +84,7 @@ foreach ($products as $k => $v) {
                         {id: 'jxc_analysis_info', text: '显示统计', img: 'icon-page'},
                         {id: 'sys_self_info', text: '个人信息', img: 'icon-page'},
                         {id: 'sys_change_psw', text: '修改密码', img: 'icon-page'},
+                        {id: 'sys_op_info_manage', text: '经手人信息管理', img: 'icon-page'},
                     ]
                 }
             ],

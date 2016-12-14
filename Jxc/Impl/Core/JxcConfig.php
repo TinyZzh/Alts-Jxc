@@ -69,8 +69,9 @@ final class JxcConfig {
         //  统计分析
         'jxc_analysis_info' => 'Analysis/A1.php',
         //  系统管理
-        'sys_self_info' => 'Views/SysSelfInfo.php',
-        'sys_change_psw' => 'Views/SysChangePsw.php',
+        'sys_self_info' => 'Views/SysChangeSelfInfo.php',
+        'sys_change_psw' => 'Views/SysChangeSelfPsw.php',
+        'sys_op_info_manage' => 'Views/SysOpInfoManage.php',
 
 
     );
