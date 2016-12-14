@@ -242,6 +242,7 @@ var W2Util = (function () {
         renderJxcColorCell: renderJxcColorCell,
         renderJxcCustomerNameCell: renderJxcCustomerNameCell,
         renderJxcPdtSizeCell: renderJxcPdtSizeCell,
+        renderStatus: renderStatus,
         onMouseOverPdtSizeCell: onMouseOverPdtSizeCell,
         onMouseOutPdtSizeCell: onMouseOutPdtSizeCell
     };
@@ -305,6 +306,14 @@ var W2Util = (function () {
         return '<div onmouseout="W2Util.onMouseOutPdtSizeCell($(this));" '
             + ' onmouseover="W2Util.onMouseOverPdtSizeCell($(this), \'' + this.name + '\', ' + index + ', ' + col_index + ');">'
             + (html || '') + '</div>';
+    }
+
+    /**
+     * 渲染status
+     */
+    function renderStatus(record, index, col_index) {
+        var html = this.getCellValue(index, col_index);
+        return (html == 0 ? '正常' : '封禁' || '');
     }
 
     /**

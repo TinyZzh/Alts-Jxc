@@ -56,15 +56,14 @@ final class OperatorService extends JxcService {
         return array('status' => 'success');
     }
 
-    /**
-     * 获取个人信息
-     * @param VoOperator $voOp
-     * @param $request
-     * @return array
-     */
-    public function getSelfOperator($voOp, $request) {
-        $voOp->recid = $voOp->op_id;
-        return array('status' => 'success', 'record' => $voOp);
+    public function w2GetAllOperator($voOp, $request) {
+        $array = $this->operatorDao->selectAll();
+        $data = array();
+        foreach ($array as $v) {
+            $v->recid = $v->op_id;
+            $data[] = $v;
+        }
+        return array('status' => 'success', 'records' => $data);
     }
 
     public function w2GetSelfOperator($voOp, $request) {
@@ -79,6 +78,15 @@ final class OperatorService extends JxcService {
         return $this->opChangeAuth($voOp, $request['record']);
     }
 
+    public function w2OpChangeInfo($voOp, $request) {
+        if ($verify = GameUtil::verifyRequestParams($request, array('record'))) {
+            return array('status' => 'error', 'message' => 'Undefined field : ' . $verify);
+        }
+        $params = $request['record'];
+        $params['status'] = $params['status']['id'];
+        return $this->opChangeOtherInfo($voOp, $params);
+    }
+
     public function w2OpChangeSelfInfo($voOp, $request) {
         if ($verify = GameUtil::verifyRequestParams($request, array('record'))) {
             return array('status' => 'error', 'message' => 'Undefined field : ' . $verify);
@@ -91,6 +99,19 @@ final class OperatorService extends JxcService {
             return array('status' => 'error', 'message' => 'Undefined field : ' . $verify);
         }
         return $this->opChangeSelfPsw($voOp, $request['record']);
+    }
+
+    //  inner function
+
+    /**
+     * 获取个人信息
+     * @param VoOperator $voOp
+     * @param $request
+     * @return array
+     */
+    public function getSelfOperator($voOp, $request) {
+        $voOp->recid = $voOp->op_id;
+        return array('status' => 'success', 'record' => $voOp);
     }
 
     /**
@@ -186,23 +207,22 @@ final class OperatorService extends JxcService {
      * @return array
      */
     public function opChangeOtherInfo($voOp, $request) {
-        if ($verify = GameUtil::verifyRequestParams($request, array('op_account'))) {
+        if ($verify = GameUtil::verifyRequestParams($request, array('op_id'))) {
             return array('status' => 'error', 'message' => 'Undefined field : ' . $verify);
         }
         if (!$this->isSuperAuth($voOp)) {
             return array('status' => 'error', 'message' => "[*]无法修改, 操作权限不足.");
         }
-        $voOperator = $this->operatorDao->selectByAccount($request['op_account']);
+        $voOperator = $this->operatorDao->selectById($request['op_id']);
         if (!$voOperator) {
-            return array('status' => 'error', 'message' => "操作员不存在: [{$request['op_account']}].");
+            return array('status' => 'error', 'message' => "操作员不存在: [{$request['op_id']}].");
         }
         $fields = array();
-        $params = array('op_account', 'op_name', 'op_phone');
+        $params = array('op_account', 'op_name', 'op_phone', 'status');
         foreach ($params as $val) {
             if (isset($request[$val])) {
-                $f = $request[$val];
-                $voOperator->$f = $request[$val];
-                $fields[] = $f;
+                $voOperator->$val = $request[$val];
+                $fields[] = $val;
             }
         }
         if ($fields) {

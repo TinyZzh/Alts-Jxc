@@ -7,7 +7,7 @@ use Jxc\Impl\Core\Vo;
 /**
  * 管理员信息
  */
-class VoOperator extends Vo {
+final class  VoOperator extends Vo {
 
     public $op_id;         //  操作员ID
     public $op_account;    //  登录名
@@ -28,7 +28,7 @@ class VoOperator extends Vo {
     public function convert($data) {
         parent::convert($data);
         if (!is_array($this->op_auth)) {
-            $this->op_auth = json_decode($this->op_auth);
+            $this->op_auth = json_decode($this->op_auth, true);
         }
     }
 }

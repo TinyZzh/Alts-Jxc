@@ -18,22 +18,26 @@ include_once "../Templates/include.php";
 <script>
 
     var config = {
-        sysOpInfoLayout:{
+        sysOpInfoLayout: {
             name: 'layout_sys_op',
             panels: [
                 {type: 'left', size: '50%'},
                 {type: 'main', size: '50%'}
             ]
         },
-        sysOpInfoGrid:{
+        sysOpInfoGrid: {
             name: 'grid_sys_op',
             header: '经办人信息',
-//            url: {
-//                'get':''
-//            },
+            url: {
+                'get': 'Jxc/do.php?api=operator&c=w2GetAllOperator'
+            },
             columns: [
-                {field: 'color_id', caption: '颜色ID', size: '10%', style: 'text-align:center'},
-                {field: 'color_name', caption: '名称', size: '10%', style: 'text-align:center'}
+                {field: 'op_account', caption: '登录名', size: '10%', style: 'text-align:center'},
+                {field: 'op_psw', caption: '登录密钥', size: '10%', style: 'text-align:center'},
+                {field: 'op_name', caption: '名称', size: '10%', style: 'text-align:center'},
+                {field: 'op_phone', caption: '联系方式', size: '10%', style: 'text-align:center'},
+                {field: 'op_auth', caption: '操作员权限', size: '10%', style: 'text-align:center'},
+                {field: 'status', caption: '状态', size: '10%', style: 'text-align:center', render: W2Util.renderStatus}
             ],
             multiSelect: true,
             show: {
@@ -42,21 +46,45 @@ include_once "../Templates/include.php";
             },
             onAdd: w2GridOnAdd,
             onSave: w2GridOnSaveAndUpdate,
-            onKeydown: w2GridOnKeyDown
+            onKeydown: w2GridOnKeyDown,
+            onClick: function (event) {
+                var grid = this;
+                var form = w2ui['form_sys_op'];
+                console.log(event);
+                event.onComplete = function () {
+                    var sel = grid.getSelection();
+                    console.log(sel);
+                    if (sel.length == 1) {
+                        form.recid = sel[0];
+                        form.record = $.extend(true, {}, grid.get(sel[0]));
+                        form.refresh();
+                    } else {
+                        form.clear();
+                    }
+                }
+            }
         },
-        sysOpInfoForm:{
+        sysOpInfoForm: {
             header: '经办人信息',
             name: 'form_sys_op',
             recid: 1,
             url: {
-                'save': 'Jxc/do.php?api=operator&c=w2OpChangeSelfInfo'
+                'save': 'Jxc/do.php?api=operator&c=w2OpChangeInfo'
             },
             fields: [
-                {name: 'op_id', type: 'int', html: {caption: 'OP ID', attr: 'size="5" readonly'}},
-                {name: 'op_account', type: 'text', html: {caption: '登录账户', attr: 'size="20" maxlength="20"'}},
-                {name: 'op_name', type: 'text', html: {caption: '操作员名称', attr: 'size="20" maxlength="20"'}},
-                {name: 'op_phone', type: 'text', html: {caption: '联系方式', attr: 'size="20"'}},
-                {name: 'status', type: 'text', html: {caption: '状态', attr: 'size="10 readonly"'}}
+                {field: 'op_id', type: 'int', html: {caption: 'OP ID', attr: 'size="5" readonly'}},
+                {field: 'op_account', type: 'text', html: {caption: '登录账户', attr: 'size="20" maxlength="20"'}},
+                {field: 'op_name', type: 'text', html: {caption: '操作员名称', attr: 'size="20" maxlength="20"'}},
+                {field: 'op_phone', type: 'text', html: {caption: '联系方式', attr: 'size="20"'}},
+                {
+                    field: 'status',
+                    type: 'list',
+                    options: {items: [
+                        {id: 0, text: '正常'},
+                        {id: 1, text: '禁止'}
+                        ]
+                    }
+                }
             ],
             actions: {
                 save: function () {
@@ -86,7 +114,6 @@ include_once "../Templates/include.php";
         w2ui[config.sysOpInfoLayout.name].content('main', w2ui[config.sysOpInfoForm.name]);
 
         w2ui['layout'].content('main', w2ui[config.sysOpInfoLayout.name]);
-
 
 
     });
