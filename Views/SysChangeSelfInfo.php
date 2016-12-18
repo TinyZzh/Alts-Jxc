@@ -27,11 +27,11 @@ include_once "../Templates/include.php";
                     'save': 'Jxc/do.php?api=operator&c=w2OpChangeSelfInfo'
                 },
                 fields: [
-                    {name: 'op_id', type: 'int', html: {caption: 'OP ID', attr: 'size="5" readonly'}},
-                    {name: 'op_account', type: 'text', html: {caption: '登录账户', attr: 'size="20" maxlength="20"'}},
-                    {name: 'op_name', type: 'text', html: {caption: '操作员名称', attr: 'size="20" maxlength="20"'}},
-                    {name: 'op_phone', type: 'text', html: {caption: '联系方式', attr: 'size="20"'}},
-                    {name: 'status', type: 'text', html: {caption: '状态', attr: 'size="10 readonly"'}}
+                    {field: 'op_id', type: 'int', html: {caption: 'OP ID', attr: 'size="5" readonly'}},
+                    {field: 'op_account', type: 'text', html: {caption: '登录账户', attr: 'size="20" maxlength="20"'}},
+                    {field: 'op_name', type: 'text', html: {caption: '操作员名称', attr: 'size="20" maxlength="20"'}},
+                    {field: 'op_phone', type: 'text', html: {caption: '联系方式', attr: 'size="20"'}},
+                    {field: 'status', type: 'text', html: {caption: '状态', attr: 'size="10 readonly"'}}
                 ],
                 actions: {
                     save: function () {

@@ -2,16 +2,9 @@
 
 namespace Jxc\Impl\Service;
 
-use Jxc\Impl\Core\JxcConfig;
 use Jxc\Impl\Core\JxcConst;
 use Jxc\Impl\Core\JxcService;
-use Jxc\Impl\Dao\CustomerDao;
-use Jxc\Impl\Dao\LogChargeDao;
-use Jxc\Impl\Dao\OperatorDao;
-use Jxc\Impl\Libs\DateUtil;
 use Jxc\Impl\Util\GameUtil;
-use Jxc\Impl\Vo\LogCharge;
-use Jxc\Impl\Vo\VoCustomer;
 use Jxc\Impl\Vo\VoOperator;
 
 /**
@@ -209,6 +202,10 @@ final class OperatorService extends JxcService {
     public function opChangeOtherInfo($voOp, $request) {
         if ($verify = GameUtil::verifyRequestParams($request, array('op_id'))) {
             return array('status' => 'error', 'message' => 'Undefined field : ' . $verify);
+        }
+        $op_id = (int)$request['op_id'];
+        if ($op_id <= 0) {
+            return array('status' => 'error', 'message' => "无效的op_id : [$op_id]");
         }
         if (!$this->isSuperAuth($voOp)) {
             return array('status' => 'error', 'message' => "[*]无法修改, 操作权限不足.");

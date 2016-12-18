@@ -25,6 +25,24 @@ final class CustomService extends JxcService {
         $this->logChargeDao = new LogChargeDao(JxcConfig::$DB_Config);
     }
 
+    public function w2GetRecords($voOp, $request) {
+        if (isset($request['search'])) {    //  搜索
+            $records = $this->customDao->w2Search($request['search'], $request['searchLogic']);
+            return array('status' => 'success', 'records' => $records);
+        } else {
+            $status = isset($request['status']) ? $request['status'] : 0;
+            $data = $this->customDao->selectAll($status);
+            $array = array();
+            foreach ($data as $v) {
+                $v->recid = $v->ct_id;
+                $array[] = $v;
+            }
+            return array('status' => 'success', 'records' => $array);
+        }
+    }
+
+
+
     /**
      * 获取顾客列表
      * @param $voOp
