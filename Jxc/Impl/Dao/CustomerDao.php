@@ -5,7 +5,6 @@ namespace Jxc\Impl\Dao;
 use Exception;
 use Jxc\Impl\Core\MySQLDao;
 use Jxc\Impl\Vo\VoCustomer;
-use Jxc\Impl\Vo\VoProduct;
 
 /**
  * 顾客信息Dao
@@ -56,6 +55,44 @@ class CustomerDao extends MySQLDao {
             $voCustomer = new VoCustomer();
             $voCustomer->convert($data);
             $array[$voCustomer->ct_id] = $voCustomer;
+        }
+        return $array;
+    }
+
+    public function w2Search($searches, $logic) {
+        $where = '';
+        foreach ($searches as $k => $v) {
+            if ($where) {
+                $where .= $logic;
+            }
+            switch ($v['type']) {
+                case 'text': {
+                    switch ($v['operator']) {
+                        case 'is':
+                            $where .= "{$v['field']} = '{$v['value']}'";
+                            break;
+                        case 'begins':
+                            $where .= "{$v['field']} LIKE '{$v['value']}%'";
+                            break;
+                        case 'ends':
+                            $where .= "{$v['field']} LIKE '%{$v['value']}'";
+                            break;
+                        case 'contains':
+                            $where .= "{$v['field']} LIKE '%{$v['value']}%'";
+                            break;
+                    }
+                    break;
+                }
+            }
+        }
+        $query = 'select * from tb_customer where ' . $where;
+        $sets = $this->mysqlDB()->ExecuteSQL($query);
+        $array = array();
+        foreach ($sets as $data) {
+            $vo = new VoCustomer();
+            $vo->convert($data);
+            $vo->recid = $vo->ct_id;
+            $array[] = $vo;
         }
         return $array;
     }

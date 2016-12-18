@@ -46,6 +46,7 @@ Jxc\AutoLoader::register();
     //  locale
     w2utils.settings.locale = 'zh-cn';
     w2utils.settings.currencyPrefix = '￥';
+//    w2utils.settings.date_format = "yyyy-mm-dd";
     w2utils.settings.date_format = "yyyy-mm-dd";
     w2utils.settings.time_format = "hh24:mm:ss";
     w2utils.settings.phrases = {

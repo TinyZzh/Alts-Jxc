@@ -5,7 +5,7 @@
 <script>
     var configJxc = {
         header: '颜色信息管理',
-        urls: {
+        url: {
             'get': 'Jxc/do.php?api=color&c=w2GetColorInfo',
             'save': 'Jxc/do.php?api=color&c=saveColorInfo',
             'remove': 'Jxc/do.php?api=color&c=removeColorInfo'
@@ -19,7 +19,7 @@
                     return '<div style="height:24px;text-align:center;background-color: \#' + rgba + ';">' + ' ' + rgba + '</div>';
                 }
             },
-            {field: 'color_name', caption: '名称', size: '10%', style: 'text-align:center', editable: {type: 'text'}}
+            {field: 'color_name', caption: '颜色名', size: '10%', style: 'text-align:center', editable: {type: 'text'}}
         ]
     };
 </script>

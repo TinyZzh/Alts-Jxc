@@ -356,7 +356,7 @@ var W2Util = (function () {
         }
         data[0] = frow;
         var searchIds = w2grid.last.searchIds;
-        if (searchIds && searchIds.length > 0) {
+        if (searchIds && searchIds.length > 0) {    //  搜索筛选
             w2grid.last.searchIds.map(function (rec_ind, ind) {
                 var row = [];
                 for (var j = 0; j < columns.length; j++) {

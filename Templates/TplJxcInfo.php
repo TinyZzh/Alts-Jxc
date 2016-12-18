@@ -1,15 +1,16 @@
 <script>
     $(document).ready(function () {
-        var content = $('#div_main_cnt').w2grid({
+        var defaultOpts = {
             name: 'div_main_cnt',
-            header: configJxc.header,
-            url: configJxc.urls,
-            columns: configJxc.columns,
+            header: 'div_main_cnt_header',
+            url: undefined,
+            columns: [],
             multiSelect: true,
             show: {
                 header: true, toolbar: true, toolbarAdd: true, toolbarSave: true, toolbarDelete: true,
-                lineNumbers: true, footer: true, toolbarEdit: true
+                lineNumbers: true, footer: true, toolbarEdit: true, toolbarSearch: true
             },
+            searches: undefined,
             toolbar: {
                 items: [
                     {type: 'break'},
@@ -33,7 +34,10 @@
             onAdd: w2GridOnAdd,
             onSave: w2GridOnSaveAndUpdate,
             onKeydown: w2GridOnKeyDown
-        });
+        };
+        var opts = $.extend({}, defaultOpts, configJxc);
+
+        var content = $('#div_main_cnt').w2grid(opts);
         w2ui['layout'].content('main', content);
         w2GridAddEmptyRecord(content);
     });
