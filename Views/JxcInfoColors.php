@@ -19,7 +19,7 @@
                     return '<div style="height:24px;text-align:center;background-color: \#' + rgba + ';">' + ' ' + rgba + '</div>';
                 }
             },
-            {field: 'color_name', caption: '名称', size: '10%', style: 'text-align:center', editable: {type: 'text'}}
+            {field: 'color_name', caption: '颜色名', size: '10%', style: 'text-align:center', editable: {type: 'text'}}
         ]
     };
 </script>
