@@ -282,19 +282,22 @@ final class ProductService extends JxcService {
         if (!$voOp || !is_array($postData)) {
             return array('status' => 'error', 'message' => "参数错误.");
         }
+        $now = time();
         //  订单日志
         $logOrder = new LogOrder();
         $logOrder->type = $type;
         $logOrder->status = JxcConst::STATUS_NORMAL;
-        $logOrder->log_date = DateUtil::localDate();
-        $logOrder->total_rmb = $total_rmb;
-        $logOrder->datetime = DateUtil::makeTime();
-        $logOrder->op_id = $voOp->op_id;
-        $logOrder->op_name = $voOp->op_name;
+        $logOrder->log_date = DateUtil::localDate($now);
         if ($voCustomer) {
             $logOrder->ct_id = $voCustomer->ct_id;
             $logOrder->ct_name = $voCustomer->ct_name;
         }
+        $logOrder->total_rmb = $total_rmb;
+        $logOrder->comment = '备注';
+        $logOrder->datetime = DateUtil::specTime($now);
+        $logOrder->op_id = $voOp->op_id;
+        $logOrder->op_name = $voOp->op_name;
+
         $logOrder = $this->logOrderDao->insert($logOrder);
         //  更新库存
         $listOfPdt = $this->productDao->selectById(array_keys($postData));
@@ -326,6 +329,9 @@ final class ProductService extends JxcService {
                 $logOrderDetail->order_id = $logOrder->order_id;
                 $logOrderDetail->pdt_total = $w2->calc_pdt_total();
                 $logOrderDetail->total_rmb = $w2->calc_total_price();
+                if (!$logOrderDetail->pdt_comment) {
+                    $logOrderDetail->pdt_comment = '';
+                }
                 $this->logOrderDetailDao->insert($logOrderDetail);
             }
         }
