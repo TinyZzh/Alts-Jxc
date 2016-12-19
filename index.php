@@ -26,7 +26,7 @@ Jxc\AutoLoader::register();
     <link href="css/jxc-1.0.0.css" type="text/css" rel="stylesheet">
     <link href="css/w2ui-1.4.3.min.css" type="text/css" rel="stylesheet">
     <script src="js/jquery.min.js" type="text/javascript"></script>
-    <script src="js/w2ui-1.4.3-zh-cn.js" type="text/javascript"></script>
+    <script src="js/w2ui-1.4.3.js" type="text/javascript"></script>
     <script src="js/jxc-1.0.0.js?v=<?= time() ?>" type="text/javascript"></script>
 <!--  excel export  -->
     <script src="js/FileSaver.min.js" type="text/javascript"></script>
@@ -46,7 +46,6 @@ Jxc\AutoLoader::register();
     //  locale
     w2utils.settings.locale = 'zh-cn';
     w2utils.settings.currencyPrefix = '￥';
-//    w2utils.settings.date_format = "yyyy-mm-dd";
     w2utils.settings.date_format = "yyyy-mm-dd";
     w2utils.settings.time_format = "hh24:mm:ss";
     w2utils.settings.phrases = {

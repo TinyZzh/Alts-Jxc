@@ -18,6 +18,13 @@ final class PublicService extends JxcService {
         parent::__construct();
     }
 
+    public function w2Login($voOp, $request) {
+        if ($verify = GameUtil::verifyRequestParams($request, array('record'))) {
+            return array('status' => 'error', 'message' => 'Undefined field : ' . $verify);
+        }
+        return $this->login($voOp, $request['record']);
+    }
+
     /**
      * 登录管理系统
      * @param VoOperator $voOp
@@ -25,21 +32,16 @@ final class PublicService extends JxcService {
      * @return array
      */
     public function login($voOp, $request) {
-        if ($verify = GameUtil::verifyRequestParams($request, array('record'))) {
+        if ($verify = GameUtil::verifyRequestParams($request, array('account', 'psw'))) {
             return array('status' => 'error', 'message' => 'Undefined field : ' . $verify);
         }
-        if ($verify = GameUtil::verifyRequestParams($request['record'], array('account', 'psw'))) {
-            return array('status' => 'error', 'message' => 'Undefined field : ' . $verify);
-        }
-        $record = $request['record'];
-        $voOperator = $this->operatorDao->selectByAccount($record['account']);
+        $voOperator = $this->operatorDao->selectByAccount($request['account']);
         if (!$voOperator) {
             return array('status' => 'error', 'message' => '账号或密码错误!');
         }
-        if ($record['psw'] !== $voOperator->op_psw) {
+        if ($request['psw'] !== $voOperator->op_psw) {
             return array('status' => 'error', 'message' => '账号或密码错误!');
         }
-
         $_SESSION['op_id'] = $voOperator->op_id;
         $_SESSION['op_account'] = $voOperator->op_account;
         $_SESSION['op_name'] = $voOperator->op_name;
