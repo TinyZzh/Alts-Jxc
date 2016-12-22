@@ -2,9 +2,8 @@
 
 namespace Jxc\Impl\Core;
 
-use Jxc\Impl\Dao\LogInvokeApiDao;
 use Jxc\Impl\Dao\OperatorDao;
-use Jxc\Impl\Vo\LogInvokeApi;
+use Jxc\Impl\Vo\VoOperator;
 use ReflectionMethod;
 
 /**
@@ -90,5 +89,34 @@ class JxcService {
         } else {
             return array('status' => 'error', 'message' => 'Unknown service.');
         }
+    }
+
+    //  Operator
+
+    /**
+     * 超级管理员权限
+     * @param VoOperator $voOp
+     * @return bool
+     */
+    protected function isSuperAuth($voOp) {
+        return (isset($voOp->op_auth[JxcConst::SYSTEM_AUTHORITY_ALL]) && $voOp->op_auth[JxcConst::SYSTEM_AUTHORITY_ALL]);
+    }
+
+    /**
+     * 检查权限.
+     * 要修改其他操作员的权限，自身权限必须大于且包含这些权限. 否则无法操作成功.
+     * @param VoOperator $voOp 操作员
+     * @param string $func 接口名
+     * @return bool
+     */
+    protected function verifyAuth($voOp, $func) {
+        if ($this->isSuperAuth($voOp)) {
+            return true;
+        } else {
+            if (isset($voOp->op_auth[$func]) && $voOp->op_auth[$func]) {
+                return true;
+            }
+        }
+        return false;
     }
 }
