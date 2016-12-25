@@ -228,30 +228,4 @@ final class OperatorService extends JxcService {
         return array('status' => 'success');
     }
 
-    /**
-     * 超级管理员权限
-     * @param VoOperator $voOp
-     * @return bool
-     */
-    private function isSuperAuth($voOp) {
-        return (isset($voOp->op_auth[JxcConst::SYSTEM_AUTHORITY_ALL]) && $voOp->op_auth[JxcConst::SYSTEM_AUTHORITY_ALL]);
-    }
-
-    /**
-     * 检查权限.
-     * 要修改其他操作员的权限，自身权限必须大于且包含这些权限. 否则无法操作成功.
-     * @param VoOperator $voOp 操作员
-     * @param string $func 接口名
-     * @return bool
-     */
-    private function verifyAuth($voOp, $func) {
-        if ($this->isSuperAuth($voOp)) {
-            return true;
-        } else {
-            if (isset($voOp->op_auth[$func]) && $voOp->op_auth[$func]) {
-                return true;
-            }
-        }
-        return false;
-    }
 }
